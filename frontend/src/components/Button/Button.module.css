@@ -1,0 +1,20 @@
+.button {
+  width: 50%;
+  padding: 15px;
+  display: flex;
+  margin: auto;
+  margin-top: 25px;
+  background-color: rgb(83, 12, 92);
+  border: 1px solid #835e7e;
+  border-radius: 15px;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.button:hover {
+  opacity: 0.8;
+}
