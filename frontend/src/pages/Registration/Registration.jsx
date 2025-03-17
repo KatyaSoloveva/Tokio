@@ -24,6 +24,16 @@ const Registration = () => {
     password: "Пароль слишком похож на username!",
   };
 
+  const handleServerError = (error) => {
+    const serverErrors = {}
+    Object.keys(error).forEach((key) => {
+      const error_key = key;
+      const error_message = messages[error_key];
+      serverErrors[key] = error_message 
+    })
+    return serverErrors;
+  }
+
   useEffect(() => {
     console.log(formData), [formData];
   });
@@ -39,12 +49,7 @@ const Registration = () => {
         navigate("/login");
       } catch (error) {
         console.log("Error:", error);
-        Object.keys(error).forEach((key) => {
-          const error_key = key;
-          console.log(error_key);
-          const error_message = messages[error_key];
-          setServerError((prev) => ({ ...prev, [error_key]: error_message }));
-        });
+        setServerError(handleServerError(error))
       }
     }
   };

@@ -4,7 +4,7 @@ import api from "../api";
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem("token"));
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
   const [token, setToken] = useState(null);
 
   const login = (token) => {
