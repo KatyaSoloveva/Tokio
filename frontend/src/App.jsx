@@ -9,6 +9,7 @@ import Container from "./components/Container/Container";
 import "./App.css";
 import { AuthProvider } from "./contexts/AuthContext";
 import Tasks from "./pages/Tasks/Tasks";
+import api from "./api";
 
 export default function App() {
   return (

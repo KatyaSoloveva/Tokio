@@ -1,20 +1,32 @@
 import React, { useState } from "react";
+import api from "../api";
 
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem("token"));
+  const [token, setToken] = useState(null);
 
-  const login = () => {
+  const login = (token) => {
     setIsAuthenticated(true);
+    setToken(token);
+    localStorage.setItem("token", token);
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
+  const logout = async () => {
+    try {
+      await api.signout();
+    } catch (error) {
+      alert("Не удалось выйти из системы.")
+    } finally {
+      setIsAuthenticated(false);
+      setToken(null);
+      localStorage.removeItem("token");
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

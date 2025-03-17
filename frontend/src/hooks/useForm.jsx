@@ -11,7 +11,7 @@ const validateRules = {
     if (value.length < 6) return "Пароль должен быть не менее 6 символов!";
     return null;
   },
-  login: (value) => {
+  username: (value) => {
     if (!value) return "Login обязателен!";
     if (value.length < 3) return "Login должен быть не менее 3 символов!";
     return null;

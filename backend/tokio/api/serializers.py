@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from djoser.serializers import UserSerializer
+# from djoser.serializers import UserSerializer
 
 from tasks.models import Task
 
@@ -11,9 +11,10 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserSerializer(serializers):
+# class UserSerializer(UserSerializer):
 
-    class Meta(UserSerializer.Meta):
-        fields = UserSerializer.Meta.fields + ('first_name',
-                                               'last_name', 'birthday')
+#     class Meta(UserSerializer.Meta):
+#         fields = UserSerializer.Meta.fields + ('first_name',
+#                                                'last_name', 'birthday')
+
 # потом добавить поля - avatar, issubscribed

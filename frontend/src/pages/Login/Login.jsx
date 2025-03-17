@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Form from "../../components/Form/Form";
 import FormTitle from "../../components/FormTitle/FormTitle";
 import Button from "../../components/Button/Button";
@@ -7,6 +7,7 @@ import styles from "./Login.module.css";
 import useForm from "../../hooks/useForm";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import api from "../../api";
 
 const Login = () => {
   const { formData, handleChange, handleSubmit, errors } = useForm({
@@ -16,14 +17,22 @@ const Login = () => {
 
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [serverError, setServerError] = useState("");
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     if (handleSubmit(event)) {
-      console.log("handleSubmit is running: Ready to go to server");
-      login();
-      navigate("/");
+      try {
+        const userData = await api.signin({
+          email: formData.email,
+          password: formData.password,
+        });
+        login(userData.auth_token);
+        navigate("/");
+      } catch (error) {
+        setServerError("Неверный email или пароль!");
+      }
     } else {
-      console.log("cant");
+      console.log("mistakes in  the form");
     }
   };
 
@@ -31,25 +40,31 @@ const Login = () => {
     console.log(formData);
   }, [formData]);
 
+  const onChange = (event) => {
+    handleChange(event)
+    setServerError("")
+  }
+
   return (
     <>
       <Form onSubmit={onSubmit}>
         <FormTitle title="Войти" />
         <Input
           label="Email"
-          type="email"
           name="email"
           value={formData.email}
-          onChange={handleChange}
-          error={errors.email}
+          onChange={onChange}
+          error={errors.email || serverError}
+          style={errors.email || serverError ? {outline: "solid"} : {}}
         />
         <Input
           label="Password"
-          type="password"
           name="password"
+          type="password"
           value={formData.password}
-          onChange={handleChange}
+          onChange={onChange}
           error={errors.password}
+          style={errors.password || serverError ? {outline: "solid"} : {}}
         />
         <Button type="submit">Войти</Button>
       </Form>
