@@ -4,7 +4,9 @@ import api from "../api";
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem("token")
+  );
   const [token, setToken] = useState(null);
 
   const login = (token) => {
@@ -17,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await api.signout();
     } catch (error) {
-      alert("Не удалось выйти из системы.")
+      alert("Не удалось выйти из системы.");
     } finally {
       setIsAuthenticated(false);
       setToken(null);

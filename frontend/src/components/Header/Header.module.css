@@ -1,4 +1,9 @@
 .header {
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6,6 +11,7 @@
   background-color: rgb(245, 198, 224);
   border-bottom: 3px solid rgb(223, 163, 196);
   padding: 0 25px;
+  box-sizing: border-box;
 }
 
 .headerContent {

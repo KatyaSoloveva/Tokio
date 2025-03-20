@@ -1,6 +1,5 @@
 import styles from "./Header.module.css";
 import logo from "/nusya2.png";
-import Container from "../Container/Container";
 import LinkComponent from "../Link/Link";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -17,69 +16,67 @@ const Header = () => {
   };
   return (
     <header className={styles.header}>
-      <Container>
-        <div
-          className={styles.headerContent}
-          style={isAuthenticated ? { gridTemplateColumns: "1fr 2fr 1fr" } : {}}
-        >
-          <LinkComponent to="/" className={styles.link}>
-            <img className={styles.headerLogo} src={logo} alt="Tokio" />
+      <div
+        className={styles.headerContent}
+        style={isAuthenticated ? { gridTemplateColumns: "1fr 2fr 1fr" } : {}}
+      >
+        <LinkComponent to="/" className={styles.link}>
+          <img className={styles.headerLogo} src={logo} alt="Tokio" />
+        </LinkComponent>
+        <div className={isAuthenticated ? styles.nav2 : styles.nav}>
+          <LinkComponent
+            to="/opportunities"
+            className={styles.link}
+            activeClassName={styles.link_active}
+          >
+            Возможности
           </LinkComponent>
-          <div className={isAuthenticated ? styles.nav2 : styles.nav}>
+          <LinkComponent
+            to="/about"
+            className={styles.link}
+            activeClassName={styles.link_active}
+          >
+            О проекте
+          </LinkComponent>
+          {isAuthenticated && (
             <LinkComponent
-              to="/opportunities"
+              to="/tasks"
               className={styles.link}
               activeClassName={styles.link_active}
             >
-              Возможности
+              Мои заметки
             </LinkComponent>
+          )}
+        </div>
+        <div className={styles.nav}>
+          {isAuthenticated ? (
             <LinkComponent
-              to="/about"
+              to="/"
               className={styles.link}
-              activeClassName={styles.link_active}
+              onClick={handleLogout}
             >
-              О проекте
+              Выйти
             </LinkComponent>
-            {isAuthenticated && (
+          ) : (
+            <>
               <LinkComponent
-                to="/tasks"
+                to="/login"
                 className={styles.link}
                 activeClassName={styles.link_active}
               >
-                Мои заметки
+                Войти
               </LinkComponent>
-            )}
-          </div>
-          <div className={styles.nav}>
-            {isAuthenticated ? (
               <LinkComponent
-                to="/"
+                to="/register"
                 className={styles.link}
-                onClick={handleLogout}
+                activeClassName={styles.link_active}
               >
-                Выйти
+                Зарегистрироваться
               </LinkComponent>
-            ) : (
-              <>
-                <LinkComponent
-                  to="/login"
-                  className={styles.link}
-                  activeClassName={styles.link_active}
-                >
-                  Войти
-                </LinkComponent>
-                <LinkComponent
-                  to="/register"
-                  className={styles.link}
-                  activeClassName={styles.link_active}
-                >
-                  Зарегистрироваться
-                </LinkComponent>
-              </>
-            )}
-          </div>
+            </>
+          )}
         </div>
-      </Container>
+      </div>
     </header>
   );
 };

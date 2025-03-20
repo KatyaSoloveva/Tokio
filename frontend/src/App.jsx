@@ -13,8 +13,7 @@ import api from "./api";
 
 export default function App() {
   return (
-    <>
-      <AuthProvider>
+    <AuthProvider>
         <Header />
         <Container>
           <Routes>
@@ -26,7 +25,6 @@ export default function App() {
             <Route path="tasks" element={<Tasks />}></Route>
           </Routes>
         </Container>
-      </AuthProvider>
-    </>
+    </AuthProvider>
   );
 }
