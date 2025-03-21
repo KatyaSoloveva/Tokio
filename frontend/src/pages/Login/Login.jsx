@@ -3,11 +3,13 @@ import Form from "../../components/Form/Form";
 import FormTitle from "../../components/FormTitle/FormTitle";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
+import Main from "../../components/Main/Main";
 import styles from "./Login.module.css";
 import useForm from "../../hooks/useForm";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
+import Container from "../../components/Container/Container";
 
 const Login = () => {
   const { formData, handleChange, handleSubmit, errors } = useForm({
@@ -41,34 +43,36 @@ const Login = () => {
   }, [formData]);
 
   const onChange = (event) => {
-    handleChange(event)
-    setServerError("")
-  }
+    handleChange(event);
+    setServerError("");
+  };
 
   return (
-    <>
-      <Form onSubmit={onSubmit}>
-        <FormTitle title="Войти" />
-        <Input
-          label="Email"
-          name="email"
-          value={formData.email}
-          onChange={onChange}
-          error={errors.email || serverError}
-          style={errors.email || serverError ? {outline: "solid"} : {}}
-        />
-        <Input
-          label="Password"
-          name="password"
-          type="password"
-          value={formData.password}
-          onChange={onChange}
-          error={errors.password}
-          style={errors.password || serverError ? {outline: "solid"} : {}}
-        />
-        <Button type="submit">Войти</Button>
-      </Form>
-    </>
+    <Main withBG>
+      <Container>
+        <Form onSubmit={onSubmit}>
+          <FormTitle title="Войти" />
+          <Input
+            label="Email"
+            name="email"
+            value={formData.email}
+            onChange={onChange}
+            error={errors.email || serverError}
+            style={errors.email || serverError ? { outline: "solid" } : {}}
+          />
+          <Input
+            label="Password"
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={onChange}
+            error={errors.password}
+            style={errors.password || serverError ? { outline: "solid" } : {}}
+          />
+          <Button type="submit">Войти</Button>
+        </Form>
+      </Container>
+    </Main>
   );
 };
 

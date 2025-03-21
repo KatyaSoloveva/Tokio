@@ -18,4 +18,5 @@
 .errorMessage {
   color: rgb(105, 27, 75);
   margin-bottom: 1rem;
+  text-align: left;
 }

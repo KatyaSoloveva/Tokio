@@ -1,0 +1,38 @@
+.main {
+  min-height: calc(100vh - 100px);
+  padding-top: 100px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.withBG {
+  background-image: url("../../../public/background.jpg");
+  background-position: 50% 50%;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
+
+@media (max-width: 991px) {
+  .main {
+    min-height: calc(100dvh - 90px);
+    padding-top: 90px;
+  }
+}
+
+@media (max-width: 767px) {
+  .main {
+    min-height: calc(100dvh - 80px);
+    padding-top: 80px;
+  }
+}
+
+@media (max-width: 479px) {
+  .main {
+    min-height: calc(100dvh - 70px);
+    padding-top: 70px;
+  }
+}
