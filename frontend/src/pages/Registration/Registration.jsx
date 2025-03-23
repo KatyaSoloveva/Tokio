@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import useForm from "../../hooks/useForm";
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
+import errorMessages from "../../utils /errorMessages";
 
 const Registration = () => {
   const { formData, handleChange, handleSubmit, errors } = useForm({
@@ -20,17 +21,12 @@ const Registration = () => {
 
   const navigate = useNavigate();
 
-  const messages = {
-    username: "Пользователь с таким логином уже существует!",
-    email: "Пользователь с таким email уже существует!",
-    password: "Пароль слишком похож на username!",
-  };
-
   const handleServerError = (error) => {
     const serverErrors = {};
-    Object.keys(error).forEach((key) => {
+    Object.keys(error.error).forEach((key) => {
       const error_key = key;
-      const error_message = messages[error_key];
+      console.log(errorMessages["registration"], error_key);
+      const error_message = errorMessages["registration"][error_key];
       serverErrors[key] = error_message;
     });
     return serverErrors;
@@ -51,10 +47,15 @@ const Registration = () => {
         navigate("/login");
       } catch (error) {
         console.log("Error:", error);
-        setServerError(handleServerError(error));
+        if (errorMessages["general"][error.status]) {
+          setServerError({ general: errorMessages["general"][error.status] });
+        } else {
+          setServerError(handleServerError(error));
+        }
       }
     }
   };
+  console.log(serverError);
 
   const onChange = (event) => {
     handleChange(event);
@@ -71,7 +72,9 @@ const Registration = () => {
             name="username"
             value={formData.username}
             onChange={onChange}
-            error={errors.username || serverError.username}
+            error={
+              errors.username || serverError.general || serverError.username
+            }
             style={
               errors.username || serverError.username
                 ? { outline: "solid" }

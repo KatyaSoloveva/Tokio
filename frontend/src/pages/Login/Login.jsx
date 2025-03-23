@@ -10,6 +10,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import Container from "../../components/Container/Container";
+import errorMessages from "../../utils /errorMessages";
 
 const Login = () => {
   const { formData, handleChange, handleSubmit, errors } = useForm({
@@ -31,7 +32,11 @@ const Login = () => {
         login(userData.auth_token);
         navigate("/");
       } catch (error) {
-        setServerError("Неверный email или пароль!");
+        setServerError(
+          errorMessages["general"][error.status] ||
+            errorMessages["login"][error.status] ||
+            errorMessages["login"]["undefined"]
+        );
       }
     } else {
       console.log("mistakes in  the form");

@@ -18,7 +18,7 @@ class Api {
         throw data;
       }
     } catch (error) {
-      throw error;
+      throw { error, status: res.status };
     }
   }
 
@@ -66,6 +66,21 @@ class Api {
       return this.checkResponse(response);
     } catch (error) {
       console.log("Ошибка при выходе:", error);
+      throw error;
+    }
+  }
+
+  async createTask({ name, text }) {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("/api/tasks/", {
+        method: "POST",
+        headers: { ...this._headers, authorization: `Token ${token}` },
+        body: JSON.stringify({ name, text }),
+      });
+      return this.checkResponse(response);
+    } catch (error) {
+      console.log("Ошибка при создании заметки:", error);
       throw error;
     }
   }

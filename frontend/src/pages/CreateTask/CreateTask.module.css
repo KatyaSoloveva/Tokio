@@ -1,0 +1,15 @@
+.formCreateTask {
+    width: 80%;
+    max-width: none;
+}
+
+.inputName {
+    width: 50%;
+}
+
+.inputText {
+    height: 472px;
+    width: 100%;
+    overflow: auto;
+    resize: vertical;
+}

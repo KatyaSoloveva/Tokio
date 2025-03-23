@@ -12,7 +12,8 @@
 }
 
 .inputLabel {
-  display: inline;
+  display: block;
+  text-align: left
 }
 
 .errorMessage {

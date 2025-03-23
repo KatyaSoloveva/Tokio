@@ -25,13 +25,6 @@ const Header = () => {
         </LinkComponent>
         <div className={isAuthenticated ? styles.nav2 : styles.nav}>
           <LinkComponent
-            to="/opportunities"
-            className={styles.link}
-            activeClassName={styles.link_active}
-          >
-            Возможности
-          </LinkComponent>
-          <LinkComponent
             to="/about"
             className={styles.link}
             activeClassName={styles.link_active}
@@ -39,13 +32,22 @@ const Header = () => {
             О проекте
           </LinkComponent>
           {isAuthenticated && (
-            <LinkComponent
-              to="/tasks"
-              className={styles.link}
-              activeClassName={styles.link_active}
-            >
-              Мои заметки
-            </LinkComponent>
+            <>
+              <LinkComponent
+                to="/create"
+                className={styles.link}
+                activeClassName={styles.link_active}
+              >
+                Создать заметку
+              </LinkComponent>
+              <LinkComponent
+                to="/tasks"
+                className={styles.link}
+                activeClassName={styles.link_active}
+              >
+                Мои заметки
+              </LinkComponent>
+            </>
           )}
         </div>
         <div className={styles.nav}>

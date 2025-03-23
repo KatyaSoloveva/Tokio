@@ -12,7 +12,7 @@ const About = () => {
         </Container>
         <Container className={styles.container}>
           <h2 className={styles.info}>Стек технологий</h2>
-          <ul class={styles.list}>
+          <ul className={styles.list}>
             <li>Заполнить</li>
             <li>Заполнить</li>
             <li>Заполнить</li>

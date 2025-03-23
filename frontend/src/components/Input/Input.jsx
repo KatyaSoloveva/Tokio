@@ -10,21 +10,35 @@ const Input = ({
   value,
   onChange,
   error,
+  fieldType = "input",
   ...props
 }) => {
   return (
     <label htmlFor={name} className={styles.inputLabel}>
-      <div className={styles.errorMessage}>{error}</div>
-      <input
-        id={name}
-        type={type}
-        name={name}
-        placeholder={label}
-        className={cn(styles.input, className)}
-        onChange={onChange}
-        value={value}
-        {...props}
-      />
+      {error && <div className={styles.errorMessage}>{error}</div>}
+      {fieldType === "textarea" ? (
+        <textarea
+          id={name}
+          type={type}
+          name={name}
+          placeholder={label}
+          className={cn(styles.input, className)}
+          onChange={onChange}
+          value={value}
+          {...props}
+        />
+      ) : (
+        <input
+          id={name}
+          type={type}
+          name={name}
+          placeholder={label}
+          className={cn(styles.input, className)}
+          onChange={onChange}
+          value={value}
+          {...props}
+        />
+      )}
     </label>
   );
 };
