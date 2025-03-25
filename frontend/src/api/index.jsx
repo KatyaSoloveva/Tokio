@@ -84,6 +84,20 @@ class Api {
       throw error;
     }
   }
+
+  async getTasks() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("/api/tasks/", {
+        method: "GET",
+        headers: { ...this._headers, authorization: `Token ${token}` },
+      });
+      return this.checkResponse(response);
+    } catch (error) {
+      console.log("Ошибка при получении заметок:", error);
+      throw error;
+    }
+  }
 }
 
 export default new Api("http://localhost:8000", {
