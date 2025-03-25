@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 # from djoser.serializers import UserSerializer
 
 from tasks.models import Task
@@ -10,6 +11,13 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = '__all__'
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Task.objects.all(),
+                fields=('author', 'name'),
+                message='Заметка с таким названием уже существует!',
+            )
+        ]
 
 
 # class UserSerializer(UserSerializer):

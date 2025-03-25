@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -12,8 +13,8 @@ class Task(models.Model):
                              null=True, blank=True,
                              verbose_name='Пользователь',
                              related_name='tasks_user')
-    name = models.CharField(max_length=255, verbose_name='Заметка',
-                            default='Безымянная заметка')
+    name = models.CharField(max_length=255, verbose_name='Заметка', null=True,
+                            blank=True, default=None)
     text = models.TextField(null=True, blank=True,
                             verbose_name='Текст заметки')
     pub_date = models.DateTimeField(auto_now_add=True,
@@ -31,9 +32,18 @@ class Task(models.Model):
         constraints = (
             models.UniqueConstraint(
                 fields=('author', 'name'),
-                name='unique_author_name'
+                name='unique_author_name',
+                condition=Q(name__isnull=False),
             ),
         )
 
     def __str__(self):
         return self.name[:20]
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            counter = Task.objects.filter(
+                name__startswith='Безымянная заметка'
+            ).count()
+            self.name = f'Безымянная заметка {counter + 1}'
+        return super().save(*args, **kwargs)

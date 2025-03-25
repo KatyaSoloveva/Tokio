@@ -10,6 +10,7 @@ import api from "../../api";
 
 const CreateTask = () => {
   const [formData, setFormData] = useState({ name: "", text: "" });
+  const [serverError, setServerError] = useState("")
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -20,14 +21,18 @@ const CreateTask = () => {
         text: formData.text,
       });
       navigate("/");
-    } catch (error) {}
+    } catch (error) {
+      // console.log(error.error['non_field_errors'][0])
+      setServerError("Заметка с таким названием уже существует!")
+    }
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setServerError("")
   };
-  console.log(formData);
+
   return (
     <Main withBG>
       <Container>
@@ -38,6 +43,8 @@ const CreateTask = () => {
             value={formData.name}
             className={styles.inputName}
             onChange={handleChange}
+            error={serverError}
+            style={serverError ? { outline: "solid" } : {}}
           ></Input>
           <Input
             label="Текст"
