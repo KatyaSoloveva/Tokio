@@ -11,6 +11,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: opacity 0.3s;
+  cursor: url("../../../public/paw2.cur") 30 30, auto;
 }
 
 .button:hover {

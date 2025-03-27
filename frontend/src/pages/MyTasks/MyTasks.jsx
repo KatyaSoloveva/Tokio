@@ -25,7 +25,7 @@ const MyTasks = () => {
     setSelectedTask(taskData);
     localStorage.setItem("selectedTask", JSON.stringify(taskData));
   };
-  console.log(isHidden);
+
   return (
     <Main className={styles.mainMyTasks}>
       {data.length > 0 ? (
