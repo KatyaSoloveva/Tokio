@@ -1,0 +1,15 @@
+.mainMyTasks {
+    display: flex;
+    padding-bottom: 0;
+}
+
+.tasksContainer {
+    padding: 20px 0;
+    width: 20%;
+    border-right: 3px solid rgb(223, 163, 196);
+    overflow-y: auto;
+}
+
+.firstTaskContainer {
+    width: 80%;
+}

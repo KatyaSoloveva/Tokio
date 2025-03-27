@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-# from djoser.serializers import UserSerializer
+from djoser.serializers import UserSerializer
 
 from tasks.models import Task
 
@@ -20,10 +20,10 @@ class TaskSerializer(serializers.ModelSerializer):
         ]
 
 
-# class UserSerializer(UserSerializer):
+class UserSerializer(UserSerializer):
 
-#     class Meta(UserSerializer.Meta):
-#         fields = UserSerializer.Meta.fields + ('first_name',
-#                                                'last_name', 'birthday')
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + ('first_name',
+                                               'last_name', 'birthday')
 
 # потом добавить поля - avatar, issubscribed

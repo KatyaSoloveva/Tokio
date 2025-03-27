@@ -7,7 +7,7 @@ import About from "./pages/About/About";
 import Header from "./components/Header/Header";
 import "./App.css";
 import { AuthProvider } from "./contexts/AuthContext";
-import Tasks from "./pages/Tasks/Tasks";
+import MyTasks from "./pages/MyTasks/MyTasks";
 
 export default function App() {
   return (
@@ -20,7 +20,7 @@ export default function App() {
           <Route path="login" element={<Login />}></Route>
           <Route path="create" element={<CreateTask />}></Route>
           <Route path="about" element={<About />}></Route>
-          <Route path="tasks" element={<Tasks />}></Route>
+          <Route path="tasks" element={<MyTasks />}></Route>
         </Routes>
       </>
     </AuthProvider>
