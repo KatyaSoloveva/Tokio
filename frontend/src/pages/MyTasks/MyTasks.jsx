@@ -23,32 +23,46 @@ const MyTasks = () => {
 
   const handleTaskClick = (taskData) => {
     setSelectedTask(taskData);
+    localStorage.setItem("selectedTask", JSON.stringify(taskData));
   };
-
   console.log(isHidden);
   return (
     <Main className={styles.mainMyTasks}>
-      {!isHidden && (
-        <Container className={styles.tasksContainer}>
-          <TaskLink tasks={data} onTaskClick={handleTaskClick}></TaskLink>
-        </Container>
+      {data.length > 0 ? (
+        <>
+          {!isHidden && (
+            <Container className={styles.tasksContainer}>
+              <TaskLink tasks={data} onTaskClick={handleTaskClick}></TaskLink>
+            </Container>
+          )}
+          <Container
+            className={
+              isHidden
+                ? styles.firstTaskContainerFull
+                : styles.firstTaskContainer
+            }
+          >
+            <TaskDetail
+              data={
+                localStorage.getItem("selectedTask")
+                  ? JSON.parse(localStorage.getItem("selectedTask"))
+                  : selectedTask
+              }
+            ></TaskDetail>
+          </Container>
+          <button
+            onClick={() => {
+              setIsHidden(!isHidden);
+            }}
+            className={styles.button}
+            style={isHidden ? { left: "0" } : {}}
+          ></button>
+        </>
+      ) : (
+        <h1>Тут пусто (потом сделать страницу норм)</h1>
       )}
-      <Container
-        className={
-          isHidden ? styles.firstTaskContainerFull : styles.firstTaskContainer
-        }
-      >
-        <TaskDetail data={selectedTask}></TaskDetail>
-      </Container>
-      <button
-        onClick={() => {
-          setIsHidden(!isHidden);
-        }}
-        className={styles.button} style={isHidden ? {left: "0"} : {}}
-      ></button>
     </Main>
   );
 };
 
 export default MyTasks;
-
