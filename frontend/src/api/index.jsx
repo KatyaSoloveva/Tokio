@@ -99,6 +99,20 @@ class Api {
     }
   }
 
+  async getTask({ task_id }) {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(`/api/tasks/${task_id}`, {
+        method: "GET",
+        headers: { ...this._headers, authorization: `Token ${token}` },
+      });
+      return this.checkResponse(response);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
   async getMyTasks() {
     const token = localStorage.getItem("token");
     try {
