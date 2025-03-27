@@ -118,8 +118,8 @@
 
 .link {
   padding: 5px;
-  color: rgb(105, 27, 75);
   font-weight: bold;
+  color: rgb(105, 27, 75);
 }
 
 .link_active {

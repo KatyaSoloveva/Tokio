@@ -9,6 +9,7 @@ import styles from "./MyTasks.module.css";
 const MyTasks = () => {
   const [data, setData] = useState([]);
   const [selectedTask, setSelectedTask] = useState([]);
+  const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -24,17 +25,30 @@ const MyTasks = () => {
     setSelectedTask(taskData);
   };
 
-  console.log("f", selectedTask);
+  console.log(isHidden);
   return (
     <Main className={styles.mainMyTasks}>
-      <Container className={styles.tasksContainer}>
-        <TaskLink tasks={data} onTaskClick={handleTaskClick}></TaskLink>
-      </Container>
-      <Container className={styles.firstTaskContainer}>
+      {!isHidden && (
+        <Container className={styles.tasksContainer}>
+          <TaskLink tasks={data} onTaskClick={handleTaskClick}></TaskLink>
+        </Container>
+      )}
+      <Container
+        className={
+          isHidden ? styles.firstTaskContainerFull : styles.firstTaskContainer
+        }
+      >
         <TaskDetail data={selectedTask}></TaskDetail>
       </Container>
+      <button
+        onClick={() => {
+          setIsHidden(!isHidden);
+        }}
+        className={styles.button} style={isHidden ? {left: "0"} : {}}
+      ></button>
     </Main>
   );
 };
 
 export default MyTasks;
+
