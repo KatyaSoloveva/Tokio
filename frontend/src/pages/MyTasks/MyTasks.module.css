@@ -13,17 +13,14 @@
   width: 80%;
 }
 
-.firstTaskContainerFull {
-    width: 100%;
-  }
-
 .button {
   position: fixed;
   top: 120px;
-  left: 20.2%; 
-  width: 15px;
+  left: 16.8%; 
+  width: 16px;
   height: 100px;
   background: rgb(223, 163, 196);
   border-radius: 5px;
+  cursor: pointer;
 }
 

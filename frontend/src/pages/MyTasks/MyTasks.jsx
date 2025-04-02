@@ -35,13 +35,7 @@ const MyTasks = () => {
               <TaskLink tasks={data} onTaskClick={handleTaskClick}></TaskLink>
             </Container>
           )}
-          <Container
-            className={
-              isHidden
-                ? styles.firstTaskContainerFull
-                : styles.firstTaskContainer
-            }
-          >
+          <Container className={!isHidden && styles.firstTaskContainerFull}>
             <TaskDetail
               data={
                 localStorage.getItem("selectedTask")

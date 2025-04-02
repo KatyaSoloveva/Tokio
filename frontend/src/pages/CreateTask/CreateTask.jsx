@@ -7,6 +7,7 @@ import Button from "../../components/Button/Button";
 import styles from "./CreateTask.module.css";
 import Main from "../../components/Main/Main";
 import api from "../../api";
+import Panel from "../../components/Panel/Panel";
 
 const CreateTask = () => {
   const [formData, setFormData] = useState({ name: "", text: "" });
@@ -22,7 +23,6 @@ const CreateTask = () => {
       });
       navigate("/");
     } catch (error) {
-      // console.log(error.error['non_field_errors'][0])
       setServerError("Заметка с таким названием уже существует!")
     }
   };
@@ -46,6 +46,7 @@ const CreateTask = () => {
             error={serverError}
             style={serverError ? { outline: "solid" } : {}}
           ></Input>
+          <Panel></Panel>
           <Input
             label="Текст"
             name="text"

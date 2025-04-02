@@ -1,0 +1,18 @@
+.panel {
+  margin: 10px 0;
+  background-color: hsl(300, 24%, 90%);
+  padding: 10px;
+  padding-top: 5px;
+  border: 1px solid #835e7e;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.liItem h1,
+.liItem h2,
+.liItem h3,
+.liItem h4,
+.liItem h5,
+.liItem h6 {
+  margin: 5px 0;
+}

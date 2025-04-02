@@ -1,0 +1,11 @@
+.tool {
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 3px; 
+    display: inline-block;
+    color: rgb(105, 27, 75);
+    box-sizing: border-box;
+    background-color: white;
+    border: 1px solid #835e7e;
+    border-radius: 5px;
+}
