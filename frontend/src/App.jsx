@@ -12,17 +12,17 @@ import MyTasks from "./pages/MyTasks/MyTasks";
 export default function App() {
   return (
     <AuthProvider>
-      <Header />
-      <>
-        <Routes>
-          <Route path="/" element={<MainPage />}></Route>
-          <Route path="register" element={<Registration />}></Route>
-          <Route path="login" element={<Login />}></Route>
-          <Route path="create" element={<CreateTask />}></Route>
-          <Route path="about" element={<About />}></Route>
-          <Route path="tasks" element={<MyTasks />}></Route>
-        </Routes>
-      </>
+        <Header />
+        <>
+          <Routes>
+            <Route path="/" element={<MainPage />}></Route>
+            <Route path="register" element={<Registration />}></Route>
+            <Route path="login" element={<Login />}></Route>
+            <Route path="create" element={<CreateTask />}></Route>
+            <Route path="about" element={<About />}></Route>
+            <Route path="tasks" element={<MyTasks />}></Route>
+          </Routes>
+        </>
     </AuthProvider>
   );
 }

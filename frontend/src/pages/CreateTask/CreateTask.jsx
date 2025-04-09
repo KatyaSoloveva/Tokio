@@ -8,11 +8,26 @@ import styles from "./CreateTask.module.css";
 import Main from "../../components/Main/Main";
 import api from "../../api";
 import Panel from "../../components/Panel/Panel";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import TextStyle from "@tiptap/extension-text-style";
+import FontFamily from "@tiptap/extension-font-family";
 
 const CreateTask = () => {
   const [formData, setFormData] = useState({ name: "", text: "" });
-  const [serverError, setServerError] = useState("")
+  const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
+
+  const editor = useEditor({
+    extensions: [StarterKit, TextStyle, FontFamily],
+    content: formData.text,
+    onUpdate: ({ editor }) => {
+      setFormData((prev) => ({
+        ...prev,
+        text: editor.getHTML(),
+      }));
+    },
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,21 +38,21 @@ const CreateTask = () => {
       });
       navigate("/");
     } catch (error) {
-      setServerError("Заметка с таким названием уже существует!")
+      setServerError("Заметка с таким названием уже существует!");
     }
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setServerError("")
+    setServerError("");
   };
-
   return (
     <Main withBG>
       <Container>
         <Form onSubmit={handleSubmit} className={styles.formCreateTask}>
           <Input
+            type="text"
             label="Заметка"
             name="name"
             value={formData.name}
@@ -46,15 +61,8 @@ const CreateTask = () => {
             error={serverError}
             style={serverError ? { outline: "solid" } : {}}
           ></Input>
-          <Panel></Panel>
-          <Input
-            label="Текст"
-            name="text"
-            value={formData.text}
-            className={styles.inputText}
-            fieldType="textarea"
-            onChange={handleChange}
-          ></Input>
+          <Panel editor={editor}></Panel>
+          <EditorContent editor={editor} className={styles.editor} />
           <Button type="submit">Создать заметку</Button>
         </Form>
       </Container>

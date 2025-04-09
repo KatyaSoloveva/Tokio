@@ -7,6 +7,7 @@ const ButtonDropDown = ({
   isOpen,
   setIsOpen,
   items,
+  onSelect,
 }) => {
   const handleClick = (event) => {
     event.preventDefault();
@@ -14,9 +15,10 @@ const ButtonDropDown = ({
   };
 
   const handleItemClick = (item) => (event) => {
-    event.preventDefault()
-      console.log(item)
-  }
+    event.preventDefault();
+    setIsOpen(!isOpen);
+    onSelect(item);
+  };
 
   return (
     <Tool className={styles.dropdown}>

@@ -43,6 +43,7 @@ class Task(models.Model):
     def save(self, *args, **kwargs):
         if not self.name:
             counter = Task.objects.filter(
+                author=self.author,
                 name__startswith='Безымянная заметка'
             ).count()
             self.name = f'Безымянная заметка {counter + 1}'

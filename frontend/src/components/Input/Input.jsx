@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 const Input = ({
   className,
   label,
-  type = "text",
+  type="text",
   name,
   value,
   onChange,

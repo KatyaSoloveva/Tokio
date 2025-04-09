@@ -7,17 +7,29 @@ import down_arrow from "/down_arrow.svg";
 import up_arrow from "/up_arrow.svg";
 import { fontOptions, headingOptions } from "../../utils /noteOptions";
 
-const Panel = () => {
-  const styleDropdownItems = headingOptions.map((item) => {
-    const content = <div style={item.value}>{item.label}</div>;
+const Panel = ({ editor }) => {
+
+  const selectStyle = (item) => {
+    if (!editor) return;
+    editor.chain().focus().toggleHeading({ level: item.level }).run()
+  };
+
+  const selectFont = (item) => {
+    console.log(item, editor);
+    if (!editor) return;
+    editor.chain().focus().setFontFamily(item.value).run();
+  };
+
+  const fontDropdownItems = fontOptions.map((item) => {
+    const content = <div style={{ fontFamily: item.value }}>{item.label}</div>;
     return {
       ...item,
       content: content,
     };
   });
 
-  const fontDropdownItems = fontOptions.map((item) => {
-    const content = <div style={{ fontFamily: item.value }}>{item.label}</div>;
+  const styleDropdownItems = headingOptions.map((item) => {
+    const content = <div style={item.value}>{item.label}</div>;
     return {
       ...item,
       content: content,
@@ -34,6 +46,7 @@ const Panel = () => {
         setIsOpen={setStyleIsOpen}
         buttonImg={styleIsOpen ? up_arrow : down_arrow}
         items={styleDropdownItems}
+        onSelect={selectStyle}
       ></ButtonDropDown>
       <ButtonDropDown
         buttonName="Шрифт"
@@ -41,6 +54,7 @@ const Panel = () => {
         setIsOpen={setFontIsOpen}
         buttonImg={fontIsOpen ? up_arrow : down_arrow}
         items={fontDropdownItems}
+        onSelect={selectFont}
       ></ButtonDropDown>
       <Tool>one</Tool>
       <Tool>two</Tool>
