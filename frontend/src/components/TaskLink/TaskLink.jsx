@@ -4,15 +4,14 @@ import LinkComponent from "../Link/Link";
 import logo from "/logo-nusya.png";
 import api from "../../api";
 
-const TaskLink = ({ tasks, onTaskClick  }) => {
-  const handleClick = (taskId) => async (event) =>{
-      event.preventDefault();
-      try {
-        const response = await api.getTask({ task_id: taskId });
-        onTaskClick(response)
-      } catch (error) {}
-    };
-
+const TaskLink = ({ tasks, onTaskClick }) => {
+  const handleClick = (taskId) => async (event) => {
+    event.preventDefault();
+    try {
+      const response = await api.getTask({ task_id: taskId });
+      onTaskClick(response);
+    } catch (error) {}
+  };
   return (
     <>
       {tasks.map((task) => (

@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth import get_user_model
+import bleach
+from bleach.css_sanitizer import CSSSanitizer
 
 User = get_user_model()
 
@@ -41,6 +43,7 @@ class Task(models.Model):
         return self.name[:20]
 
     def save(self, *args, **kwargs):
+        self.text = self.clean_html(self.text)
         if not self.name:
             counter = Task.objects.filter(
                 author=self.author,
@@ -48,3 +51,11 @@ class Task(models.Model):
             ).count()
             self.name = f'Безымянная заметка {counter + 1}'
         return super().save(*args, **kwargs)
+
+    @staticmethod
+    def clean_html(cleaned_text):
+        css_sanitizer = CSSSanitizer(allowed_css_properties=('font-family'))
+        tags = {'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'}
+        attrs = {'*': ['style']}
+        return bleach.clean(cleaned_text, tags=tags,
+                            attributes=attrs, css_sanitizer=css_sanitizer)

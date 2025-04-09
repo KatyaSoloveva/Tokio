@@ -2,3 +2,5 @@ Django
 djangorestframework
 Pillow
 djoser
+bleach
+bleach[css]
