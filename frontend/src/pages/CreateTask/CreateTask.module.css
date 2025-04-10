@@ -1,5 +1,5 @@
 .formCreateTask {
-  width: 80%;
+  width: 90%;
   max-width: none;
   padding-top: 30px;
 }
@@ -17,7 +17,8 @@
 
 .editor {
   width: 100%;
-  min-height: 400px;
+  min-height: 350px;
+  max-height: 500px;
   box-sizing: border-box;
   margin-bottom: 1rem;
   font-family: "SF Pro Display", sans-serif;
@@ -29,6 +30,8 @@
   color: rgb(105, 27, 75);
   text-align: left;
   display: flex;
+  overflow-y: auto;
+  resize: vertical;
 }
 
 .editor :global(.tiptap.ProseMirror:focus) {

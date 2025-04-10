@@ -8,6 +8,7 @@ const ButtonDropDown = ({
   setIsOpen,
   items,
   onSelect,
+  children,
 }) => {
   const handleClick = (event) => {
     event.preventDefault();
@@ -27,20 +28,40 @@ const ButtonDropDown = ({
         <img src={buttonImg} className={styles.panelImg}></img>
       </button>
       {isOpen && (
-        <ul className={styles.dropdownMenu}>
-          {items.map((item) => (
-            <li
-              key={item.label}
-              className={styles.liItem}
-              onClick={handleItemClick(item)}
-            >
-              {item.content}
-            </li>
-          ))}
-        </ul>
+        <div className={styles.dropdownMenu}>
+          {children ? (
+            <div className={styles.customContent}>{children}</div>
+          ) : (
+            <ul className={styles.listContent}>
+              {items.map((item) => (
+                <li
+                  key={item.label}
+                  className={styles.liItem}
+                  onClick={handleItemClick(item)}
+                >
+                  {item.content}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
     </Tool>
   );
 };
 
 export default ButtonDropDown;
+
+// {isOpen && (
+//   <ul className={styles.dropdownMenu}>
+//     {items.map((item) => (
+//       <li
+//         key={item.label}
+//         className={styles.liItem}
+//         onClick={handleItemClick(item)}
+//       >
+//         {item.content}
+//       </li>
+//     ))}
+//   </ul>
+// )}

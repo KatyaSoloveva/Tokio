@@ -12,6 +12,8 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
 import FontFamily from "@tiptap/extension-font-family";
+import { Color } from "@tiptap/extension-color";
+import { BackgroundColor } from "../../../tiptap-extension/src/BackgroundColorExtension";
 
 const CreateTask = () => {
   const [formData, setFormData] = useState({ name: "", text: "" });
@@ -19,7 +21,7 @@ const CreateTask = () => {
   const navigate = useNavigate();
 
   const editor = useEditor({
-    extensions: [StarterKit, TextStyle, FontFamily],
+    extensions: [StarterKit, TextStyle, FontFamily, Color, BackgroundColor],
     content: formData.text,
     onUpdate: ({ editor }) => {
       setFormData((prev) => ({
