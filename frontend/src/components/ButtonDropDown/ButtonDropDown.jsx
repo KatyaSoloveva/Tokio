@@ -9,6 +9,7 @@ const ButtonDropDown = ({
   items,
   onSelect,
   children,
+  isImage,
 }) => {
   const handleClick = (event) => {
     event.preventDefault();
@@ -28,7 +29,10 @@ const ButtonDropDown = ({
         <img src={buttonImg} className={styles.panelImg}></img>
       </button>
       {isOpen && (
-        <div className={styles.dropdownMenu}>
+        <div
+          className={styles.dropdownMenu}
+          style={isImage === "true" ? { minWidth: "120px" } : {}}
+        >
           {children ? (
             <div className={styles.customContent}>{children}</div>
           ) : (
@@ -37,9 +41,7 @@ const ButtonDropDown = ({
                 <li
                   key={item.label}
                   className={
-                    buttonName === "Выравнивание"
-                      ? styles.liItemAlign
-                      : styles.liItem
+                    isImage === "true" ? styles.liItemAlign : styles.liItem
                   }
                   onClick={handleItemClick(item)}
                 >

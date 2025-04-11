@@ -1,7 +1,9 @@
-import left from "/left.svg"
-import center from "/center.svg"
-import right from "/right.svg"
-import width from "/width.svg"
+import left from "/left.svg";
+import center from "/center.svg";
+import right from "/right.svg";
+import width from "/width.svg";
+import ordered_list from "/ordered_list.svg";
+import bulleted_list from "/bulleted_list.svg";
 
 export const headingOptions = [
   {
@@ -47,10 +49,14 @@ export const fontOptions = [
   { label: "Open Sans", value: "'Open Sans', 'Helvetica Neue', sans-serif" },
 ];
 
-
 export const textAlignOptions = [
-  {label: left, value: "left"},
-  {label: center, value: "center"},
-  {label: right, value: "right"},
-  {label: width, value: "justify"},
-]
+  { label: left, value: "left" },
+  { label: center, value: "center" },
+  { label: right, value: "right" },
+  { label: width, value: "justify" },
+];
+
+export const ListOptions = [
+  { label: ordered_list, value: "ordered_list" },
+  { label: bulleted_list, value: "bulleted_list" },
+];

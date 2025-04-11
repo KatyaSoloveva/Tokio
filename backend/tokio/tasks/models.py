@@ -58,7 +58,8 @@ class Task(models.Model):
             allowed_css_properties=('font-family', 'color', 'background-color',
                                     'text-align')
         )
-        tags = {'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'}
+        tags = {'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'ol', 'li',
+                'ul'}
         attrs = {'*': ['style']}
         return bleach.clean(cleaned_text, tags=tags,
                             attributes=attrs, css_sanitizer=css_sanitizer)

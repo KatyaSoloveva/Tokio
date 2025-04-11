@@ -9,6 +9,7 @@ import {
   fontOptions,
   headingOptions,
   textAlignOptions,
+  ListOptions,
 } from "../../utils /noteOptions";
 import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
@@ -19,6 +20,7 @@ const Panel = ({ editor }) => {
   const [fontColorIsOpen, setFontColorIsOpen] = useState(false);
   const [backColorIsOpen, setBackColorIsOpen] = useState(false);
   const [textAlignIsOpen, setTextAlignIsOpen] = useState(false);
+  const [listIsOpen, setListIsOpen] = useState(false);
   const [fontColor, setFontColor] = useColor("");
   const [backColor, setBackColor] = useColor("");
 
@@ -47,7 +49,14 @@ const Panel = ({ editor }) => {
   const selectTextAlign = (item) => {
     if (!editor) return;
     editor.chain().focus().setTextAlign(item.value).run();
-  }
+  };
+
+  const selectList = (item) => {
+    if (!editor) return;
+    else if (item.value === "ordered_list")
+      editor.chain().focus().toggleOrderedList().run();
+    else editor.chain().focus().toggleBulletList().run();
+  };
 
   const fontDropdownItems = fontOptions.map((item) => {
     const content = <div style={{ fontFamily: item.value }}>{item.label}</div>;
@@ -66,6 +75,14 @@ const Panel = ({ editor }) => {
   });
 
   const textAlignItems = textAlignOptions.map((item) => {
+    const content = <img src={item.label} className={styles.alignImage}></img>;
+    return {
+      ...item,
+      content: content,
+    };
+  });
+
+  const ListItems = ListOptions.map((item) => {
     const content = <img src={item.label} className={styles.alignImage}></img>;
     return {
       ...item,
@@ -124,6 +141,16 @@ const Panel = ({ editor }) => {
         buttonImg={textAlignIsOpen ? up_arrow : down_arrow}
         items={textAlignItems}
         onSelect={selectTextAlign}
+        isImage="true"
+      />
+      <ButtonDropDown
+        buttonName="Списки"
+        isOpen={listIsOpen}
+        setIsOpen={setListIsOpen}
+        buttonImg={listIsOpen ? up_arrow : down_arrow}
+        items={ListItems}
+        onSelect={selectList}
+        isImage="true"
       />
       <Tool>two</Tool>
       <Tool>three</Tool>
