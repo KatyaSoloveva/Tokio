@@ -55,7 +55,8 @@ class Task(models.Model):
     @staticmethod
     def clean_html(cleaned_text):
         css_sanitizer = CSSSanitizer(
-            allowed_css_properties=('font-family', 'color', 'background-color')
+            allowed_css_properties=('font-family', 'color', 'background-color',
+                                    'text-align')
         )
         tags = {'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span'}
         attrs = {'*': ['style']}

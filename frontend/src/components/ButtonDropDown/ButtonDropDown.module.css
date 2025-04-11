@@ -2,6 +2,12 @@
   cursor: pointer;
 }
 
+.liItemAlign {
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 20px;
+}
+
 .dropdown {
   position: relative;
 }
@@ -40,7 +46,6 @@
   margin: 2px 0 0 0;
   padding: 0 0 0 5px;
 }
-
 
 .customContent {
   padding: 3px;

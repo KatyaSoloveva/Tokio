@@ -36,7 +36,11 @@ const ButtonDropDown = ({
               {items.map((item) => (
                 <li
                   key={item.label}
-                  className={styles.liItem}
+                  className={
+                    buttonName === "Выравнивание"
+                      ? styles.liItemAlign
+                      : styles.liItem
+                  }
                   onClick={handleItemClick(item)}
                 >
                   {item.content}
@@ -51,17 +55,3 @@ const ButtonDropDown = ({
 };
 
 export default ButtonDropDown;
-
-// {isOpen && (
-//   <ul className={styles.dropdownMenu}>
-//     {items.map((item) => (
-//       <li
-//         key={item.label}
-//         className={styles.liItem}
-//         onClick={handleItemClick(item)}
-//       >
-//         {item.content}
-//       </li>
-//     ))}
-//   </ul>
-// )}

@@ -12,6 +12,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextStyle from "@tiptap/extension-text-style";
 import FontFamily from "@tiptap/extension-font-family";
+import TextAlign from "@tiptap/extension-text-align";
 import { Color } from "@tiptap/extension-color";
 import { BackgroundColor } from "../../../tiptap-extension/src/BackgroundColorExtension";
 
@@ -21,7 +22,16 @@ const CreateTask = () => {
   const navigate = useNavigate();
 
   const editor = useEditor({
-    extensions: [StarterKit, TextStyle, FontFamily, Color, BackgroundColor],
+    extensions: [
+      StarterKit,
+      TextStyle,
+      FontFamily,
+      Color,
+      BackgroundColor,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+    ],
     content: formData.text,
     onUpdate: ({ editor }) => {
       setFormData((prev) => ({

@@ -1,3 +1,8 @@
+import left from "/left.svg"
+import center from "/center.svg"
+import right from "/right.svg"
+import width from "/width.svg"
+
 export const headingOptions = [
   {
     label: "Заголовок 1",
@@ -41,3 +46,11 @@ export const fontOptions = [
   },
   { label: "Open Sans", value: "'Open Sans', 'Helvetica Neue', sans-serif" },
 ];
+
+
+export const textAlignOptions = [
+  {label: left, value: "left"},
+  {label: center, value: "center"},
+  {label: right, value: "right"},
+  {label: width, value: "justify"},
+]

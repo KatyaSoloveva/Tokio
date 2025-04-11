@@ -5,7 +5,11 @@ import Tool from "../Tool/Tool";
 import ButtonDropDown from "../ButtonDropDown/ButtonDropDown";
 import down_arrow from "/down_arrow.svg";
 import up_arrow from "/up_arrow.svg";
-import { fontOptions, headingOptions } from "../../utils /noteOptions";
+import {
+  fontOptions,
+  headingOptions,
+  textAlignOptions,
+} from "../../utils /noteOptions";
 import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
 
@@ -13,7 +17,8 @@ const Panel = ({ editor }) => {
   const [styleIsOpen, setStyleIsOpen] = useState(false);
   const [fontIsOpen, setFontIsOpen] = useState(false);
   const [fontColorIsOpen, setFontColorIsOpen] = useState(false);
-  const [backColorIsOpen, setBackColorIsOpen] = useState(false)
+  const [backColorIsOpen, setBackColorIsOpen] = useState(false);
+  const [textAlignIsOpen, setTextAlignIsOpen] = useState(false);
   const [fontColor, setFontColor] = useColor("");
   const [backColor, setBackColor] = useColor("");
 
@@ -30,14 +35,18 @@ const Panel = ({ editor }) => {
   const selectFontColor = (color) => {
     setFontColor(color);
     if (!editor) return;
-    editor.chain().focus().setColor(color.hex).run()
-  }
+    editor.chain().focus().setColor(color.hex).run();
+  };
 
   const selectBackColor = (color) => {
     setBackColor(color);
     if (!editor) return;
-    editor.chain().focus().setBackgroundColor(color.hex).run()
+    editor.chain().focus().setBackgroundColor(color.hex).run();
+  };
 
+  const selectTextAlign = (item) => {
+    if (!editor) return;
+    editor.chain().focus().setTextAlign(item.value).run();
   }
 
   const fontDropdownItems = fontOptions.map((item) => {
@@ -50,6 +59,14 @@ const Panel = ({ editor }) => {
 
   const styleDropdownItems = headingOptions.map((item) => {
     const content = <div style={item.value}>{item.label}</div>;
+    return {
+      ...item,
+      content: content,
+    };
+  });
+
+  const textAlignItems = textAlignOptions.map((item) => {
+    const content = <img src={item.label} className={styles.alignImage}></img>;
     return {
       ...item,
       content: content,
@@ -80,7 +97,12 @@ const Panel = ({ editor }) => {
         setIsOpen={setFontColorIsOpen}
         buttonImg={fontColorIsOpen ? up_arrow : down_arrow}
       >
-        <ColorPicker color={fontColor} onChange={selectFontColor} hideInput={["hsv"]} height={100} />
+        <ColorPicker
+          color={fontColor}
+          onChange={selectFontColor}
+          hideInput={["hsv"]}
+          height={100}
+        />
       </ButtonDropDown>
       <ButtonDropDown
         buttonName="Цвет фона"
@@ -88,9 +110,21 @@ const Panel = ({ editor }) => {
         setIsOpen={setBackColorIsOpen}
         buttonImg={backColorIsOpen ? up_arrow : down_arrow}
       >
-        <ColorPicker color={backColor} onChange={selectBackColor} hideInput={["hsv"]} height={100} />
+        <ColorPicker
+          color={backColor}
+          onChange={selectBackColor}
+          hideInput={["hsv"]}
+          height={100}
+        />
       </ButtonDropDown>
-      <Tool>one</Tool>
+      <ButtonDropDown
+        buttonName="Выравнивание"
+        isOpen={textAlignIsOpen}
+        setIsOpen={setTextAlignIsOpen}
+        buttonImg={textAlignIsOpen ? up_arrow : down_arrow}
+        items={textAlignItems}
+        onSelect={selectTextAlign}
+      />
       <Tool>two</Tool>
       <Tool>three</Tool>
       <Tool>four</Tool>

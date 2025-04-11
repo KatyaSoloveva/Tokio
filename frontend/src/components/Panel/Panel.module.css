@@ -16,3 +16,8 @@
 .liItem h6 {
   margin: 5px 0;
 }
+
+.alignImage {
+  width: 32px;
+  height: 32px;
+}

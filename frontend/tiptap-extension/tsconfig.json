@@ -6,6 +6,6 @@
     "moduleResolution": "node",
     "declaration": true,
     "noEmit": true,
-    "rootDir": "./src",
+    "rootDir": "./src"
   }
 }
