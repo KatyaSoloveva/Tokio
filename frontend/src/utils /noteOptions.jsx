@@ -4,6 +4,13 @@ import right from "/right.svg";
 import width from "/width.svg";
 import ordered_list from "/ordered_list.svg";
 import bulleted_list from "/bulleted_list.svg";
+import column_left from "/column_left.svg";
+import column_right from "/column_right.svg";
+import delete_column from "/delete_column.svg";
+import row_up from "/row_up.svg";
+import row_down from "/row_down.svg";
+import delete_row from "/delete_row.svg"
+import trash_bin from "/trash_bin.svg"
 
 export const headingOptions = [
   {
@@ -60,3 +67,14 @@ export const ListOptions = [
   { label: ordered_list, value: "ordered_list" },
   { label: bulleted_list, value: "bulleted_list" },
 ];
+
+
+export const tableOptions = [
+  {img: column_left, alt: "Add column before", action: "addColumnBefore"},
+  {img: column_right, alt: "Add column after", action: "addColumnAfter"},
+  {img: delete_column, alt: "Delete column", action: "deleteColumn"},
+  {img: row_up, alt: "Add row before", action: "addRowBefore"},
+  {img: row_down, alt: "Add row after", action: "addRowAfter"},
+  {img: delete_row, alt: "Delete row", action: "deleteRow"},
+  {img: trash_bin, alt: "Delete table", action: "deleteTable"}
+]

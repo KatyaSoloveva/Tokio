@@ -10,31 +10,39 @@ const ButtonDropDown = ({
   onSelect,
   children,
   isImage,
+  isColor,
+  onClick,
 }) => {
   const handleClick = (event) => {
-    event.preventDefault();
+    event.stopPropagation();
     setIsOpen(!isOpen);
   };
 
   const handleItemClick = (item) => (event) => {
     event.preventDefault();
-    setIsOpen(!isOpen);
+    setIsOpen(false);
     onSelect(item);
   };
 
   return (
     <Tool className={styles.dropdown}>
-      <button type="button" className={styles.button} onClick={handleClick}>
+      <button
+        type="button"
+        className={styles.button}
+        onClick={onClick || handleClick}
+      >
         <span className={styles.buttonName}>{buttonName}</span>
-        <img src={buttonImg} className={styles.panelImg}></img>
+        {!onClick && <img src={buttonImg} className={styles.panelImg}></img>}
       </button>
       {isOpen && (
         <div
           className={styles.dropdownMenu}
           style={isImage === "true" ? { minWidth: "120px" } : {}}
         >
-          {children ? (
-            <div className={styles.customContent}>{children}</div>
+          {isColor === "true" ? (
+            <div className={styles.customContent}></div>
+          ) : !items ? (
+            <div></div>
           ) : (
             <ul className={styles.listContent}>
               {items.map((item) => (
@@ -50,6 +58,7 @@ const ButtonDropDown = ({
               ))}
             </ul>
           )}
+          {children}
         </div>
       )}
     </Tool>

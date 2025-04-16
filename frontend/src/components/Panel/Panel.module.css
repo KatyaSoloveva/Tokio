@@ -21,3 +21,82 @@
   width: 32px;
   height: 32px;
 }
+
+:global(.tiptap.ProseMirror) {
+
+  table {
+    border-collapse: collapse;
+    margin: 0;
+    overflow: hidden;
+    table-layout: fixed;
+    width: 100%;
+
+    td,
+    th {
+      border: 1px solid rgb(90, 38, 58);
+      box-sizing: border-box;
+      min-width: 1em;
+      padding: 6px 8px;
+      position: relative;
+      vertical-align: top;
+
+      > * {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+    }
+
+    th {
+      background-color: rgb(250, 238, 248);
+      font-weight: bold;
+      text-align: left;
+    }
+
+    :global(.selectedCell:after) {
+      background: rgb(255, 236, 255);
+      content: "";
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      pointer-events: none;
+      position: absolute;
+      z-index: 2;
+    }
+
+    :global(.column-resize-handle) {
+      background-color: purple;
+      bottom: -2px;
+      pointer-events: none;
+      position: absolute;
+      right: -2px;
+      top: 0;
+      width: 4px;
+    }
+  }
+
+  :global(.tableWrapper) {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+
+  :global(&.resize-cursor) {
+    cursor: ew-resize;
+    cursor: col-resize;
+  }
+}
+
+
+.floating{
+  background-color: hsl(300, 24%, 90%);
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  min-width: 230px;
+  z-index: 900;
+}
+
+.imageForTable {
+  height: 32px;
+  width: 32px;;
+}

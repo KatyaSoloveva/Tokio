@@ -1,7 +1,6 @@
 import styles from "./Panel.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Container from "../Container/Container";
-import Tool from "../Tool/Tool";
 import ButtonDropDown from "../ButtonDropDown/ButtonDropDown";
 import down_arrow from "/down_arrow.svg";
 import up_arrow from "/up_arrow.svg";
@@ -10,6 +9,7 @@ import {
   headingOptions,
   textAlignOptions,
   ListOptions,
+  tableOptions,
 } from "../../utils /noteOptions";
 import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
@@ -23,6 +23,8 @@ const Panel = ({ editor }) => {
   const [listIsOpen, setListIsOpen] = useState(false);
   const [fontColor, setFontColor] = useColor("");
   const [backColor, setBackColor] = useColor("");
+  const [coords, setCoords] = useState(null);
+  const [selectedCellPos, setSelectedCellPos] = useState(null);
 
   const selectStyle = (item) => {
     if (!editor) return;
@@ -58,6 +60,70 @@ const Panel = ({ editor }) => {
     else editor.chain().focus().toggleBulletList().run();
   };
 
+  const handleClickTable = () => {
+    if (!editor) return;
+    editor
+      .chain()
+      .focus()
+      .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+      .run();
+  };
+
+  const handleClickEditTable = (action) => {
+    if (!editor) return;
+    const actions = {
+      addColumnBefore: () => editor.chain().focus().addColumnBefore().run(),
+      addColumnAfter: () => editor.chain().focus().addColumnAfter().run(),
+      deleteColumn: () => editor.chain().focus().deleteColumn().run(),
+      addRowBefore: () => editor.chain().focus().addRowBefore().run(),
+      addRowAfter: () => editor.chain().focus().addRowAfter().run(),
+      deleteRow: () => editor.chain().focus().deleteRow().run(),
+      deleteTable: () => editor.chain().focus().deleteTable().run(),
+    };
+
+    actions[action]();
+  };
+
+  useEffect(() => {
+    if (!editor) return;
+
+    const updatePosition = () => {
+      const { $from } = editor.state.selection;
+      const tableCellNode = $from.node(-1);
+      console.log(tableCellNode);
+      if (
+        tableCellNode !== undefined &&
+        tableCellNode.type.name === "tableCell"
+      ) {
+        const position = $from.posAtIndex(0);
+        if (position != selectedCellPos) {
+          const pos = editor.view.coordsAtPos(position);
+          setCoords({ top: pos.top + 15, left: pos.left });
+          setSelectedCellPos(position);
+        }
+      } else {
+        setCoords(null);
+      }
+    };
+    editor.on("selectionUpdate", updatePosition);
+    return () => {
+      editor.off("selectionUpdate", updatePosition);
+    };
+  }, [editor, selectedCellPos]);
+
+  useEffect(() => {
+    const handleFloating = () => {
+      setCoords(false);
+    };
+
+    document.addEventListener("keyup", handleFloating);
+    document.addEventListener("keydown", handleFloating);
+    return () => {
+      document.removeEventListener("keyup", handleFloating);
+      document.removeEventListener("keydown", handleFloating);
+    };
+  }, [coords]);
+
   const fontDropdownItems = fontOptions.map((item) => {
     const content = <div style={{ fontFamily: item.value }}>{item.label}</div>;
     return {
@@ -90,6 +156,37 @@ const Panel = ({ editor }) => {
     };
   });
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const isAnyOpen =
+        styleIsOpen ||
+        fontIsOpen ||
+        fontColorIsOpen ||
+        backColorIsOpen ||
+        textAlignIsOpen ||
+        listIsOpen;
+      if (!isAnyOpen) return;
+      const isInside = event.target.closest('[dropdown="true"]');
+      if (!isInside) {
+        setStyleIsOpen(false);
+        setFontIsOpen(false);
+        setFontColorIsOpen(false);
+        setBackColorIsOpen(false);
+        setTextAlignIsOpen(false);
+        setListIsOpen(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [
+    styleIsOpen,
+    fontIsOpen,
+    fontColorIsOpen,
+    backColorIsOpen,
+    textAlignIsOpen,
+    listIsOpen,
+  ]);
+
   return (
     <Container className={styles.panel}>
       <ButtonDropDown
@@ -113,6 +210,7 @@ const Panel = ({ editor }) => {
         isOpen={fontColorIsOpen}
         setIsOpen={setFontColorIsOpen}
         buttonImg={fontColorIsOpen ? up_arrow : down_arrow}
+        isColor="true"
       >
         <ColorPicker
           color={fontColor}
@@ -126,6 +224,7 @@ const Panel = ({ editor }) => {
         isOpen={backColorIsOpen}
         setIsOpen={setBackColorIsOpen}
         buttonImg={backColorIsOpen ? up_arrow : down_arrow}
+        isColor="true"
       >
         <ColorPicker
           color={backColor}
@@ -152,9 +251,36 @@ const Panel = ({ editor }) => {
         onSelect={selectList}
         isImage="true"
       />
-      <Tool>two</Tool>
-      <Tool>three</Tool>
-      <Tool>four</Tool>
+      <ButtonDropDown buttonName="Таблица" onClick={handleClickTable} />
+      {coords && (
+        <div
+          className={styles.floating}
+          style={{
+            position: "absolute",
+            top: `${coords.top}px`,
+            left: `${coords.left}px`,
+          }}
+        >
+          {tableOptions.map((item) => (
+            <button
+              key={item.alt}
+              type="button"
+              style={{ display: "inline-block" }}
+              // onClick={() => handleClickEditTable(item.action)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClickEditTable(item.action);
+              }}
+            >
+              <img
+                src={item.img}
+                alt={item.alt}
+                className={styles.imageForTable}
+              ></img>
+            </button>
+          ))}
+        </div>
+      )}
     </Container>
   );
 };

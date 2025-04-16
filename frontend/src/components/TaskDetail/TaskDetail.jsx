@@ -1,10 +1,15 @@
+import CreateEditTask from "../CreateEditTask/CreateEditTask";
+import styles from "./TaskDetail.module.css";
+
 const TaskDetail = ({ data }) => {
   return (
-    <div>
-      <h2>{data.name}</h2>
-      <p>{data.text}</p>
-      <div dangerouslySetInnerHTML={{ __html: data.text }} />
-    </div>
+    <CreateEditTask
+      formClassName={styles.formEditTask}
+      editorClassName={styles.editorEditTask}
+      buttonName="Сохранить редактирование"
+      label={data.name}
+      initialContent={data?.text || ""}
+    ></CreateEditTask>
   );
 };
 
