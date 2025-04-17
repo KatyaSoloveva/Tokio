@@ -4,7 +4,7 @@ import FormTitle from "../../components/FormTitle/FormTitle";
 import Button from "../../components/Button/Button";
 import Container from "../../components/Container/Container";
 import Main from "../../components/Main/Main";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useForm from "../../hooks/useForm";
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
@@ -25,16 +25,11 @@ const Registration = () => {
     const serverErrors = {};
     Object.keys(error.error).forEach((key) => {
       const error_key = key;
-      console.log(errorMessages["registration"], error_key);
       const error_message = errorMessages["registration"][error_key];
       serverErrors[key] = error_message;
     });
     return serverErrors;
   };
-
-  useEffect(() => {
-    console.log(formData), [formData];
-  });
 
   const onSubmit = async (event) => {
     if (handleSubmit(event)) {
@@ -55,7 +50,6 @@ const Registration = () => {
       }
     }
   };
-  console.log(serverError);
 
   const onChange = (event) => {
     handleChange(event);

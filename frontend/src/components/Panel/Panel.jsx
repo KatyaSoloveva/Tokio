@@ -90,7 +90,6 @@ const Panel = ({ editor }) => {
     const updatePosition = () => {
       const { $from } = editor.state.selection;
       const tableCellNode = $from.node(-1);
-      console.log(tableCellNode);
       if (
         tableCellNode !== undefined &&
         tableCellNode.type.name === "tableCell"

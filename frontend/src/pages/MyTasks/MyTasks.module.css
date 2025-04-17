@@ -7,6 +7,8 @@
   padding: 20px 0;
   width: 20%;
   border-right: 3px solid rgb(223, 163, 196);
+  overflow-y: auto;
+  max-height: 100vh;
 }
 
 .firstTaskContainer {
@@ -16,7 +18,7 @@
 .button {
   position: fixed;
   top: 120px;
-  left: 16.8%; 
+  left: 16.8%;
   width: 16px;
   height: 100px;
   background: rgb(223, 163, 196);
@@ -24,3 +26,6 @@
   cursor: pointer;
 }
 
+.searchInput {
+  width: 90%;
+}

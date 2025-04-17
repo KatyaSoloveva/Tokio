@@ -5,6 +5,7 @@ import TaskLink from "../../components/TaskLink/TaskLink";
 import TaskDetail from "../../components/TaskDetail/TaskDetail";
 import api from "../../api";
 import styles from "./MyTasks.module.css";
+import Input from "../../components/Input/Input";
 
 const MyTasks = () => {
   const [data, setData] = useState([]);
@@ -19,7 +20,7 @@ const MyTasks = () => {
       } catch (error) {}
     };
     fetchTasks();
-  }, []);
+  }, [data]);
 
   const handleTaskClick = (taskData) => {
     setSelectedTask(taskData);
@@ -32,6 +33,12 @@ const MyTasks = () => {
         <>
           {!isHidden && (
             <Container className={styles.tasksContainer}>
+              <Input
+                type="text"
+                name="search"
+                label="Заметка"
+                className={styles.searchInput}
+              />
               <TaskLink tasks={data} onTaskClick={handleTaskClick}></TaskLink>
             </Container>
           )}

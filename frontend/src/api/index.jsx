@@ -85,6 +85,21 @@ class Api {
     }
   }
 
+  async updateTask({ name, text, task_id }) {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(`/api/tasks/${task_id}/`, {
+        method: "PATCH",
+        headers: { ...this._headers, authorization: `Token ${token}` },
+        body: JSON.stringify({ name, text, id: task_id }),
+      });
+      return this.checkResponse(response);
+    } catch (error) {
+      console.log("Ошибка при редактировании заметки:", error);
+      throw error;
+    }
+  }
+
   async getTasks() {
     const token = localStorage.getItem("token");
     try {

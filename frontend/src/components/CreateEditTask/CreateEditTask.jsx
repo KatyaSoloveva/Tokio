@@ -26,6 +26,7 @@ const CreateEditTask = ({
   buttonName,
   label,
   initialContent,
+  submitType,
 }) => {
   const [formData, setFormData] = useState({ name: "", text: initialContent });
   const [serverError, setServerError] = useState("");
@@ -70,11 +71,26 @@ const CreateEditTask = ({
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await api.createTask({
-        name: formData.name,
-        text: formData.text,
-      });
-      navigate("/");
+      if (submitType === "createTask") {
+        const taskData = await api.createTask({
+          name: formData.name,
+          text: formData.text,
+        });
+        localStorage.setItem("selectedTask", JSON.stringify(taskData));
+        navigate("/tasks");
+      } else {
+        const data = JSON.parse(localStorage.getItem("selectedTask"));
+        const taskData = await api.updateTask({
+          name: formData.name || data.name,
+          text: formData.text,
+          task_id: data.id,
+        });
+        localStorage.setItem("selectedTask", JSON.stringify(taskData));
+        setFormData((prev) => ({
+          ...prev,
+          name: "",
+        }));
+      }
     } catch (error) {
       setServerError("Заметка с таким названием уже существует!");
     }
@@ -89,6 +105,7 @@ const CreateEditTask = ({
     <>
       <Form
         onSubmit={handleSubmit}
+        submitType={submitType}
         className={cn(formClassName, styles.formCreateTask)}
       >
         <Input

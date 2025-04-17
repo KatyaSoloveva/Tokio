@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Form from "../../components/Form/Form";
 import FormTitle from "../../components/FormTitle/FormTitle";
 import Button from "../../components/Button/Button";
@@ -42,10 +42,6 @@ const Login = () => {
       console.log("mistakes in  the form");
     }
   };
-
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
 
   const onChange = (event) => {
     handleChange(event);

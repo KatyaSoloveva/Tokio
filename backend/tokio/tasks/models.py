@@ -40,7 +40,7 @@ class Task(models.Model):
         )
 
     def __str__(self):
-        return self.name[:20]
+        return self.name[:30]
 
     def save(self, *args, **kwargs):
         self.text = self.clean_html(self.text)
@@ -54,13 +54,15 @@ class Task(models.Model):
 
     @staticmethod
     def clean_html(cleaned_text):
-        css_sanitizer = CSSSanitizer(
-            allowed_css_properties=('font-family', 'color', 'background-color',
-                                    'text-align', 'min-width')
-        )
-        tags = {'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'ol', 'li',
-                'ul', 'table', 'tbody', 'th', 'tr', 'td', 'div', 'colgroup',
-                'col', 'br', 'strong'}
-        attrs = {'*': ['style']}
-        return bleach.clean(cleaned_text, tags=tags,
-                            attributes=attrs, css_sanitizer=css_sanitizer)
+        if cleaned_text:
+            css_sanitizer = CSSSanitizer(
+                allowed_css_properties=('font-family', 'color',
+                                        'background-color', 'text-align',
+                                        'min-width')
+            )
+            tags = {'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'ol',
+                    'li', 'ul', 'table', 'tbody', 'th', 'tr', 'td', 'div',
+                    'colgroup', 'col', 'br', 'strong'}
+            attrs = {'*': ['style']}
+            return bleach.clean(cleaned_text, tags=tags,
+                                attributes=attrs, css_sanitizer=css_sanitizer)
