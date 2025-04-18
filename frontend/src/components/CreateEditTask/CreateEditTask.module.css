@@ -42,3 +42,9 @@
   flex: 1;
   z-index: 0;
 }
+
+.createTaskButton {
+  width: 45%;
+  margin: 15px;
+  margin-top: 25px;
+}

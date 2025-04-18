@@ -21,6 +21,7 @@ export default function App() {
           <Route path="create" element={<CreateTask />}></Route>
           <Route path="about" element={<About />}></Route>
           <Route path="tasks" element={<MyTasks />}></Route>
+          <Route path="tasks/:id" element={<MyTasks />} />
         </Routes>
       </>
     </AuthProvider>

@@ -23,3 +23,7 @@
   height: 50px;
   border-radius: 5px;
 }
+
+.activeLink {
+  color: rgb(138, 100, 128);
+}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Container from "../../components/Container/Container";
 import Main from "../../components/Main/Main";
 import TaskLink from "../../components/TaskLink/TaskLink";
@@ -9,8 +10,11 @@ import Input from "../../components/Input/Input";
 
 const MyTasks = () => {
   const [data, setData] = useState([]);
-  const [selectedTask, setSelectedTask] = useState([]);
   const [isHidden, setIsHidden] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate()
+
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -20,12 +24,20 @@ const MyTasks = () => {
       } catch (error) {}
     };
     fetchTasks();
-  }, [data]);
+  }, [id]);
 
-  const handleTaskClick = (taskData) => {
-    setSelectedTask(taskData);
-    localStorage.setItem("selectedTask", JSON.stringify(taskData));
-  };
+  useEffect(() => {
+    if (location.state?.refresh) {
+      const fetchTasks = async () => {
+        try {
+          const tasks = await api.getMyTasks();
+          setData(tasks);
+        } catch (error) {}
+      };
+      fetchTasks();
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state]);
 
   return (
     <Main className={styles.mainMyTasks}>
@@ -39,17 +51,17 @@ const MyTasks = () => {
                 label="Заметка"
                 className={styles.searchInput}
               />
-              <TaskLink tasks={data} onTaskClick={handleTaskClick}></TaskLink>
+              <TaskLink tasks={data}></TaskLink>
             </Container>
           )}
           <Container className={!isHidden && styles.firstTaskContainerFull}>
-            <TaskDetail
-              data={
-                localStorage.getItem("selectedTask")
-                  ? JSON.parse(localStorage.getItem("selectedTask"))
-                  : selectedTask
-              }
-            ></TaskDetail>
+            {id ? (
+              <TaskDetail
+                data={data.find((task) => task.id === parseInt(id))}
+              />
+            ) : (
+              <div>Выберите задачу из списка(потом сделать страницу норм)</div>
+            )}
           </Container>
           <button
             onClick={() => {

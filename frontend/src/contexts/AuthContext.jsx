@@ -18,7 +18,6 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await api.signout();
-      localStorage.removeItem("selectedTask");
     } catch (error) {
       alert("Не удалось выйти из системы.");
     } finally {

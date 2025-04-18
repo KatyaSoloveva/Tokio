@@ -100,7 +100,21 @@ class Api {
     }
   }
 
-  async getTasks() {
+  async deleteTask({ task_id }) {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(`/api/tasks/${task_id}/`, {
+        method: "DELETE",
+        headers: { ...this._headers, authorization: `Token ${token}` },
+      });
+      return this.checkResponse(response);
+    } catch (error) {
+      console.log("Ошибка удаления заметки:", error);
+      throw error;
+    }
+  }
+
+  async getMyTasks() {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch("/api/tasks/", {
@@ -117,27 +131,13 @@ class Api {
   async getTask({ task_id }) {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch(`/api/tasks/${task_id}`, {
+      const response = await fetch(`/api/tasks/${task_id}/`, {
         method: "GET",
         headers: { ...this._headers, authorization: `Token ${token}` },
       });
       return this.checkResponse(response);
     } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
-
-  async getMyTasks() {
-    const token = localStorage.getItem("token");
-    try {
-      const response = await fetch("api/users/me/tasks/", {
-        method: "GET",
-        headers: { ...this._headers, authorization: `Token ${token}` },
-      });
-      return this.checkResponse(response);
-    } catch (error) {
-      console.log(error);
+      console.log("Ошибка получения заметки:", error);
       throw error;
     }
   }

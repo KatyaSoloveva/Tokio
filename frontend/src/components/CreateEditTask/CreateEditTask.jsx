@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import cn from "classnames";
 import Form from "../../components/Form/Form";
 import Input from "../../components/Input/Input";
@@ -31,6 +31,7 @@ const CreateEditTask = ({
   const [formData, setFormData] = useState({ name: "", text: initialContent });
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const editor = useEditor({
     extensions: [
@@ -70,29 +71,31 @@ const CreateEditTask = ({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      if (submitType === "createTask") {
+
+    if (submitType === "createTask") {
+      try {
         const taskData = await api.createTask({
           name: formData.name,
           text: formData.text,
         });
-        localStorage.setItem("selectedTask", JSON.stringify(taskData));
-        navigate("/tasks");
-      } else {
-        const data = JSON.parse(localStorage.getItem("selectedTask"));
-        const taskData = await api.updateTask({
-          name: formData.name || data.name,
-          text: formData.text,
-          task_id: data.id,
-        });
-        localStorage.setItem("selectedTask", JSON.stringify(taskData));
-        setFormData((prev) => ({
-          ...prev,
-          name: "",
-        }));
+        navigate(`/tasks/${taskData.id}`);
+      } catch (error) {
+        setServerError("Ошибка при создании заметки.");
       }
-    } catch (error) {
-      setServerError("Заметка с таким названием уже существует!");
+    } else {
+      try {
+        const current_name = await api.getTask({ task_id: parseInt(id) });
+        await api.updateTask({
+          name: formData.name || current_name.name,
+          text: formData.text,
+          task_id: parseInt(id),
+        });
+        navigate(`/tasks/${id}`, { state: { refresh: true } });
+        setFormData((prev) => ({ ...prev, name: "" }));
+      } catch (error) {
+        console.log(error);
+        setServerError("Ошибка при обновлении заметки.");
+      }
     }
   };
 
@@ -101,6 +104,17 @@ const CreateEditTask = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
     setServerError("");
   };
+
+  const handleDelete = async (event) => {
+    event.preventDefault();
+    try {
+      await api.deleteTask({ task_id: parseInt(id) });
+      navigate("/tasks");
+    } catch (error) {
+      setServerError("Ошибка при удалении заметки.");
+    }
+  };
+
   return (
     <>
       <Form
@@ -123,7 +137,18 @@ const CreateEditTask = ({
           editor={editor}
           className={cn(editorClassName, styles.editor)}
         />
-        <Button type="submit">{buttonName}</Button>
+        <Button type="submit" className={styles.createTaskButton}>
+          {buttonName}
+        </Button>
+        {submitType != "createTask" && (
+          <Button
+            type="submit"
+            className={styles.createTaskButton}
+            onClick={handleDelete}
+          >
+            Удалить заметку
+          </Button>
+        )}
       </Form>
     </>
   );
