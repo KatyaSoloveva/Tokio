@@ -7,6 +7,20 @@ from bleach.css_sanitizer import CSSSanitizer
 User = get_user_model()
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=255, verbose_name='Категория',
+                            null=True, blank=True)
+    slug = models.SlugField(unique=True, verbose_name='Slug',
+                            max_length=256)
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+
+    def __str__(self):
+        return self.name[:30]
+
+
 class Task(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                verbose_name='Автор заметки',
@@ -26,6 +40,8 @@ class Task(models.Model):
     image = models.ImageField(upload_to='tasks/images',
                               null=True, blank=True,
                               verbose_name='Заставка заметки')
+    categories = models.ManyToManyField(Category, verbose_name='Категории',
+                                        null=True, blank=True)
 
     class Meta:
         verbose_name = 'Заметка'

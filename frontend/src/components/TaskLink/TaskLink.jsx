@@ -9,7 +9,7 @@ const TaskLink = ({ tasks }) => {
       {tasks.map((task) => (
         <Container className={styles.taskContainer} key={task.id}>
           <img
-            src={task.image ? `http://localhost:8000${task.image}` : logo}
+            src={task.image ? `${task.image}` : logo}
             className={styles.img}
           />
           <LinkComponent
