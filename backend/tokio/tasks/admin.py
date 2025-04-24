@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from django.contrib.auth.models import Group
 
-from .models import Category, Task
+from .models import Category, Status, Task
 
 
 @admin.register(Task)
@@ -13,7 +13,7 @@ class TaskAdmin(admin.ModelAdmin):
     list_filter = ('author__username',)
     readonly_fields = ('pub_date', 'update_date', 'get_image', 'get_text')
     fields = ('author', 'name', 'user', 'categories', 'get_text', 'text',
-              'image', 'get_image', 'pub_date', 'update_date')
+              'status', 'image', 'get_image', 'pub_date', 'update_date')
 
     @admin.display(description='Миниатюра заставки')
     def get_image(self, obj):
@@ -34,6 +34,12 @@ class TaskAdmin(admin.ModelAdmin):
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
+    search_fields = ('name', )
+
+
+@admin.register(Status)
+class StatusAdmin(admin.ModelAdmin):
+    list_display = ('name', )
     search_fields = ('name', )
 
 
