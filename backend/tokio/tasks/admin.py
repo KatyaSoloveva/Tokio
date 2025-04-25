@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from django.contrib.auth.models import Group
 
-from .models import Category, Status, Task
+from .models import Category, Task
 
 
 @admin.register(Task)
@@ -34,12 +34,6 @@ class TaskAdmin(admin.ModelAdmin):
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
-    search_fields = ('name', )
-
-
-@admin.register(Status)
-class StatusAdmin(admin.ModelAdmin):
-    list_display = ('name', )
     search_fields = ('name', )
 
 

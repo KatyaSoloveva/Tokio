@@ -21,28 +21,12 @@ class Category(models.Model):
         return self.name[:30]
 
 
-class Status(models.Model):
-    class StatusName(models.TextChoices):
+class Task(models.Model):
+    class Status(models.TextChoices):
         IN_PROGRESS = 'in_progress', 'В процессе'
         DONE = 'done', 'Сделано'
         NOT_STARTED = 'not_started', 'Не начато'
 
-    name = models.CharField(max_length=20, choices=StatusName.choices,
-                            unique=True, verbose_name='Статус заметки')
-
-    class Meta:
-        verbose_name = 'Статус заметки'
-        verbose_name_plural = 'Статусы заметок'
-
-    def __str__(self):
-        return self.name
-
-    @classmethod
-    def get_default_status(cls):
-        return cls.objects.get(name=cls.StatusName.NOT_STARTED.value).id
-
-
-class Task(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                verbose_name='Автор заметки',
                                related_name='tasks_author')
@@ -62,10 +46,9 @@ class Task(models.Model):
                               null=True, blank=True,
                               verbose_name='Заставка заметки')
     categories = models.ManyToManyField(Category, verbose_name='Категории')
-    status = models.ForeignKey(Status,
-                               on_delete=models.PROTECT,
-                               verbose_name='Статус заметки',
-                               default=Status.get_default_status)
+    status = models.CharField(max_length=20, choices=Status.choices,
+                              verbose_name='Статус заметки',
+                              default=Status.NOT_STARTED)
 
     class Meta:
         verbose_name = 'Заметка'
