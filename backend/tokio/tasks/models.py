@@ -8,8 +8,7 @@ User = get_user_model()
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Категория',
-                            null=True, blank=True)
+    name = models.CharField(max_length=255, verbose_name='Категория')
     slug = models.SlugField(unique=True, verbose_name='Slug',
                             max_length=256)
 
@@ -45,7 +44,8 @@ class Task(models.Model):
     image = models.ImageField(upload_to='tasks/images',
                               null=True, blank=True,
                               verbose_name='Заставка заметки')
-    categories = models.ManyToManyField(Category, verbose_name='Категории')
+    categories = models.ManyToManyField(Category, verbose_name='Категории',
+                                        blank=True)
     status = models.CharField(max_length=20, choices=Status.choices,
                               verbose_name='Статус заметки',
                               default=Status.NOT_STARTED)
