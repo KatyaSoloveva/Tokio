@@ -8,7 +8,7 @@ from .models import Category, Task
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('author', 'name', 'get_categories')
+    list_display = ('author', 'name', 'get_categories', 'status')
     search_fields = ('name', 'author__username')
     list_filter = ('author__username',)
     readonly_fields = ('pub_date', 'update_date', 'get_image', 'get_text')
