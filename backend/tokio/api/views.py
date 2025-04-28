@@ -14,9 +14,6 @@ class TaskViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Task.objects.filter(author=self.request.user)
 
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()

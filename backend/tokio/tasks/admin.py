@@ -33,8 +33,8 @@ class TaskAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug')
-    search_fields = ('name', )
+    list_display = ('name', 'slug', 'author')
+    search_fields = ('name', 'author')
 
 
 admin.site.unregister(Group)

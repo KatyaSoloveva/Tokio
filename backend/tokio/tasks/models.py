@@ -8,6 +8,10 @@ User = get_user_model()
 
 
 class Category(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               verbose_name='Создатель категории',
+                               related_name='categories', null=True,
+                               blank=True)
     name = models.CharField(max_length=255, verbose_name='Категория')
     slug = models.SlugField(unique=True, verbose_name='Slug',
                             max_length=256)
