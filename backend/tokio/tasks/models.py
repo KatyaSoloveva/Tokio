@@ -3,6 +3,8 @@ from django.db.models import Q
 from django.contrib.auth import get_user_model
 import bleach
 from bleach.css_sanitizer import CSSSanitizer
+from django.utils.text import slugify
+from unidecode import unidecode
 
 User = get_user_model()
 
@@ -22,6 +24,14 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name[:30]
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(unidecode(self.name))
+        if (
+            update_fields := kwargs.get("update_fields")
+        ) is not None and "name" in update_fields:
+            kwargs["update_fields"] = {"slug"}.union(update_fields)
+        super().save(**kwargs)
 
 
 class Task(models.Model):
@@ -77,7 +87,7 @@ class Task(models.Model):
                 name__startswith='Безымянная заметка'
             ).count()
             self.name = f'Безымянная заметка {counter + 1}'
-        return super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     @staticmethod
     def clean_html(cleaned_text):
