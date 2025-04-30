@@ -21,6 +21,12 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
+        constraints = (
+            models.UniqueConstraint(
+                fields=('author', 'name'),
+                name='unique_name_author',
+            ),
+        )
 
     def __str__(self):
         return self.name[:30]
