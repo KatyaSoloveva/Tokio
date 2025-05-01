@@ -15,7 +15,7 @@ class Category(models.Model):
                                related_name='categories', null=True,
                                blank=True)
     name = models.CharField(max_length=255, verbose_name='Категория')
-    slug = models.SlugField(unique=True, verbose_name='Slug',
+    slug = models.SlugField(verbose_name='Slug',
                             max_length=256)
 
     class Meta:
@@ -24,8 +24,12 @@ class Category(models.Model):
         constraints = (
             models.UniqueConstraint(
                 fields=('author', 'name'),
-                name='unique_name_author',
+                name='unique_category_author_name',
             ),
+            models.UniqueConstraint(
+                fields=('author', 'slug'),
+                name='unique_author_slug'
+            )
         )
 
     def __str__(self):
@@ -37,7 +41,7 @@ class Category(models.Model):
             update_fields := kwargs.get("update_fields")
         ) is not None and "name" in update_fields:
             kwargs["update_fields"] = {"slug"}.union(update_fields)
-        super().save(**kwargs)
+        super().save(*args, **kwargs)
 
 
 class Task(models.Model):
@@ -77,7 +81,7 @@ class Task(models.Model):
         constraints = (
             models.UniqueConstraint(
                 fields=('author', 'name'),
-                name='unique_author_name',
+                name='unique_task_author_name',
                 condition=Q(name__isnull=False),
             ),
         )
