@@ -35,7 +35,7 @@ class TaskAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'author')
     search_fields = ('name', 'author')
-    prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ('slug',)
 
 
 admin.site.unregister(Group)

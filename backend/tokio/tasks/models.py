@@ -1,9 +1,9 @@
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth import get_user_model
+from django.utils.text import slugify
 import bleach
 from bleach.css_sanitizer import CSSSanitizer
-from django.utils.text import slugify
 from unidecode import unidecode
 
 User = get_user_model()
@@ -16,7 +16,7 @@ class Category(models.Model):
                                blank=True)
     name = models.CharField(max_length=255, verbose_name='Категория')
     slug = models.SlugField(verbose_name='Slug',
-                            max_length=256)
+                            max_length=256, blank=True)
 
     class Meta:
         verbose_name = 'Категория'
@@ -35,12 +35,18 @@ class Category(models.Model):
     def __str__(self):
         return self.name[:30]
 
+    def get_unique_slug(self, base_slug):
+        slug = base_slug
+        counter = 0
+        while Category.objects.filter(author=self.author, slug=slug).exists():
+            counter += 1
+            slug = f"{base_slug}-{counter}"
+        return slug
+
     def save(self, *args, **kwargs):
-        self.slug = slugify(unidecode(self.name))
-        if (
-            update_fields := kwargs.get("update_fields")
-        ) is not None and "name" in update_fields:
-            kwargs["update_fields"] = {"slug"}.union(update_fields)
+        if not self.id:
+            base_slug = slugify(unidecode(self.name))
+            self.slug = self.get_unique_slug(base_slug)
         super().save(*args, **kwargs)
 
 
@@ -57,7 +63,7 @@ class Task(models.Model):
                              null=True, blank=True,
                              verbose_name='Пользователь',
                              related_name='tasks_user')
-    name = models.CharField(max_length=255, verbose_name='Заметка', null=True,
+    name = models.CharField(max_length=255, verbose_name='Заметка',
                             blank=True, default=None)
     text = models.TextField(null=True, blank=True,
                             verbose_name='Текст заметки')
