@@ -19,7 +19,9 @@ class Category(models.Model):
     name = models.CharField(max_length=255, verbose_name='Категория',
                             validators=(validate_category_name,))
     slug = models.SlugField(verbose_name='Slug',
-                            max_length=256, blank=True)
+                            max_length=50, blank=True,
+                            help_text='Поле заполняется автоматически, но при '
+                            'желании может быть заполнено самостоятельно')
 
     class Meta:
         verbose_name = 'Категория'
@@ -43,12 +45,12 @@ class Category(models.Model):
         counter = 0
         while Category.objects.filter(author=self.author, slug=slug).exists():
             counter += 1
-            slug = f"{base_slug}-{counter}"
+            slug = f"{base_slug[:45]}-{counter}"
         return slug
 
     def save(self, *args, **kwargs):
         if not self.id:
-            base_slug = slugify(unidecode(self.name))
+            base_slug = slugify(unidecode(self.name))[:50]
             self.slug = self.get_unique_slug(base_slug)
         super().save(*args, **kwargs)
 
