@@ -6,6 +6,8 @@ import bleach
 from bleach.css_sanitizer import CSSSanitizer
 from unidecode import unidecode
 
+from core.validators import validate_category_name
+
 User = get_user_model()
 
 
@@ -14,7 +16,8 @@ class Category(models.Model):
                                verbose_name='Создатель категории',
                                related_name='categories', null=True,
                                blank=True)
-    name = models.CharField(max_length=255, verbose_name='Категория')
+    name = models.CharField(max_length=255, verbose_name='Категория',
+                            validators=(validate_category_name,))
     slug = models.SlugField(verbose_name='Slug',
                             max_length=256, blank=True)
 
