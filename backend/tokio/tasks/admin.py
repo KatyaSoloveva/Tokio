@@ -33,7 +33,7 @@ class TaskAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'author')
+    list_display = ('name', 'slug', 'author', 'is_system')
     search_fields = ('name', 'author')
 
 

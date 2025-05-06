@@ -14,7 +14,9 @@ class Command(BaseCommand):
             with open(file_path, 'r', encoding='utf-8') as f:
                 reader = csv.reader(f)
                 categories = [
-                    Category(name=name, slug=slug) for name, slug in reader
+                    Category(
+                        name=name, slug=slug, is_system=True
+                    ) for name, slug in reader
                 ]
                 Category.objects.bulk_create(categories, ignore_conflicts=True)
             self.stdout.write(

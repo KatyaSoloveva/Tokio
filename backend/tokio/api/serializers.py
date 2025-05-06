@@ -5,6 +5,15 @@ from djoser.serializers import UserSerializer
 from tasks.models import Category, Task
 
 
+class UserSerializer(UserSerializer):
+
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + ('first_name',
+                                               'last_name', 'birthday')
+
+# потом добавить поля - avatar, issubscribed
+
+
 class TaskSerializer(serializers.ModelSerializer):
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
@@ -26,12 +35,3 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
-
-
-class UserSerializer(UserSerializer):
-
-    class Meta(UserSerializer.Meta):
-        fields = UserSerializer.Meta.fields + ('first_name',
-                                               'last_name', 'birthday')
-
-# потом добавить поля - avatar, issubscribed

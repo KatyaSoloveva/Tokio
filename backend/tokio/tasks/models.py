@@ -22,6 +22,7 @@ class Category(models.Model):
                             max_length=50, blank=True,
                             help_text='Поле заполняется автоматически, но при '
                             'желании может быть заполнено самостоятельно')
+    is_system = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Категория'
