@@ -65,10 +65,9 @@ class Task(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                verbose_name='Автор заметки',
                                related_name='tasks_author')
-    user = models.ForeignKey(User, on_delete=models.CASCADE,
-                             null=True, blank=True,
-                             verbose_name='Пользователь',
-                             related_name='tasks_user')
+    collaborators = models.ManyToManyField(User, blank=True,
+                                           verbose_name='Коллабораторы',
+                                           related_name='tasks_collaborators')
     name = models.CharField(max_length=255, verbose_name='Заметка',
                             blank=True, default=None)
     text = models.TextField(null=True, blank=True,

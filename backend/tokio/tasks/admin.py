@@ -12,8 +12,9 @@ class TaskAdmin(admin.ModelAdmin):
     search_fields = ('name', 'author__username')
     list_filter = ('author__username',)
     readonly_fields = ('pub_date', 'update_date', 'get_image', 'get_text')
-    fields = ('author', 'name', 'user', 'categories', 'get_text', 'text',
-              'status', 'image', 'get_image', 'pub_date', 'update_date')
+    fields = ('author', 'name', 'collaborators', 'categories', 'get_text',
+              'text', 'status', 'image', 'get_image', 'pub_date',
+              'update_date')
 
     @admin.display(description='Миниатюра заставки')
     def get_image(self, obj):
