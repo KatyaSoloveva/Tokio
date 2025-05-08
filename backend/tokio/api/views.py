@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 from .serializers import (CategorySerializer, CollaborationRequestSerializer,
                           TaskWriteSerializer, TaskReadSerializer)
@@ -23,8 +24,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
 
     def get_queryset(self):
-        return (Category.objects.filter(author=self.request.user)
-                or Category.objects.filter(is_system=True))
+        return (Category.objects.filter(
+            Q(author=self.request.user) | Q(is_system=True)
+        ))
 
 
 class CollaborationRequestViewSet(viewsets.ModelViewSet):
