@@ -14,7 +14,15 @@ class UserSerializer(UserSerializer):
 # потом добавить поля - avatar, issubscribed
 
 
-class TaskSerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
+    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
+class TaskWriteSerializer(serializers.ModelSerializer):
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
@@ -28,12 +36,22 @@ class TaskSerializer(serializers.ModelSerializer):
             )
         ]
 
+    def create(self, validated_data):
+        categories = validated_data.pop('categories')
+        collaborators = validated_data.pop('collaborators')
+        instance = Task.objects.create(**validated_data)
+        instance.categories.set(categories)
+        instance.collaborators.set(collaborators)
+        return instance
 
-class CategorySerializer(serializers.ModelSerializer):
-    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+class TaskReadSerializer(serializers.ModelSerializer):
+    author = UserSerializer(read_only=True)
+    categories = CategorySerializer(many=True, read_only=True)
+    collaborators = UserSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Category
+        model = Task
         fields = '__all__'
 
 
