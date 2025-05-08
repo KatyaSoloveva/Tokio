@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from djoser.serializers import UserSerializer
 
-from tasks.models import Category, Task
+from tasks.models import Category, CollaborationRequest, Task
 
 
 class UserSerializer(UserSerializer):
@@ -34,4 +34,12 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
+        fields = '__all__'
+
+
+class CollaborationRequestSerializer(serializers.ModelSerializer):
+    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = CollaborationRequest
         fields = '__all__'
