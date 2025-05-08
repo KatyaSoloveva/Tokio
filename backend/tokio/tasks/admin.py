@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from django.contrib.auth.models import Group
 
-from .models import Category, Task
+from .models import Category, CollaborationRequest, Task
 
 
 @admin.register(Task)
@@ -36,6 +36,11 @@ class TaskAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'author', 'is_system')
     search_fields = ('name', 'author')
+
+
+@admin.register(CollaborationRequest)
+class CollaborationRequestAdmin(admin.ModelAdmin):
+    list_display = ('task', 'author', 'collaborator', 'status')
 
 
 admin.site.unregister(Group)

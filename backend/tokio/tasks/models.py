@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Q
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
+from django.core.exceptions import ValidationError
 import bleach
 from bleach.css_sanitizer import CSSSanitizer
 from unidecode import unidecode
@@ -46,7 +47,7 @@ class Category(models.Model):
         counter = 0
         while Category.objects.filter(author=self.author, slug=slug).exists():
             counter += 1
-            slug = f"{base_slug[:45]}-{counter}"
+            slug = f'{base_slug[:45]}-{counter}'
         return slug
 
     def save(self, *args, **kwargs):
@@ -124,3 +125,50 @@ class Task(models.Model):
             attrs = {'*': ['style']}
             return bleach.clean(cleaned_text, tags=tags,
                                 attributes=attrs, css_sanitizer=css_sanitizer)
+
+
+class CollaborationRequest(models.Model):
+    class Status(models.TextChoices):
+        PENDING = 'pending', 'Ожидает подтверждения'
+        ACCEPTED = 'accepted', 'Принято'
+        REJECTED = 'rejected', 'Отклонено'
+
+    task = models.ForeignKey(Task, on_delete=models.CASCADE,
+                             verbose_name='Задача')
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               related_name='requests_author',
+                               verbose_name='Пригласивший')
+    collaborator = models.ForeignKey(User, on_delete=models.CASCADE,
+                                     related_name='requests_receiver',
+                                     verbose_name='Приглашенный')
+    status = models.CharField(max_length=20, choices=Status.choices,
+                              verbose_name='Статус запроса',
+                              default=Status.PENDING)
+    request_date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата создания запроса на сотрудничество'
+    )
+
+    class Meta:
+        verbose_name = 'Запрос на коллаборацию'
+        verbose_name_plural = 'Запросы на коллаборацию'
+        ordering = ('-request_date',)
+        constraints = (
+            models.UniqueConstraint(
+                fields=('task', 'author', 'collaborator'),
+                name='unique_task_author_collaborator',
+            ),
+        )
+
+    def __str__(self):
+        return f'{self.task}-{self.author}-{self.collaborator}'
+
+    def clean(self):
+        if self.author == self.collaborator:
+            raise ValidationError(
+                'Нельзя отправить запрос на коллаборацию самому себе!'
+            )
+        if self.author != self.task.author:
+            raise ValidationError(
+                'Нельзя пригласить коллаборатора не в свою заметку!'
+            )
