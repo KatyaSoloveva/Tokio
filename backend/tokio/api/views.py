@@ -20,8 +20,11 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        return (Category.objects.filter(author=self.request.user)
+                or Category.objects.filter(is_system=True))
 
 
 class CollaborationRequestViewSet(viewsets.ModelViewSet):

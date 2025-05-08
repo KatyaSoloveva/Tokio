@@ -37,8 +37,8 @@ class TaskWriteSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        categories = validated_data.pop('categories')
-        collaborators = validated_data.pop('collaborators')
+        categories = validated_data.pop('categories', [])
+        collaborators = validated_data.pop('collaborators', [])
         instance = Task.objects.create(**validated_data)
         instance.categories.set(categories)
         instance.collaborators.set(collaborators)
