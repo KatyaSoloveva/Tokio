@@ -10,6 +10,34 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'sql': {
+            'format': '\n\033[33m[SQL] \033[36m%(duration)sms\033[0m\n\033[34mQuery: %(sql)s\nArgs: %(params)s\033[0m\n',
+        },
+        'verbose': {
+            'format': '{asctime} {levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'sql',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

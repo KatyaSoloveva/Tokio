@@ -14,7 +14,9 @@ User = get_user_model()
 
 class TaskViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
-        return Task.objects.filter(author=self.request.user)
+        return Task.objects.filter(author=self.request.user).select_related(
+            'author'
+        ).prefetch_related('categories', 'collaborators')
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
@@ -35,9 +37,15 @@ class CollaborationRequestViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        CollaborationRequest.objects.filter(
+            Q(author=user) | Q(collaborator=user)
+        )
         return CollaborationRequest.objects.filter(
             Q(author=user) | Q(collaborator=user)
-        ).select_related('task', 'collaborator', 'author')
+        ).select_related('task', 'collaborator', 'author').only(
+            'id', 'status', 'request_date', 'task__name', 'author__username',
+            'collaborator__username'
+        )
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
