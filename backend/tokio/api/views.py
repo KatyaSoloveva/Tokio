@@ -2,7 +2,9 @@ from rest_framework import viewsets
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
-from .serializers import (CategorySerializer, CollaborationRequestSerializer,
+from .serializers import (CategorySerializer,
+                          CollaborationRequestReadSerializer,
+                          CollaborationRequestWriteSerializer,
                           TaskWriteSerializer, TaskReadSerializer)
 from tasks.models import Category, CollaborationRequest, Task
 
@@ -30,5 +32,15 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class CollaborationRequestViewSet(viewsets.ModelViewSet):
-    queryset = CollaborationRequest.objects.all()
-    serializer_class = CollaborationRequestSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return CollaborationRequest.objects.filter(
+            Q(author=user) | Q(collaborator=user)
+        ).select_related('task', 'collaborator', 'author')
+
+    def get_serializer_class(self):
+        if self.action in ('list', 'retrieve'):
+            return CollaborationRequestReadSerializer
+        elif self.action in ('create', 'destroy'):
+            return CollaborationRequestWriteSerializer

@@ -8,8 +8,8 @@ router.register(r'tasks', TaskViewSet,
                 basename='tasks')
 router.register(r'categories', CategoryViewSet,
                 basename='categories')
-router.register(r'collaboration-requests', CollaborationRequestViewSet,
-                basename='requests')
+router.register(r'collaborations', CollaborationRequestViewSet,
+                basename='collaborations')
 
 
 urlpatterns = [

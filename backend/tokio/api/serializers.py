@@ -55,9 +55,23 @@ class TaskReadSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CollaborationRequestSerializer(serializers.ModelSerializer):
+class CollaborationRequestReadSerializer(serializers.ModelSerializer):
+    task = serializers.CharField(source='task.name')
+    collaborator = serializers.CharField(source='collaborator.username')
+    author = serializers.CharField(source='author.username')
+
+    class Meta:
+        model = CollaborationRequest
+        fields = '__all__'
+
+
+class CollaborationRequestWriteSerializer(serializers.ModelSerializer):
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = CollaborationRequest
         fields = '__all__'
+
+    def to_representation(self, instance):
+        print(instance)
+        return CollaborationRequestReadSerializer(instance=instance).data
