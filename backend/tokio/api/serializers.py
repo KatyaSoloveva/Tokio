@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
 from djoser.serializers import UserSerializer
+from django.core.exceptions import ValidationError
 
 from tasks.models import Category, CollaborationRequest, Task
 
@@ -28,13 +28,6 @@ class TaskWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = '__all__'
-        validators = [
-            UniqueTogetherValidator(
-                queryset=Task.objects.all(),
-                fields=('author', 'name'),
-                message='Заметка с таким названием уже существует!',
-            )
-        ]
 
     def create(self, validated_data):
         categories = validated_data.pop('categories', [])
@@ -71,6 +64,17 @@ class CollaborationRequestWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollaborationRequest
         fields = '__all__'
+
+    def validate(self, attrs):
+        if attrs['author'] != attrs['task'].author:
+            raise ValidationError(
+                'Нельзя пригласить коллаборатора не в свою заметку!'
+            )
+        elif attrs['author'] == attrs['collaborator']:
+            raise ValidationError(
+                'Нельзя отправить запрос на коллаборацию самому себе!'
+            )
+        return attrs
 
     def to_representation(self, instance):
         print(instance)
