@@ -40,12 +40,9 @@ class CollaborationRequestViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        return CollaborationRequest.objects.filter(
+        return self.get_optimized_queryset(CollaborationRequest.objects.filter(
             Q(author=user) | Q(collaborator=user)
-        ).select_related('task', 'collaborator', 'author').only(
-            'id', 'status', 'request_date', 'task__name', 'author__username',
-            'collaborator__username'
-        )
+        ))
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
@@ -53,26 +50,24 @@ class CollaborationRequestViewSet(viewsets.ModelViewSet):
         elif self.action in ('create', 'destroy'):
             return CollaborationRequestWriteSerializer
 
-    @action(detail=False, methods=('get',))
-    def sent(self, request):
-        sent_requests = CollaborationRequest.objects.filter(
-            author=request.user
-        ).select_related('task', 'collaborator', 'author').only(
-            'id', 'status', 'request_date', 'task__name', 'author__username',
-            'collaborator__username'
+    def get_optimized_queryset(self, queryset):
+        return queryset.select_related('task', 'collaborator', 'author').only(
+            'id', 'status', 'request_date', 'task__name',
+            'author__username', 'collaborator__username'
         )
-        serializer = CollaborationRequestReadSerializer(sent_requests,
+
+    def get_requests_type(self, filter_condition):
+        requests = self.get_optimized_queryset(
+            CollaborationRequest.objects.filter(**filter_condition)
+        )
+        serializer = CollaborationRequestReadSerializer(requests,
                                                         many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=('get',))
+    def sent(self, request):
+        return self.get_requests_type({'author': request.user})
+
+    @action(detail=False, methods=('get',))
     def received(self, request):
-        received_requests = CollaborationRequest.objects.filter(
-            collaborator=request.user
-        ).select_related('task', 'collaborator', 'author').only(
-            'id', 'status', 'request_date', 'task__name', 'author__username',
-            'collaborator__username'
-        )
-        serializer = CollaborationRequestReadSerializer(received_requests,
-                                                        many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return self.get_requests_type({'collaborator': request.user})
