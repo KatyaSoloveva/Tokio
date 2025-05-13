@@ -10,6 +10,7 @@ from .serializers import (CategorySerializer,
                           CollaborationRequestWriteSerializer,
                           TaskWriteSerializer, TaskReadSerializer)
 from tasks.models import Category, CollaborationRequest, Task
+from .permissions import IsAuthorOrReadOnly
 
 
 User = get_user_model()
@@ -41,6 +42,7 @@ class CollaborationRequestViewSet(mixins.CreateModelMixin,
                                   mixins.DestroyModelMixin,
                                   mixins.ListModelMixin,
                                   viewsets.GenericViewSet):
+    permission_classes = (IsAuthorOrReadOnly,)
 
     def get_queryset(self):
         user = self.request.user
