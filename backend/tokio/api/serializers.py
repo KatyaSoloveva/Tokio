@@ -77,5 +77,4 @@ class CollaborationRequestWriteSerializer(serializers.ModelSerializer):
         return attrs
 
     def to_representation(self, instance):
-        print(instance)
         return CollaborationRequestReadSerializer(instance=instance).data
