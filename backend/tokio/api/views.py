@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
@@ -36,7 +36,11 @@ class CategoryViewSet(viewsets.ModelViewSet):
         ))
 
 
-class CollaborationRequestViewSet(viewsets.ModelViewSet):
+class CollaborationRequestViewSet(mixins.CreateModelMixin,
+                                  mixins.RetrieveModelMixin,
+                                  mixins.DestroyModelMixin,
+                                  mixins.ListModelMixin,
+                                  viewsets.GenericViewSet):
 
     def get_queryset(self):
         user = self.request.user
@@ -47,7 +51,7 @@ class CollaborationRequestViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
             return CollaborationRequestReadSerializer
-        elif self.action in ('create', 'destroy'):
+        elif self.action in ('create'):
             return CollaborationRequestWriteSerializer
 
     def get_optimized_queryset(self, queryset):
