@@ -6,11 +6,12 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 
 from .serializers import (CategorySerializer,
+                          CollaborationResponseSerializer,
                           CollaborationRequestReadSerializer,
                           CollaborationRequestWriteSerializer,
                           TaskWriteSerializer, TaskReadSerializer)
 from tasks.models import Category, CollaborationRequest, Task
-from .permissions import IsAuthorOrReadOnly
+from .permissions import IsAuthorOrReadOnly, IsCollaboratorOnly
 
 
 User = get_user_model()
@@ -76,3 +77,21 @@ class CollaborationRequestViewSet(mixins.CreateModelMixin,
     @action(detail=False, methods=('get',))
     def received(self, request):
         return self.get_requests_type({'collaborator': request.user})
+
+    @action(detail=True, methods=('post',),
+            permission_classes=(IsCollaboratorOnly,))
+    def respond(self, request, pk=None):
+        collaboration_request = self.get_object()
+        serializer = CollaborationResponseSerializer(
+            data=request.data, instance=collaboration_request
+        )
+        serializer.is_valid(raise_exception=True)
+        if (serializer.validated_data['action'] ==
+                CollaborationRequest.Status.ACCEPTED):
+            collaboration_request.accept()
+        else:
+            collaboration_request.reject()
+        return Response(
+            CollaborationRequestReadSerializer(collaboration_request).data,
+            status=status.HTTP_200_OK
+        )

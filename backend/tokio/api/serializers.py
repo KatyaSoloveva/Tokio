@@ -78,3 +78,17 @@ class CollaborationRequestWriteSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return CollaborationRequestReadSerializer(instance=instance).data
+
+
+class CollaborationResponseSerializer(serializers.Serializer):
+    action = serializers.ChoiceField(choices=(
+        CollaborationRequest.Status.ACCEPTED,
+        CollaborationRequest.Status.REJECTED
+    ))
+
+    def validate(self, attrs):
+        if self.instance.status != CollaborationRequest.Status.PENDING:
+            raise ValidationError(
+                'Вы уже ответили на этот запрос!'
+            )
+        return attrs
