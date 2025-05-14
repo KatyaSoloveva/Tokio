@@ -157,6 +157,7 @@ class CollaborationRequest(models.Model):
             models.UniqueConstraint(
                 fields=('task', 'author', 'collaborator'),
                 name='unique_task_author_collaborator',
+                condition=Q(status='pending') | Q(status='accepted')
             ),
         )
 
