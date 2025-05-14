@@ -11,7 +11,6 @@ router.register(r'categories', CategoryViewSet,
 router.register(r'collaborations', CollaborationRequestViewSet,
                 basename='collaborations')
 
-
 urlpatterns = [
     path('', include(router.urls)),
     path(r'', include('djoser.urls')),

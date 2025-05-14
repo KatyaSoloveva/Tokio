@@ -40,7 +40,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class CollaborationRequestViewSet(mixins.CreateModelMixin,
                                   mixins.RetrieveModelMixin,
                                   mixins.DestroyModelMixin,
-                                  mixins.ListModelMixin,
                                   viewsets.GenericViewSet):
     permission_classes = (IsAuthorOrReadOnly,)
 
@@ -51,10 +50,11 @@ class CollaborationRequestViewSet(mixins.CreateModelMixin,
         ))
 
     def get_serializer_class(self):
-        if self.action in ('list', 'retrieve'):
+        if self.action in ('retrieve'):
             return CollaborationRequestReadSerializer
         elif self.action in ('create'):
             return CollaborationRequestWriteSerializer
+        return CollaborationRequestReadSerializer
 
     def get_optimized_queryset(self, queryset):
         return queryset.select_related('task', 'collaborator', 'author').only(
@@ -66,8 +66,7 @@ class CollaborationRequestViewSet(mixins.CreateModelMixin,
         requests = self.get_optimized_queryset(
             CollaborationRequest.objects.filter(**filter_condition)
         )
-        serializer = CollaborationRequestReadSerializer(requests,
-                                                        many=True)
+        serializer = self.get_serializer(requests, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=('get',))
