@@ -173,3 +173,12 @@ class CollaborationRequest(models.Model):
             raise ValidationError(
                 'Нельзя пригласить коллаборатора не в свою заметку!'
             )
+
+    def accept(self):
+        self.status = self.Status.ACCEPTED
+        self.task.collaborators.add(self.collaborator)
+        self.save()
+
+    def reject(self):
+        self.status = self.Status.REJECTED
+        self.save()
