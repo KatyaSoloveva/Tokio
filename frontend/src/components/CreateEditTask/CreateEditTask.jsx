@@ -18,13 +18,14 @@ import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
 import { Color } from "@tiptap/extension-color";
 import { BackgroundColor } from "../../../tiptap-extension/src/BackgroundColorExtension";
+import Container from "../Container/Container";
 
 const CreateEditTask = ({
   formClassName,
-  inputClassName,
   editorClassName,
   buttonName,
-  label,
+  label1,
+  label2,
   initialContent,
   submitType,
 }) => {
@@ -122,16 +123,24 @@ const CreateEditTask = ({
         submitType={submitType}
         className={cn(formClassName, styles.formCreateTask)}
       >
-        <Input
-          type="text"
-          label={label}
-          name="name"
-          value={formData.name}
-          className={cn(inputClassName, styles.inputName)}
-          onChange={handleChange}
-          error={serverError}
-          style={serverError ? { outline: "solid" } : {}}
-        ></Input>
+        <Container className={styles.container}>
+          <Input
+            type="text"
+            label={label1}
+            name="name"
+            value={formData.name}
+            className2={styles.inputLabel}
+            onChange={handleChange}
+            error={serverError}
+            style={serverError ? { outline: "solid" } : {}}
+          ></Input>
+          <Input
+            type="text"
+            label={label2}
+            name="collaborator"
+            className2={styles.inputLabel}
+          ></Input>
+        </Container>
         <Panel editor={editor}></Panel>
         <EditorContent
           editor={editor}

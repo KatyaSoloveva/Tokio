@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 const Input = ({
   className,
+  className2,
   label,
   type,
   name,
@@ -13,7 +14,7 @@ const Input = ({
   ...props
 }) => {
   return (
-    <label htmlFor={name} className={styles.inputLabel}>
+    <label htmlFor={name} className={cn(className2, styles.inputLabel)}>
       {error && <div className={styles.errorMessage}>{error}</div>}
       <input
         id={name}
@@ -39,31 +40,3 @@ Input.propTypes = {
 
 export default Input;
 
-{
-  /* <label htmlFor={name} className={styles.inputLabel}>
-      {error && <div className={styles.errorMessage}>{error}</div>}
-      {fieldType === "textarea" ? (
-        <textarea
-          id={name}
-          type={type}
-          name={name}
-          placeholder={label}
-          className={cn(styles.input, className)}
-          onChange={onChange}
-          value={value}
-          {...props}
-        />
-      ) : (
-        <input
-          id={name}
-          type={type}
-          name={name}
-          placeholder={label}
-          className={cn(styles.input, className)}
-          onChange={onChange}
-          value={value}
-          {...props}
-        />
-      )}
-    </label> */
-}

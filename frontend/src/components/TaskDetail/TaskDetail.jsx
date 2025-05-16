@@ -7,7 +7,8 @@ const TaskDetail = ({ data }) => {
       formClassName={styles.formEditTask}
       editorClassName={styles.editorEditTask}
       buttonName="Сохранить редактирование"
-      label={data.name}
+      label1={data.name}
+      label2="change next"
       initialContent={data?.text || ""}
     />
   ) : (
