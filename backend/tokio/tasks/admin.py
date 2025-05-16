@@ -15,6 +15,7 @@ class TaskAdmin(admin.ModelAdmin):
     fields = ('author', 'name', 'collaborators', 'categories', 'get_text',
               'text', 'status', 'image', 'get_image', 'pub_date',
               'update_date')
+    filter_horizontal = ('collaborators', 'categories')
 
     @admin.display(description='Миниатюра заставки')
     def get_image(self, obj):
