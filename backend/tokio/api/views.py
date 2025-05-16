@@ -9,8 +9,10 @@ from .serializers import (CategorySerializer,
                           CollaborationResponseSerializer,
                           CollaborationRequestReadSerializer,
                           CollaborationRequestWriteSerializer,
+                          FriendShipRequestSerializer,
                           TaskWriteSerializer, TaskReadSerializer)
 from tasks.models import Category, CollaborationRequest, Task
+from users.models import FriendShipRequest
 from .permissions import IsSenderOrReadOnly, IsReceiverOnly
 
 
@@ -95,3 +97,8 @@ class CollaborationRequestViewSet(mixins.CreateModelMixin,
             CollaborationRequestReadSerializer(collaboration_request).data,
             status=status.HTTP_200_OK
         )
+
+
+class FriendShipRequestViewSet(viewsets.ModelViewSet):
+    queryset = FriendShipRequest.objects.all()
+    serializer_class = FriendShipRequestSerializer

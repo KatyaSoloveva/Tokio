@@ -3,13 +3,21 @@ from djoser.serializers import UserSerializer
 from django.core.exceptions import ValidationError
 
 from tasks.models import Category, CollaborationRequest, Task
+from users.models import FriendShipRequest
 
 
 class UserSerializer(UserSerializer):
 
     class Meta(UserSerializer.Meta):
-        fields = UserSerializer.Meta.fields + ('first_name',
-                                               'last_name', 'birthday')
+        fields = UserSerializer.Meta.fields + (
+            'first_name', 'last_name', 'birthday', 'friends'
+        )
+
+
+class FriendShipRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FriendShipRequest
+        fields = '__all__'
 
 
 class CategorySerializer(serializers.ModelSerializer):
