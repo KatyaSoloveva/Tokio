@@ -11,7 +11,7 @@ from .serializers import (CategorySerializer,
                           CollaborationRequestWriteSerializer,
                           TaskWriteSerializer, TaskReadSerializer)
 from tasks.models import Category, CollaborationRequest, Task
-from .permissions import IsAuthorOrReadOnly, IsCollaboratorOnly
+from .permissions import IsSenderOrReadOnly, IsReceiverOnly
 
 
 User = get_user_model()
@@ -42,12 +42,12 @@ class CollaborationRequestViewSet(mixins.CreateModelMixin,
                                   mixins.RetrieveModelMixin,
                                   mixins.DestroyModelMixin,
                                   viewsets.GenericViewSet):
-    permission_classes = (IsAuthorOrReadOnly,)
+    permission_classes = (IsSenderOrReadOnly,)
 
     def get_queryset(self):
         user = self.request.user
         return self.get_optimized_queryset(CollaborationRequest.objects.filter(
-            Q(author=user) | Q(collaborator=user)
+            Q(sender=user) | Q(receiver=user)
         ))
 
     def get_serializer_class(self):
@@ -58,9 +58,9 @@ class CollaborationRequestViewSet(mixins.CreateModelMixin,
         return CollaborationRequestReadSerializer
 
     def get_optimized_queryset(self, queryset):
-        return queryset.select_related('task', 'collaborator', 'author').only(
+        return queryset.select_related('task', 'receiver', 'sender').only(
             'id', 'status', 'request_date', 'task__name',
-            'author__username', 'collaborator__username'
+            'sender__username', 'receiver__username'
         )
 
     def get_requests_type(self, filter_condition):
@@ -72,14 +72,14 @@ class CollaborationRequestViewSet(mixins.CreateModelMixin,
 
     @action(detail=False, methods=('get',))
     def sent(self, request):
-        return self.get_requests_type({'author': request.user})
+        return self.get_requests_type({'sender': request.user})
 
     @action(detail=False, methods=('get',))
     def received(self, request):
-        return self.get_requests_type({'collaborator': request.user})
+        return self.get_requests_type({'receiver': request.user})
 
     @action(detail=True, methods=('post',),
-            permission_classes=(IsCollaboratorOnly,))
+            permission_classes=(IsReceiverOnly,))
     def respond(self, request, pk=None):
         collaboration_request = self.get_object()
         serializer = CollaborationResponseSerializer(

@@ -8,6 +8,7 @@ from bleach.css_sanitizer import CSSSanitizer
 from unidecode import unidecode
 
 from core.validators import validate_category_name
+from core.base_models import BaseRequestModel
 
 User = get_user_model()
 
@@ -127,58 +128,35 @@ class Task(models.Model):
                                 attributes=attrs, css_sanitizer=css_sanitizer)
 
 
-class CollaborationRequest(models.Model):
-    class Status(models.TextChoices):
-        PENDING = 'pending', 'Ожидает подтверждения'
-        ACCEPTED = 'accepted', 'Принято'
-        REJECTED = 'rejected', 'Отклонено'
-
+class CollaborationRequest(BaseRequestModel):
     task = models.ForeignKey(Task, on_delete=models.CASCADE,
                              verbose_name='Задача')
-    author = models.ForeignKey(User, on_delete=models.CASCADE,
+    sender = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='requests_author',
                                verbose_name='Пригласивший')
-    collaborator = models.ForeignKey(User, on_delete=models.CASCADE,
-                                     related_name='requests_receiver',
-                                     verbose_name='Приглашенный')
-    status = models.CharField(max_length=20, choices=Status.choices,
-                              verbose_name='Статус запроса',
-                              default=Status.PENDING)
-    request_date = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Дата создания запроса на сотрудничество'
-    )
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE,
+                                 related_name='requests_receiver',
+                                 verbose_name='Приглашенный')
 
-    class Meta:
+    class Meta(BaseRequestModel.Meta):
         verbose_name = 'Запрос на коллаборацию'
         verbose_name_plural = 'Запросы на коллаборацию'
-        ordering = ('-request_date',)
         constraints = (
             models.UniqueConstraint(
-                fields=('task', 'author', 'collaborator'),
-                name='unique_task_author_collaborator',
+                fields=('task', 'sender', 'receiver'),
+                name='unique_task_sender_receiver',
                 condition=Q(status='pending') | Q(status='accepted')
             ),
         )
 
     def __str__(self):
-        return f'{self.task}-{self.author}-{self.collaborator}'
+        return f'{self.task}-{self.sender}-{self.receiver}'
 
     def clean(self):
-        if self.author == self.collaborator:
-            raise ValidationError(
-                'Нельзя отправить запрос на коллаборацию самому себе!'
-            )
-        if self.author != self.task.author:
+        if self.sender != self.task.sender:
             raise ValidationError(
                 'Нельзя пригласить коллаборатора не в свою заметку!'
             )
 
-    def accept(self):
-        self.status = self.Status.ACCEPTED
-        self.task.collaborators.add(self.collaborator)
-        self.save()
-
-    def reject(self):
-        self.status = self.Status.REJECTED
-        self.save()
+    def perform_acception(self):
+        self.task.collaborators.add(self.receiver)

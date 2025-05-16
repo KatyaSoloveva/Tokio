@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
-from .models import FriendRequest
+from .models import FriendShipRequest
 
 
 User = get_user_model()
@@ -26,6 +26,6 @@ class UserAdmin(UserAdmin):
     )
 
 
-@admin.register(FriendRequest)
+@admin.register(FriendShipRequest)
 class FriendRequestAdmin(admin.ModelAdmin):
-    list_display = ('user', 'friend', 'status')
+    list_display = ('sender', 'receiver', 'status')

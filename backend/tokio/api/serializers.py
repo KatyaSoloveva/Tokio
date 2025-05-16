@@ -48,8 +48,8 @@ class TaskReadSerializer(serializers.ModelSerializer):
 
 class CollaborationRequestReadSerializer(serializers.ModelSerializer):
     task = serializers.CharField(source='task.name')
-    collaborator = serializers.CharField(source='collaborator.username')
-    author = serializers.CharField(source='author.username')
+    receiver = serializers.CharField(source='receiver.username')
+    sender = serializers.CharField(source='sender.username')
 
     class Meta:
         model = CollaborationRequest
@@ -57,18 +57,18 @@ class CollaborationRequestReadSerializer(serializers.ModelSerializer):
 
 
 class CollaborationRequestWriteSerializer(serializers.ModelSerializer):
-    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    sender = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = CollaborationRequest
         fields = '__all__'
 
     def validate(self, attrs):
-        if attrs['author'] != attrs['task'].author:
+        if attrs['sender'] != attrs['task'].sender:
             raise ValidationError(
                 'Нельзя пригласить коллаборатора не в свою заметку!'
             )
-        elif attrs['author'] == attrs['collaborator']:
+        elif attrs['sender'] == attrs['receiver']:
             raise ValidationError(
                 'Нельзя отправить запрос на коллаборацию самому себе!'
             )

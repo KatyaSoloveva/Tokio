@@ -41,7 +41,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(CollaborationRequest)
 class CollaborationRequestAdmin(admin.ModelAdmin):
-    list_display = ('task', 'author', 'collaborator', 'status')
+    list_display = ('task', 'sender', 'receiver', 'status')
 
 
 admin.site.unregister(Group)
