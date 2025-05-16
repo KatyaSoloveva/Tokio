@@ -43,3 +43,41 @@ class User(AbstractUser):
                 raise ValidationError(
                     'Вам не может быть более 100 и менее 5 лет!'
                 )
+
+
+class FriendRequest(models.Model):
+    class Status(models.TextChoices):
+        PENDING = 'pending', 'Ожидает подтверждения'
+        ACCEPTED = 'accepted', 'Принято'
+        REJECTED = 'rejected', 'Отклонено'
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             verbose_name='Отправитель запроса',
+                             related_name='friends_sender')
+    friend = models.ForeignKey(User, on_delete=models.CASCADE,
+                               verbose_name='Получатель запроса',
+                               related_name='friends_receiver')
+    status = models.CharField(max_length=20, choices=Status.choices,
+                              verbose_name='Статус запроса',
+                              default=Status.PENDING)
+    request_date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата создания запроса в друзья'
+    )
+
+    class Meta:
+        verbose_name = 'Заявка в друзья'
+        verbose_name_plural = 'Заявки в друзья'
+        ordering = ('-request_date',)
+        constraints = (
+            models.UniqueConstraint(
+                fields=('user', 'friend'),
+                name='unique_user_friend',
+                condition=models.Q(status='pending') | models.Q(
+                    status='accepted'
+                )
+            ),
+        )
+
+    def __str__(self):
+        return f'{self.user}-{self.friend}'
