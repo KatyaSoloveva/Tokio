@@ -81,3 +81,15 @@ class FriendRequest(models.Model):
 
     def __str__(self):
         return f'{self.user}-{self.friend}'
+
+    def clean(self):
+        if FriendRequest.objects.filter(
+            user=self.friend, friend=self.user
+        ).exists():
+            raise ValidationError(
+                'Заявка на дружбу с данными людьми уже существует!'
+            )
+        elif self.user == self.friend:
+            raise ValidationError(
+                'Нельзя отправить самому себе заявку в друзья!'
+            )
