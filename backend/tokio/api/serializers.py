@@ -11,8 +11,6 @@ class UserSerializer(UserSerializer):
         fields = UserSerializer.Meta.fields + ('first_name',
                                                'last_name', 'birthday')
 
-# потом добавить поля - avatar, issubscribed
-
 
 class CategorySerializer(serializers.ModelSerializer):
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())

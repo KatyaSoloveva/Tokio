@@ -23,6 +23,8 @@ class User(AbstractUser):
                                null=True, verbose_name='Аватар')
     birthday = models.DateField(null=True, blank=True,
                                 verbose_name='День рождения')
+    friends = models.ManyToManyField('self', verbose_name='Друзья',
+                                     blank=True, symmetrical=True)
 
     class Meta:
         verbose_name = 'Пользователь'
@@ -41,29 +43,3 @@ class User(AbstractUser):
                 raise ValidationError(
                     'Вам не может быть более 100 и менее 5 лет!'
                 )
-
-
-class Follow(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE,
-                             verbose_name='Подписчик',
-                             related_name='user_subscriptions')
-    author = models.ForeignKey(User, on_delete=models.CASCADE,
-                               verbose_name='Автор',
-                               related_name='subscriptions_to_author')
-
-    class Meta:
-        verbose_name = 'Подписка'
-        verbose_name_plural = 'Подписки'
-        constraints = (
-            models.UniqueConstraint(
-                fields=('user', 'author'),
-                name='unique_user_author'
-            ),
-        )
-
-    def __str__(self):
-        return f'{self.user} - {self.author}'
-
-    def clean(self):
-        if self.user == self.author:
-            raise ValidationError('Нельзя подписаться на самого себя!')
