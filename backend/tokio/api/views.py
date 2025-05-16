@@ -40,34 +40,35 @@ class CategoryViewSet(viewsets.ModelViewSet):
         ))
 
 
-class CollaborationRequestViewSet(mixins.CreateModelMixin,
-                                  mixins.RetrieveModelMixin,
-                                  mixins.DestroyModelMixin,
-                                  viewsets.GenericViewSet):
+class BaseRequestViewSet(mixins.CreateModelMixin,
+                         mixins.RetrieveModelMixin,
+                         mixins.DestroyModelMixin,
+                         viewsets.GenericViewSet):
+    serializer_read_class = None
+    serializer_write_class = None
+    serializer_response_class = None
+    request_model = None
     permission_classes = (IsSenderOrReadOnly,)
 
     def get_queryset(self):
         user = self.request.user
-        return self.get_optimized_queryset(CollaborationRequest.objects.filter(
+        return self.get_optimized_queryset(self.request_model.objects.filter(
             Q(sender=user) | Q(receiver=user)
         ))
 
     def get_serializer_class(self):
-        if self.action in ('retrieve'):
-            return CollaborationRequestReadSerializer
-        elif self.action in ('create'):
-            return CollaborationRequestWriteSerializer
-        return CollaborationRequestReadSerializer
+        return (self.serializer_write_class if self.action == 'create'
+                else self.serializer_read_class)
 
     def get_optimized_queryset(self, queryset):
-        return queryset.select_related('task', 'receiver', 'sender').only(
-            'id', 'status', 'request_date', 'task__name',
+        return queryset.select_related('receiver', 'sender').only(
+            'id', 'status', 'request_date',
             'sender__username', 'receiver__username'
         )
 
     def get_requests_type(self, filter_condition):
         requests = self.get_optimized_queryset(
-            CollaborationRequest.objects.filter(**filter_condition)
+            self.request_model.objects.filter(**filter_condition)
         )
         serializer = self.get_serializer(requests, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -83,19 +84,33 @@ class CollaborationRequestViewSet(mixins.CreateModelMixin,
     @action(detail=True, methods=('post',),
             permission_classes=(IsReceiverOnly,))
     def respond(self, request, pk=None):
-        collaboration_request = self.get_object()
-        serializer = CollaborationResponseSerializer(
-            data=request.data, instance=collaboration_request
+        current_request = self.get_object()
+        serializer = self.serializer_response_class(
+            data=request.data, instance=current_request
         )
         serializer.is_valid(raise_exception=True)
         if (serializer.validated_data['action'] ==
-                CollaborationRequest.Status.ACCEPTED):
-            collaboration_request.accept()
+                self.request_model.Status.ACCEPTED):
+            current_request.accept()
         else:
-            collaboration_request.reject()
+            current_request.reject()
         return Response(
-            CollaborationRequestReadSerializer(collaboration_request).data,
+            self.serializer_read_class(current_request).data,
             status=status.HTTP_200_OK
+        )
+
+
+class CollaborationRequestViewSet(BaseRequestViewSet):
+    serializer_read_class = CollaborationRequestReadSerializer
+    serializer_write_class = CollaborationRequestWriteSerializer
+    serializer_response_class = CollaborationResponseSerializer
+    request_model = CollaborationRequest
+
+    def get_optimized_queryset(self, queryset):
+        queryset = super().get_optimized_queryset(queryset)
+        return queryset.select_related('task').only(
+            'id', 'status', 'request_date', 'sender__username',
+            'receiver__username', 'task__name'
         )
 
 

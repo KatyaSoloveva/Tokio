@@ -30,6 +30,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class TaskWriteSerializer(serializers.ModelSerializer):
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    collaborators = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Task
@@ -37,10 +38,8 @@ class TaskWriteSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         categories = validated_data.pop('categories', [])
-        collaborators = validated_data.pop('collaborators', [])
         instance = Task.objects.create(**validated_data)
         instance.categories.set(categories)
-        instance.collaborators.set(collaborators)
         return instance
 
 
