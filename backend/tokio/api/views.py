@@ -46,7 +46,6 @@ class BaseRequestViewSet(mixins.CreateModelMixin,
                          viewsets.GenericViewSet):
     serializer_read_class = None
     serializer_write_class = None
-    serializer_response_class = BaseResponseSerializer
     request_model = None
     permission_classes = (IsSenderOrReadOnly,)
 
@@ -85,7 +84,7 @@ class BaseRequestViewSet(mixins.CreateModelMixin,
             permission_classes=(IsReceiverOnly,))
     def respond(self, request, pk=None):
         current_request = self.get_object()
-        serializer = self.serializer_response_class(
+        serializer = BaseResponseSerializer(
             data=request.data, instance=current_request
         )
         serializer.is_valid(raise_exception=True)
