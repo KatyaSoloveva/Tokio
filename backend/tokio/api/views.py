@@ -5,11 +5,11 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
-from .serializers import (CategorySerializer,
-                          CollaborationResponseSerializer,
+from .serializers import (BaseResponseSerializer, CategorySerializer,
                           CollaborationRequestReadSerializer,
                           CollaborationRequestWriteSerializer,
-                          FriendShipRequestSerializer,
+                          FriendshipRequestReadSerializer,
+                          FriendshipRequestWriteSerializer,
                           TaskWriteSerializer, TaskReadSerializer)
 from tasks.models import Category, CollaborationRequest, Task
 from users.models import FriendShipRequest
@@ -46,7 +46,7 @@ class BaseRequestViewSet(mixins.CreateModelMixin,
                          viewsets.GenericViewSet):
     serializer_read_class = None
     serializer_write_class = None
-    serializer_response_class = None
+    serializer_response_class = BaseResponseSerializer
     request_model = None
     permission_classes = (IsSenderOrReadOnly,)
 
@@ -103,7 +103,6 @@ class BaseRequestViewSet(mixins.CreateModelMixin,
 class CollaborationRequestViewSet(BaseRequestViewSet):
     serializer_read_class = CollaborationRequestReadSerializer
     serializer_write_class = CollaborationRequestWriteSerializer
-    serializer_response_class = CollaborationResponseSerializer
     request_model = CollaborationRequest
 
     def get_optimized_queryset(self, queryset):
@@ -114,6 +113,7 @@ class CollaborationRequestViewSet(BaseRequestViewSet):
         )
 
 
-class FriendShipRequestViewSet(viewsets.ModelViewSet):
-    queryset = FriendShipRequest.objects.all()
-    serializer_class = FriendShipRequestSerializer
+class FriendShipRequestViewSet(BaseRequestViewSet):
+    serializer_read_class = FriendshipRequestReadSerializer
+    serializer_write_class = FriendshipRequestWriteSerializer
+    request_model = FriendShipRequest

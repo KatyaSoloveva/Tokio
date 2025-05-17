@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 
 from tasks.models import Category, CollaborationRequest, Task
 from users.models import FriendShipRequest
+from core.base_models import BaseRequestModel
 
 
 class UserSerializer(UserSerializer):
@@ -12,12 +13,6 @@ class UserSerializer(UserSerializer):
         fields = UserSerializer.Meta.fields + (
             'first_name', 'last_name', 'birthday', 'friends'
         )
-
-
-class FriendShipRequestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FriendShipRequest
-        fields = '__all__'
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -53,31 +48,56 @@ class TaskReadSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CollaborationRequestReadSerializer(serializers.ModelSerializer):
-    task = serializers.CharField(source='task.name')
+class BaseRequestReadSerializer(serializers.ModelSerializer):
     receiver = serializers.CharField(source='receiver.username')
     sender = serializers.CharField(source='sender.username')
+
+
+class BaseRequestWriteSerializer(serializers.ModelSerializer):
+    sender = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    def validate(self, attrs):
+        model = self.Meta.model
+        if attrs['sender'] == attrs['receiver']:
+            raise ValidationError(
+                f'Нельзя отправить {model._meta.verbose_name} самому себе!'
+            )
+        return attrs
+
+
+class BaseResponseSerializer(serializers.Serializer):
+    action = serializers.ChoiceField(choices=(
+        BaseRequestModel.Status.ACCEPTED,
+        BaseRequestModel.Status.REJECTED
+    ))
+
+    def validate(self, attrs):
+        if self.instance.status != BaseRequestModel.Status.PENDING:
+            raise ValidationError(
+                'Вы уже ответили на этот запрос!'
+            )
+        return attrs
+
+
+class CollaborationRequestReadSerializer(BaseRequestReadSerializer):
+    task = serializers.CharField(source='task.name')
 
     class Meta:
         model = CollaborationRequest
         fields = '__all__'
 
 
-class CollaborationRequestWriteSerializer(serializers.ModelSerializer):
-    sender = serializers.HiddenField(default=serializers.CurrentUserDefault())
+class CollaborationRequestWriteSerializer(BaseRequestWriteSerializer):
 
     class Meta:
         model = CollaborationRequest
         fields = '__all__'
 
     def validate(self, attrs):
+        super().validate(attrs)
         if attrs['sender'] != attrs['task'].sender:
             raise ValidationError(
                 'Нельзя пригласить коллаборатора не в свою заметку!'
-            )
-        elif attrs['sender'] == attrs['receiver']:
-            raise ValidationError(
-                'Нельзя отправить запрос на коллаборацию самому себе!'
             )
         return attrs
 
@@ -85,15 +105,31 @@ class CollaborationRequestWriteSerializer(serializers.ModelSerializer):
         return CollaborationRequestReadSerializer(instance=instance).data
 
 
-class CollaborationResponseSerializer(serializers.Serializer):
-    action = serializers.ChoiceField(choices=(
-        CollaborationRequest.Status.ACCEPTED,
-        CollaborationRequest.Status.REJECTED
-    ))
+class FriendshipRequestReadSerializer(BaseRequestReadSerializer):
+
+    class Meta:
+        model = FriendShipRequest
+        fields = '__all__'
+
+
+class FriendshipRequestWriteSerializer(BaseRequestWriteSerializer):
+
+    class Meta:
+        model = FriendShipRequest
+        fields = '__all__'
 
     def validate(self, attrs):
-        if self.instance.status != CollaborationRequest.Status.PENDING:
-            raise ValidationError(
-                'Вы уже ответили на этот запрос!'
+        super().validate(attrs)
+        if FriendShipRequest.objects.filter(
+            sender=attrs['receiver'], receiver=attrs['sender'], status__in=(
+                'pending', 'accepted'
             )
+        ).exists():
+            raise ValidationError(
+                'Заявка на дружбу с данными людьми уже существует!'
+            )
+
         return attrs
+
+    def to_representation(self, instance):
+        return FriendshipRequestReadSerializer(instance=instance).data
