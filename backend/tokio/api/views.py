@@ -14,8 +14,8 @@ from .serializers import (BaseResponseSerializer, CategorySerializer,
                           TaskWriteSerializer, TaskReadSerializer)
 from tasks.models import Category, CollaborationRequest, Task
 from users.models import FriendShipRequest
-from .permissions import (IsSenderOrReadOnly, IsReceiverOnly,
-                          IsAuthorOrCollaborator)
+from .permissions import (IsAuthorOrCollaborator, IsAuthorOnly,
+                          IsSenderOrReadOnly, IsReceiverOnly,)
 
 
 User = get_user_model()
@@ -38,7 +38,8 @@ class TaskViewSet(viewsets.ModelViewSet):
         return TaskWriteSerializer
 
     @action(detail=True, methods=('delete',),
-            url_path=r'delete_collaborator/(?P<user_id>\d+)')
+            url_path=r'delete_collaborator/(?P<user_id>\d+)',
+            permission_classes=(IsAuthorOnly,))
     def delete_collaborator(self, request, pk=None, user_id=None):
         task = self.get_object()
         user = get_object_or_404(User, id=user_id)
@@ -48,8 +49,7 @@ class TaskViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         task.collaborators.remove(user)
-        return Response('Коллаборатор успешно удален!',
-                        status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
