@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
 from .serializers import (BaseResponseSerializer, CategorySerializer,
                           CollaborationRequestReadSerializer,
@@ -35,6 +36,20 @@ class TaskViewSet(viewsets.ModelViewSet):
         if self.action in ('list', 'retrieve'):
             return TaskReadSerializer
         return TaskWriteSerializer
+
+    @action(detail=True, methods=('delete',),
+            url_path=r'delete_collaborator/(?P<user_id>\d+)')
+    def delete_collaborator(self, request, pk=None, user_id=None):
+        task = self.get_object()
+        user = get_object_or_404(User, id=user_id)
+        if user not in task.collaborators.all():
+            return Response(
+                {'error': 'Пользователь не является коллаборатором!'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        task.collaborators.remove(user)
+        return Response('Коллаборатор успешно удален!',
+                        status=status.HTTP_204_NO_CONTENT)
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
