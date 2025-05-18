@@ -5,6 +5,7 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from djoser.views import UserViewSet
 
 from .serializers import (BaseResponseSerializer, CategorySerializer,
                           CollaborationRequestReadSerializer,
@@ -19,6 +20,22 @@ from .permissions import (IsAuthorOrCollaborator, IsAuthorOnly,
 
 
 User = get_user_model()
+
+
+class UserViewSet(UserViewSet):
+
+    @action(detail=False, methods=('delete',),
+            url_path=r'me/delete_friend/(?P<user_id>\d+)')
+    def delete_friend(self, request, user_id=None):
+        user = request.user
+        friend = get_object_or_404(User, id=user_id)
+        if friend not in user.friends.all():
+            return Response(
+                {'error': 'Пользователь не является вашим другом!'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        user.friends.remove(friend)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -42,13 +59,13 @@ class TaskViewSet(viewsets.ModelViewSet):
             permission_classes=(IsAuthorOnly,))
     def delete_collaborator(self, request, pk=None, user_id=None):
         task = self.get_object()
-        user = get_object_or_404(User, id=user_id)
-        if user not in task.collaborators.all():
+        collaborator = get_object_or_404(User, id=user_id)
+        if collaborator not in task.collaborators.all():
             return Response(
                 {'error': 'Пользователь не является коллаборатором!'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        task.collaborators.remove(user)
+        task.collaborators.remove(collaborator)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
