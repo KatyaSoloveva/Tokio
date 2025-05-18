@@ -13,17 +13,23 @@ from .serializers import (BaseResponseSerializer, CategorySerializer,
                           TaskWriteSerializer, TaskReadSerializer)
 from tasks.models import Category, CollaborationRequest, Task
 from users.models import FriendShipRequest
-from .permissions import IsSenderOrReadOnly, IsReceiverOnly
+from .permissions import (IsSenderOrReadOnly, IsReceiverOnly,
+                          IsAuthorOrCollaborator)
 
 
 User = get_user_model()
 
 
 class TaskViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthorOrCollaborator,)
+
     def get_queryset(self):
-        return Task.objects.filter(author=self.request.user).select_related(
-            'author'
-        ).prefetch_related('categories', 'collaborators')
+        user = self.request.user
+        return Task.objects.filter(
+            Q(author=user) | Q(collaborators=user)
+        ).select_related('author').prefetch_related(
+            'categories', 'collaborators'
+        )
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
