@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from datetime import date
 
 from core.base_models import BaseRequestModel
+from core.decorators import request_constraint
 
 year = date.today().year
 
@@ -54,18 +55,10 @@ class FriendShipRequest(BaseRequestModel):
                                  verbose_name='Получатель запроса',
                                  related_name='friends_receiver')
 
+    @request_constraint('sender', 'receiver')
     class Meta(BaseRequestModel.Meta):
         verbose_name = 'Заявка в друзья'
         verbose_name_plural = 'Заявки в друзья'
-        constraints = (
-            models.UniqueConstraint(
-                fields=('sender', 'receiver'),
-                name='unique_sender_receiver',
-                condition=models.Q(status='pending') | models.Q(
-                    status='accepted'
-                )
-            ),
-        )
 
     def __str__(self):
         return f'{self.sender}-{self.receiver}'

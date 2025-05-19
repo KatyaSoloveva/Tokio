@@ -9,6 +9,7 @@ from unidecode import unidecode
 
 from core.validators import validate_category_name
 from core.base_models import BaseRequestModel
+from core.decorators import request_constraint
 
 User = get_user_model()
 
@@ -138,22 +139,16 @@ class CollaborationRequest(BaseRequestModel):
                                  related_name='requests_receiver',
                                  verbose_name='Приглашенный')
 
+    @request_constraint('task', 'sender', 'receiver')
     class Meta(BaseRequestModel.Meta):
         verbose_name = 'Запрос на коллаборацию'
         verbose_name_plural = 'Запросы на коллаборацию'
-        constraints = (
-            models.UniqueConstraint(
-                fields=('task', 'sender', 'receiver'),
-                name='unique_task_sender_receiver',
-                condition=Q(status='pending') | Q(status='accepted')
-            ),
-        )
 
     def __str__(self):
         return f'{self.task}-{self.sender}-{self.receiver}'
 
     def clean(self):
-        if self.sender != self.task.sender:
+        if self.sender != self.task.author:
             raise ValidationError(
                 'Нельзя пригласить коллаборатора не в свою заметку!'
             )
