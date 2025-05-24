@@ -8,6 +8,7 @@ import Header from "./components/Header/Header";
 import "./App.css";
 import { AuthProvider } from "./contexts/AuthContext";
 import MyTasks from "./pages/MyTasks/MyTasks";
+import Collaborations from "./pages/Collaborations/Collaborations";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="friends" element={<Friends />}></Route>
           <Route path="tasks" element={<MyTasks />}></Route>
           <Route path="tasks/:id" element={<MyTasks />} />
+          <Route path="collaborations" element={<Collaborations />}></Route>
         </Routes>
       </>
     </AuthProvider>

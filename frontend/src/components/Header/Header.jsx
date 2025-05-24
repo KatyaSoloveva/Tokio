@@ -47,6 +47,13 @@ const Header = () => {
               >
                 Друзья
               </LinkComponent>
+              <LinkComponent
+                to="/collaborations"
+                className={styles.link}
+                activeClassName={styles.link_active}
+              >
+                Запросы на коллаборацию
+              </LinkComponent>
             </>
           )}
         </div>

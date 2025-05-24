@@ -40,12 +40,8 @@
   justify-content: flex-end;
 }
 
-.nav2 > .link:first-child {
+.nav2 > .link {
   margin-right: 15px;
-}
-
-.nav2 > .link:last-child {
-  margin-left: 15px;
 }
 
 @media (max-width: 991px) {
