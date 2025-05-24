@@ -3,7 +3,7 @@ import Registration from "./pages/Registration/Registration";
 import Login from "./pages/Login/Login";
 import MainPage from "./pages/MainPage/MainPage";
 import CreateTask from "./pages/CreateTask/CreateTask";
-import About from "./pages/About/About";
+import Friends from "./pages/Friends/Friends";
 import Header from "./components/Header/Header";
 import "./App.css";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -19,7 +19,7 @@ export default function App() {
           <Route path="register" element={<Registration />}></Route>
           <Route path="login" element={<Login />}></Route>
           <Route path="create" element={<CreateTask />}></Route>
-          <Route path="about" element={<About />}></Route>
+          <Route path="friends" element={<Friends />}></Route>
           <Route path="tasks" element={<MyTasks />}></Route>
           <Route path="tasks/:id" element={<MyTasks />} />
         </Routes>

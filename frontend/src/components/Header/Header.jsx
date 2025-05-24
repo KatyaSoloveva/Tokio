@@ -24,13 +24,6 @@ const Header = () => {
           <img className={styles.headerLogo} src={logo} alt="Tokio" />
         </LinkComponent>
         <div className={isAuthenticated ? styles.nav2 : styles.nav}>
-          <LinkComponent
-            to="/about"
-            className={styles.link}
-            activeClassName={styles.link_active}
-          >
-            О проекте
-          </LinkComponent>
           {isAuthenticated && (
             <>
               <LinkComponent
@@ -46,6 +39,13 @@ const Header = () => {
                 activeClassName={styles.link_active}
               >
                 Мои заметки
+              </LinkComponent>
+              <LinkComponent
+                to="/friends"
+                className={styles.link}
+                activeClassName={styles.link_active}
+              >
+                Друзья
               </LinkComponent>
             </>
           )}

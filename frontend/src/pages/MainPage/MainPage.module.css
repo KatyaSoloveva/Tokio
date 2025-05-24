@@ -1,3 +1,45 @@
-h1 {
-  margin: 0;
+.mainAbout {
+  display: flex;
+  padding-bottom: 0;
+  padding-right: 0;
+  height: 100%;
+}
+
+.mainContainer {
+  width: 60%;
+  overflow-y: auto;
+}
+
+.sideContainer {
+    width: 40%;
+    padding: 0;
+    background-image: url("../../../public/aboutsidephoto.avif");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.container {
+  text-align: left;
+  min-height: none;
+}
+
+.info {
+  font-size: 2rem;
+  color: rgb(105, 27, 75);
+  font-weight: bold;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+}
+
+.list li,
+.aboutinfo {
+  color: #533352;
+  font-size: 1.5rem;
+}
+
+.list li {
+  margin-bottom: 10px;
 }
