@@ -1,10 +1,14 @@
+import Container from "../../components/Container/Container";
+import Input from "../../components/Input/Input";
 import Main from "../../components/Main/Main";
-import "./Friends.module.css";
+import styles from "./Friends.module.css";
 
 const Friends = () => {
   return (
     <Main>
-      <h1>vgsrhbderbtrdeb</h1>
+      <Container>
+        <Input name="friends" label="Введите username" className={styles.friendsInput} />
+      </Container>
     </Main>
   );
 };
