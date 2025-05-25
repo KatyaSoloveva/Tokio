@@ -2,6 +2,7 @@ import CreateEditTask from "../CreateEditTask/CreateEditTask";
 import styles from "./TaskDetail.module.css";
 
 const TaskDetail = ({ data }) => {
+  console.log(data.text, 'text')
   return data && Object.keys(data).length > 0 ? (
     <CreateEditTask
       formClassName={styles.formEditTask}
@@ -10,7 +11,9 @@ const TaskDetail = ({ data }) => {
       label1={data.name}
       label2="change next"
       label3="Мои категории"
-      initialContent={data?.text || ""}
+      initialText={data?.text || " "}
+      initialCats={data?.categories || []}
+      submitType="editTask"
     />
   ) : (
     <></>

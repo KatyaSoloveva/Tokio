@@ -70,13 +70,13 @@ class Api {
     }
   }
 
-  async createTask({ name, text }) {
+  async createTask({ name, text, categories=[] }) {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch("/api/tasks/", {
         method: "POST",
         headers: { ...this._headers, authorization: `Token ${token}` },
-        body: JSON.stringify({ name, text }),
+        body: JSON.stringify({ name, text, categories }),
       });
       return this.checkResponse(response);
     } catch (error) {
@@ -85,13 +85,13 @@ class Api {
     }
   }
 
-  async updateTask({ name, text, task_id }) {
+  async updateTask({ name, text, task_id, categories }) {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(`/api/tasks/${task_id}/`, {
         method: "PATCH",
         headers: { ...this._headers, authorization: `Token ${token}` },
-        body: JSON.stringify({ name, text, id: task_id }),
+        body: JSON.stringify({ name, text, categories, id: task_id }),
       });
       return this.checkResponse(response);
     } catch (error) {

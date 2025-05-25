@@ -11,7 +11,7 @@ const InputDropDown = ({
   isOpen,
   setIsOpen,
   onSelect,
-  selectedItem,
+  selectedItems,
 }) => {
   const handleClick = (event) => {
     event.stopPropagation();
@@ -19,8 +19,10 @@ const InputDropDown = ({
   };
   const handleItemClick = (item) => (event) => {
     event.preventDefault();
+    setIsOpen(!isOpen);
     onSelect(item);
   };
+
   return (
     <div style={{ position: "relative" }}>
       <Input
@@ -41,7 +43,9 @@ const InputDropDown = ({
                 <li className={styles.liItem} onClick={handleItemClick(item)}>
                   {item.name}
                 </li>
-                {selectedItem.includes(item.id) && (
+                {selectedItems.some(
+                  (cat) => (typeof cat === "object" ? cat.id : cat) === item.id
+                ) && (
                   <img
                     src={trash_bin}
                     alt="Удалить"
@@ -58,4 +62,3 @@ const InputDropDown = ({
 };
 
 export default InputDropDown;
-

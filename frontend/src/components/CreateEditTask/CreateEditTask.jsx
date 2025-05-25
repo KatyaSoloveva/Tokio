@@ -28,17 +28,20 @@ const CreateEditTask = ({
   label1,
   label2,
   label3,
-  initialContent,
+  initialText,
+  initialCats,
   submitType,
 }) => {
-  const [formData, setFormData] = useState({ name: "", text: initialContent });
+  const [formData, setFormData] = useState({
+    name: "",
+    text: initialText,
+    categories: initialCats,
+  });
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
   const [cats, setCats] = useState([]);
   const [catsIsOpen, setCatsIsOpen] = useState(false);
-  const [selectedCat, setSelectedCat] = useState([])
-
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -78,21 +81,25 @@ const CreateEditTask = ({
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      text: initialContent,
+      text: initialText,
+      categories: initialCats,
     }));
-    if (editor && initialContent) {
-      editor.commands.setContent(initialContent);
+    if (editor && initialText) {
+      editor.commands.setContent(initialText);
     }
-  }, [initialContent, editor]);
+  }, [initialText, editor]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    const categoriesToSend = formData.categories.map((cat) =>
+      typeof cat === "object" ? cat.id : cat
+    );
     if (submitType === "createTask") {
       try {
         const taskData = await api.createTask({
           name: formData.name,
           text: formData.text,
+          categories: categoriesToSend,
         });
         navigate(`/tasks/${taskData.id}`);
       } catch (error) {
@@ -100,10 +107,11 @@ const CreateEditTask = ({
       }
     } else {
       try {
-        const current_name = await api.getTask({ task_id: parseInt(id) });
+        const current = await api.getTask({ task_id: parseInt(id) });
         await api.updateTask({
-          name: formData.name || current_name.name,
+          name: formData.name || current.name,
           text: formData.text,
+          categories: categoriesToSend,
           task_id: parseInt(id),
         });
         navigate(`/tasks/${id}`, { state: { refresh: true } });
@@ -122,12 +130,29 @@ const CreateEditTask = ({
   };
 
   const selectCat = (item) => {
-    setSelectedCat(prev => 
-    prev.includes(item.id) 
-      ? prev.filter(id => id !== item.id)
-      : [...prev, item.id]
-  );
-  }
+    setFormData((prev) => {
+      const currentCategories = prev.categories || [];
+      const isItemSelected = currentCategories.some(
+        (cat) => (typeof cat === "object" ? cat.id : cat) === item.id
+      );
+      if (isItemSelected) {
+        return {
+          ...prev,
+          categories: currentCategories.filter(
+            (cat) => (typeof cat === "object" ? cat.id : cat) !== item.id
+          ),
+        };
+      } else {
+        return {
+          ...prev,
+          categories: [
+            ...currentCategories,
+            submitType === "createTask" ? item.id : item,
+          ],
+        };
+      }
+    });
+  };
 
   const handleDelete = async (event) => {
     event.preventDefault();
@@ -172,7 +197,7 @@ const CreateEditTask = ({
             isOpen={catsIsOpen}
             setIsOpen={setCatsIsOpen}
             onSelect={selectCat}
-            selectedItem={selectedCat}
+            selectedItems={formData.categories || []}
           ></InputDropDown>
         </Container>
         <Panel editor={editor}></Panel>
