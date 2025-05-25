@@ -9,6 +9,7 @@ const TaskDetail = ({ data }) => {
       buttonName="Сохранить редактирование"
       label1={data.name}
       label2="change next"
+      label3="Мои категории"
       initialContent={data?.text || ""}
     />
   ) : (

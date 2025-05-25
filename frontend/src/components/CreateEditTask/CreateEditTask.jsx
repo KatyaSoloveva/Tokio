@@ -19,6 +19,7 @@ import TableRow from "@tiptap/extension-table-row";
 import { Color } from "@tiptap/extension-color";
 import { BackgroundColor } from "../../../tiptap-extension/src/BackgroundColorExtension";
 import Container from "../Container/Container";
+import InputDropDown from "../InputDropDown/InputDropDown";
 
 const CreateEditTask = ({
   formClassName,
@@ -34,13 +35,15 @@ const CreateEditTask = ({
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
-  const [cats, setCats] = useState([])
+  const [cats, setCats] = useState([]);
+  const [catsIsOpen, setCatsIsOpen] = useState(false);
+  const [selectedCat, setSelectedCat] = useState([])
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const categories = await api.getCategories();
-        setCats(categories)
+        setCats(categories);
       } catch (error) {}
     };
     fetchCategories();
@@ -118,6 +121,14 @@ const CreateEditTask = ({
     setServerError("");
   };
 
+  const selectCat = (item) => {
+    setSelectedCat(prev => 
+    prev.includes(item.id) 
+      ? prev.filter(id => id !== item.id)
+      : [...prev, item.id]
+  );
+  }
+
   const handleDelete = async (event) => {
     event.preventDefault();
     try {
@@ -152,12 +163,17 @@ const CreateEditTask = ({
             name="collaborator"
             className2={styles.inputLabel}
           ></Input>
-          <Input
+          <InputDropDown
             type="text"
             label={label3}
             name="categories"
             className2={styles.inputLabel}
-          ></Input>
+            items={cats}
+            isOpen={catsIsOpen}
+            setIsOpen={setCatsIsOpen}
+            onSelect={selectCat}
+            selectedItem={selectedCat}
+          ></InputDropDown>
         </Container>
         <Panel editor={editor}></Panel>
         <EditorContent

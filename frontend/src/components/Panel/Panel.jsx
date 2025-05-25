@@ -265,7 +265,6 @@ const Panel = ({ editor }) => {
               key={item.alt}
               type="button"
               style={{ display: "inline-block" }}
-              // onClick={() => handleClickEditTable(item.action)}
               onClick={(e) => {
                 e.stopPropagation();
                 handleClickEditTable(item.action);
