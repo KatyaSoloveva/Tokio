@@ -19,35 +19,42 @@ const MyPage = () => {
   }, []);
 
   return (
-    <Main className={styles.mainMyTasks}>
-      <Container className={styles.bio}>
-        <UserCard isUser
-          image={user.avatar}
-          username={user.username}
-          name={user.first_name + " " + user.last_name}
-          email={user.email}
-          birthday={user.birthday}
-        ></UserCard>
+    <Main>
+      <Container className={styles.mainMyTasks}>
+        <Container>
+          <UserCard
+            isUser
+            image={user.avatar}
+            username={user.username}
+            name={user.first_name + " " + user.last_name}
+            email={user.email}
+            birthday={user.birthday}
+          ></UserCard>
+        </Container>
+        <Container>
+          <Input
+            name="friends"
+            label="Введите username"
+            className={styles.friendsInput}
+          />
+          <div className={styles.friendUsercards}>
+            {user?.friends?.map((friend) => (
+              <UserCard
+                key={friend.id}
+                username={friend.username}
+                name={friend.first_name + " " + friend.last_name}
+                birthday={friend.birthday}
+              ></UserCard>
+            ))}
+          </div>
+        </Container>
       </Container>
-      <Container className={styles.friends}>
-        <Input
-          name="friends"
-          label="Введите username"
-          className={styles.friendsInput}
-        />
-        <div className={styles.friendUsercards}>
-          {user?.friends?.map((friend) => (
-            <UserCard
-              key={friend.id}
-              username={friend.username}
-              name={friend.first_name + " " + friend.last_name}
-              birthday={friend.birthday}
-            ></UserCard>
-          ))}
-        </div>
-      </Container>
-      <Container className={styles.requests}>
+      <Container>
         <h1>requests</h1>
+        <Container className={styles.mainMyTasks}>
+          <Container>sent</Container>
+          <Container>received</Container>
+        </Container>
       </Container>
     </Main>
   );
