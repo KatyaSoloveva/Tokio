@@ -21,7 +21,7 @@ const MyPage = () => {
   return (
     <Main className={styles.mainMyTasks}>
       <Container className={styles.bio}>
-        <UserCard
+        <UserCard isUser
           image={user.avatar}
           username={user.username}
           name={user.first_name + " " + user.last_name}
@@ -35,11 +35,16 @@ const MyPage = () => {
           label="Введите username"
           className={styles.friendsInput}
         />
-        {/* <ul>
-          {friends.map((friend) => (
-            <li key={friend.id}>{friend.username}</li>
+        <div className={styles.friendUsercards}>
+          {user?.friends?.map((friend) => (
+            <UserCard
+              key={friend.id}
+              username={friend.username}
+              name={friend.first_name + " " + friend.last_name}
+              birthday={friend.birthday}
+            ></UserCard>
           ))}
-        </ul> */}
+        </div>
       </Container>
       <Container className={styles.requests}>
         <h1>requests</h1>

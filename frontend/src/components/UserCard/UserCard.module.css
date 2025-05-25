@@ -13,12 +13,14 @@
 .infoContainer {
   background-color: white;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-gap: 15px;
 }
 
+
 .info {
-    color: rgb(105, 27, 75);
-    margin: 0;
-    text-align: center;
+  color: rgb(105, 27, 75);
+  margin: 0;
+  text-align: center;
+  min-width: 0;
 }

@@ -1,14 +1,23 @@
 import Container from "../Container/Container";
 import styles from "./UserCard.module.css";
+import anonim from "/avatar_anonim.png";
 
-const UserCard = ({ image, username, name, birthday, email }) => {
+const UserCard = ({ image, username, name, birthday, email, isUser }) => {
   return (
     <Container className={styles.usercardContainer}>
-      <img src={image} className={styles.image} />
-      <Container className={styles.infoContainer}>
+      <img src={image || anonim} className={styles.image} />
+      <Container
+        className={styles.infoContainer}
+        style={isUser ? { gridTemplateColumns: "1fr 1fr 1fr" } : {}}
+      >
         <div
           className={styles.info}
-          style={{ fontSize: "2.5rem", gridColumn: 1, gridRow: 1, textAlign: "left" }}
+          style={{
+            fontSize: "2.5rem",
+            gridColumn: 1,
+            gridRow: 1,
+            textAlign: "left",
+          }}
         >
           {username}
         </div>
@@ -16,11 +25,13 @@ const UserCard = ({ image, username, name, birthday, email }) => {
           {null ? name : "Анонимный Аноним"}
         </div>
         <div className={styles.info} style={{ gridColumn: 2, gridRow: 2 }}>
-          {email}
-        </div>
-        <div className={styles.info} style={{ gridColumn: 3, gridRow: 2 }}>
           {birthday}
         </div>
+        {isUser && (
+          <div className={styles.info} style={{ gridColumn: 3, gridRow: 2 }}>
+            {email}
+          </div>
+        )}
       </Container>
     </Container>
   );
