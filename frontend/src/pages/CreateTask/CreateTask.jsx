@@ -6,7 +6,7 @@ const CreateTask = () => {
   return (
     <Main withBG>
       <Container>
-        <CreateEditTask buttonName="Создать заметку" label1="Заметка" label2="Выбор коллаборатора" submitType="createTask"></CreateEditTask>
+        <CreateEditTask buttonName="Создать заметку" label1="Заметка" label2="Выбор коллаборатора" label3="Категории" submitType="createTask"></CreateEditTask>
       </Container>
     </Main>
   );
