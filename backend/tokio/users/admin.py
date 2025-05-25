@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
+from django.utils.safestring import mark_safe
 
 from .models import FriendShipRequest
 
@@ -14,16 +15,21 @@ class UserAdmin(UserAdmin):
     filter_horizontal = ('friends',) + UserAdmin.filter_horizontal
     fieldsets = UserAdmin.fieldsets + (
         (None, {
-            "fields": ('friends',),
+            'fields': ('friends', 'avatar', 'get_avatar'),
         }),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
             'fields': ('username', 'email',
-                       'password1', 'password2'),
+                       'password1', 'password2', 'avatar'),
         }),
     )
+    readonly_fields = ('get_avatar',)
+
+    @admin.display(description='Миниатюра аватара')
+    def get_avatar(self, obj):
+        return mark_safe(f'<img src={obj.avatar.url} width="80" height="60">')
 
 
 @admin.register(FriendShipRequest)

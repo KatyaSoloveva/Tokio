@@ -10,7 +10,7 @@ from core.base_models import BaseRequestModel
 class FriendSerializer(DjoserUserSerializer):
     class Meta(DjoserUserSerializer.Meta):
         fields = DjoserUserSerializer.Meta.fields + (
-            'first_name', 'last_name', 'birthday',
+            'first_name', 'last_name', 'birthday', 'avatar'
         )
 
 
