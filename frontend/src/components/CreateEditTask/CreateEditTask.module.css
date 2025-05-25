@@ -7,10 +7,10 @@
 .container {
   padding: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
-.inputLabel:first-child {
+.inputLabel {
   margin-right: 15px;
 }
 

@@ -19,6 +19,9 @@ import TableRow from "@tiptap/extension-table-row";
 import { Color } from "@tiptap/extension-color";
 import { BackgroundColor } from "../../../tiptap-extension/src/BackgroundColorExtension";
 import Container from "../Container/Container";
+import ButtonDropDown from "../ButtonDropDown/ButtonDropDown";
+import down_arrow from "/down_arrow.svg";
+import up_arrow from "/up_arrow.svg";
 
 const CreateEditTask = ({
   formClassName,
@@ -33,6 +36,8 @@ const CreateEditTask = ({
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
+  const [buttonIsOpen, setButtonIsOpen] = useState(false);
+
 
   const editor = useEditor({
     extensions: [
@@ -140,6 +145,12 @@ const CreateEditTask = ({
             name="collaborator"
             className2={styles.inputLabel}
           ></Input>
+          <ButtonDropDown
+            buttonName="Категории"
+            isOpen={buttonIsOpen}
+            setIsOpen={setButtonIsOpen}
+            buttonImg={setButtonIsOpen ? up_arrow : down_arrow}
+          ></ButtonDropDown>
         </Container>
         <Panel editor={editor}></Panel>
         <EditorContent
