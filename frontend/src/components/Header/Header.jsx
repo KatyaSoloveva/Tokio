@@ -41,18 +41,11 @@ const Header = () => {
                 Мои заметки
               </LinkComponent>
               <LinkComponent
-                to="/friends"
+                to="/mypage"
                 className={styles.link}
                 activeClassName={styles.link_active}
               >
-                Друзья
-              </LinkComponent>
-              <LinkComponent
-                to="/collaborations"
-                className={styles.link}
-                activeClassName={styles.link_active}
-              >
-                Запросы на коллаборацию
+                Моя страница
               </LinkComponent>
             </>
           )}
