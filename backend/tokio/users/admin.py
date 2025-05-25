@@ -15,14 +15,14 @@ class UserAdmin(UserAdmin):
     filter_horizontal = ('friends',) + UserAdmin.filter_horizontal
     fieldsets = UserAdmin.fieldsets + (
         (None, {
-            'fields': ('friends', 'avatar', 'get_avatar'),
+            'fields': ('friends', 'birthday', 'avatar', 'get_avatar'),
         }),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
             'fields': ('username', 'email',
-                       'password1', 'password2', 'avatar'),
+                       'password1', 'password2', 'avatar', 'birthday'),
         }),
     )
     readonly_fields = ('get_avatar',)
