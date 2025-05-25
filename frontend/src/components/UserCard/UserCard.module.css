@@ -1,0 +1,24 @@
+.image {
+  width: 100%;
+}
+
+.usercardContainer {
+  border: 5px solid #835e7e;
+  border-radius: 15px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.infoContainer {
+  background-color: white;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 15px;
+}
+
+.info {
+    color: rgb(105, 27, 75);
+    margin: 0;
+    text-align: center;
+}

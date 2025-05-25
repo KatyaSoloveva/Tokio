@@ -4,15 +4,15 @@ import Input from "../../components/Input/Input";
 import Main from "../../components/Main/Main";
 import styles from "./MyPage.module.css";
 import api from "../../api";
+import UserCard from "../../components/UserCard/UserCard";
 
 const MyPage = () => {
-  const [friends, setFriends] = useState([]);
+  const [user, setuser] = useState([]);
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const friends = await api.getFriends();
-        console.log(friends);
-        setFriends(friends);
+        const user = await api.getFriends();
+        setuser(user);
       } catch (error) {}
     };
     fetchFriends();
@@ -21,7 +21,13 @@ const MyPage = () => {
   return (
     <Main className={styles.mainMyTasks}>
       <Container className={styles.bio}>
-        <h1>bio</h1>
+        <UserCard
+          image={user.avatar}
+          username={user.username}
+          name={user.first_name + " " + user.last_name}
+          email={user.email}
+          birthday={user.birthday}
+        ></UserCard>
       </Container>
       <Container className={styles.friends}>
         <Input
