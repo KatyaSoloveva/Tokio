@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from djoser.serializers import UserSerializer
+from djoser.serializers import UserSerializer as DjoserUserSerializer
 from django.core.exceptions import ValidationError
 
 from tasks.models import Category, CollaborationRequest, Task
@@ -7,12 +7,18 @@ from users.models import FriendShipRequest
 from core.base_models import BaseRequestModel
 
 
-class UserSerializer(UserSerializer):
-
-    class Meta(UserSerializer.Meta):
-        fields = UserSerializer.Meta.fields + (
-            'first_name', 'last_name', 'birthday', 'friends'
+class FriendSerializer(DjoserUserSerializer):
+    class Meta(DjoserUserSerializer.Meta):
+        fields = DjoserUserSerializer.Meta.fields + (
+            'first_name', 'last_name', 'birthday',
         )
+
+
+class UserSerializer(FriendSerializer):
+    friends = FriendSerializer(many=True, read_only=True)
+
+    class Meta(FriendSerializer.Meta):
+        fields = FriendSerializer.Meta.fields + ('friends',)
 
 
 class CategorySerializer(serializers.ModelSerializer):
