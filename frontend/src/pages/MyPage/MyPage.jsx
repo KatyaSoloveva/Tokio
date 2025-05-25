@@ -11,27 +11,32 @@ const MyPage = () => {
     const fetchFriends = async () => {
       try {
         const friends = await api.getFriends();
-        setFriends(friends.friends)
+        console.log(friends);
+        setFriends(friends);
       } catch (error) {}
     };
     fetchFriends();
   }, []);
 
   return (
-    <Main>
-      <Container>
+    <Main className={styles.mainMyTasks}>
+      <Container className={styles.bio}>
+        <h1>bio</h1>
+      </Container>
+      <Container className={styles.friends}>
         <Input
           name="friends"
           label="Введите username"
           className={styles.friendsInput}
         />
-        <ul>
-            {friends.map((friend) => (
-              <li key={friend.id}>
-                {friend.username}
-              </li>
-            ))}
-          </ul>
+        {/* <ul>
+          {friends.map((friend) => (
+            <li key={friend.id}>{friend.username}</li>
+          ))}
+        </ul> */}
+      </Container>
+      <Container className={styles.requests}>
+        <h1>requests</h1>
       </Container>
     </Main>
   );

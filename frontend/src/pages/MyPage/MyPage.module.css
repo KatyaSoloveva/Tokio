@@ -1,3 +1,23 @@
+.mainMyTasks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.bio {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.friends {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.requests {
+  grid-column: 2;
+  grid-row: 2;
+}
+
 .friendsInput {
-  width: 30%;
+  width: 50%;
 }
