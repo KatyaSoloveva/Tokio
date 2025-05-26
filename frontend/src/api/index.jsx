@@ -158,6 +158,23 @@ class Api {
     }
   }
 
+  async deleteFriend({ friend_id }) {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(
+        `/api/users/me/delete_friend/${friend_id}/`,
+        {
+          method: "DELETE",
+          headers: { ...this._headers, authorization: `Token ${token}` },
+        }
+      );
+      return this.checkResponse(response);
+    } catch (error) {
+      console.log("Ошибка удаления друга", error);
+      throw error;
+    }
+  }
+
   async getCategories() {
     const token = localStorage.getItem("token");
     try {
@@ -254,14 +271,11 @@ class Api {
   async respondFriendship({ request_id, action }) {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch(
-        `api/friendship/${request_id}/respond/`,
-        {
-          method: "POST",
-          headers: { ...this._headers, authorization: `Token ${token}` },
-          body: JSON.stringify({ request_id, action }),
-        }
-      );
+      const response = await fetch(`api/friendship/${request_id}/respond/`, {
+        method: "POST",
+        headers: { ...this._headers, authorization: `Token ${token}` },
+        body: JSON.stringify({ request_id, action }),
+      });
       return this.checkResponse(response);
     } catch (error) {
       console.log("Ошибка ответа на заявку в друзья", error);
