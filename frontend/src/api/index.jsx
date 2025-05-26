@@ -202,6 +202,23 @@ class Api {
       throw error;
     }
   }
+
+  async getReceivedFriendship() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("api/friendship/received/", {
+        method: "GET",
+        headers: { ...this._headers, authorization: `Token ${token}` },
+      });
+      return this.checkResponse(response);
+    } catch (error) {
+      console.log(
+        "Ошибка получения полученных заявок в друзья",
+        error
+      );
+      throw error;
+    }
+  }
 }
 
 export default new Api("http://localhost:8000", {
