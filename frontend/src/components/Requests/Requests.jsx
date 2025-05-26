@@ -1,3 +1,4 @@
+import Button from "../Button/Button";
 import Container from "../Container/Container";
 import FormTitle from "../FormTitle/FormTitle";
 import LinkComponent from "../Link/Link";
@@ -34,6 +35,14 @@ const Requests = ({ title, title1, title2, items, items2 }) => {
                     <div className={styles.boxItem}>
                       Дата: {item.request_date}
                     </div>
+                    <div className={styles.buttonContainer}>
+                      <Button type="submit" className={styles.button}>
+                        Принять
+                      </Button>
+                      <Button type="submit" className={styles.button}>
+                        Отказаться
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </>
@@ -66,6 +75,14 @@ const Requests = ({ title, title1, title2, items, items2 }) => {
                     <div className={styles.boxItem}>Статус: {item.status}</div>
                     <div className={styles.boxItem}>
                       Дата: {item.request_date}
+                    </div>
+                    <div className={styles.buttonContainer}>
+                      <Button type="submit" className={styles.button}>
+                        Принять
+                      </Button>
+                      <Button type="submit" className={styles.button}>
+                        Отказаться
+                      </Button>
                     </div>
                   </div>
                 ))}
