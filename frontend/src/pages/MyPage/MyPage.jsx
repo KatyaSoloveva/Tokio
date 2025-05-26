@@ -12,6 +12,7 @@ const MyPage = () => {
   const [receivedColls, setReceivedColls] = useState([]);
   const [sentColls, setSentColls] = useState([]);
   const [receivedFriends, setReceivedFriends] = useState([]);
+  const [sentFriends, setSentFriends] = useState([]);
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -46,13 +47,22 @@ const MyPage = () => {
   useEffect(() => {
     const receivedFriends = async () => {
       try {
-        const collsRequests = await api.getReceivedFriendship();
-        setReceivedFriends(collsRequests);
+        const friendsRequests = await api.getReceivedFriendship();
+        setReceivedFriends(friendsRequests);
       } catch (error) {}
     };
     receivedFriends();
   }, []);
-  console.log(receivedFriends)
+
+    useEffect(() => {
+    const sentFriends = async () => {
+      try {
+        const friendsRequests = await api.getSentFriendship();
+        setSentFriends(friendsRequests);
+      } catch (error) {}
+    };
+    sentFriends();
+  }, []);
 
   return (
     <Main>
@@ -91,6 +101,7 @@ const MyPage = () => {
         title1="Отправленные"
         title2="Полученные"
         items={receivedFriends}
+        items2={sentFriends}
       ></Requests>
       <hr />
       <Requests
