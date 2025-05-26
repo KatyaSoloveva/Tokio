@@ -13,7 +13,6 @@ const Requests = ({
   onClickAccepted,
   onClickRejected,
 }) => {
-
   const handleClickAccept = (id) => (event) => {
     event.preventDefault();
     onClickAccepted(id);
@@ -88,22 +87,24 @@ const Requests = ({
                     <div className={styles.boxItem}>
                       Дата: {item.request_date}
                     </div>
-                    <div className={styles.buttonContainer}>
-                      <Button
-                        type="submit"
-                        className={styles.button}
-                        onClick={handleClickAccept(item.id)}
-                      >
-                        Принять
-                      </Button>
-                      <Button
-                        type="submit"
-                        className={styles.button}
-                        onClick={handleClickReject(item.id)}
-                      >
-                        Отказаться
-                      </Button>
-                    </div>
+                    {item.status === "pending" && (
+                      <div className={styles.buttonContainer}>
+                        <Button
+                          type="submit"
+                          className={styles.button}
+                          onClick={handleClickAccept(item.id)}
+                        >
+                          Принять
+                        </Button>
+                        <Button
+                          type="submit"
+                          className={styles.button}
+                          onClick={handleClickReject(item.id)}
+                        >
+                          Отказаться
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </>
