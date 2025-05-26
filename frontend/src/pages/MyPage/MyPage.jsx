@@ -54,7 +54,7 @@ const MyPage = () => {
     receivedFriends();
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     const sentFriends = async () => {
       try {
         const friendsRequests = await api.getSentFriendship();
@@ -63,6 +63,35 @@ const MyPage = () => {
     };
     sentFriends();
   }, []);
+
+  const acceptColls = async (id) => {
+    try {
+      await api.respondCollaborations({ request_id: id, action: "accepted" });
+      // make navigation later
+    } catch (error) {}
+  };
+
+  const rejectColls = async (id) => {
+    try {
+      await api.respondCollaborations({ request_id: id, action: "rejected" });
+      // make navigation later
+    } catch (error) {}
+  };
+
+  const acceptFriendship = async (id) => {
+    try {
+      await api.respondFriendship({ request_id: id, action: "accepted" });
+      // make navigation later
+    } catch (error) {}
+  };
+
+  const rejectFriendship = async (id) => {
+    try {
+      await api.respondFriendship({ request_id: id, action: "rejected" });
+      // make navigation later
+    } catch (error) {}
+  };
+
 
   return (
     <Main>
@@ -102,6 +131,8 @@ const MyPage = () => {
         title2="Полученные"
         items={receivedFriends}
         items2={sentFriends}
+        onClickAccepted = {acceptFriendship}
+        onClickRejected = {rejectFriendship}
       ></Requests>
       <hr />
       <Requests
@@ -110,6 +141,8 @@ const MyPage = () => {
         title2="Полученные"
         items={receivedColls}
         items2={sentColls}
+        onClickAccepted={acceptColls}
+        onClickRejected = {rejectColls}
       ></Requests>
     </Main>
   );

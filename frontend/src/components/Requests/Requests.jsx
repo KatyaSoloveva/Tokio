@@ -4,7 +4,26 @@ import FormTitle from "../FormTitle/FormTitle";
 import LinkComponent from "../Link/Link";
 import styles from "./Requests.module.css";
 
-const Requests = ({ title, title1, title2, items, items2 }) => {
+const Requests = ({
+  title,
+  title1,
+  title2,
+  items,
+  items2,
+  onClickAccepted,
+  onClickRejected,
+}) => {
+
+  const handleClickAccept = (id) => (event) => {
+    event.preventDefault();
+    onClickAccepted(id);
+  };
+
+  const handleClickReject = (id) => (event) => {
+    event.preventDefault();
+    onClickRejected(id);
+  };
+
   items?.map((item) => console.log(item.request_date));
   return (
     <Container>
@@ -35,14 +54,7 @@ const Requests = ({ title, title1, title2, items, items2 }) => {
                     <div className={styles.boxItem}>
                       Дата: {item.request_date}
                     </div>
-                    <div className={styles.buttonContainer}>
-                      <Button type="submit" className={styles.button}>
-                        Принять
-                      </Button>
-                      <Button type="submit" className={styles.button}>
-                        Отказаться
-                      </Button>
-                    </div>
+                    <div className={styles.buttonContainer}></div>
                   </div>
                 ))}
               </>
@@ -77,10 +89,18 @@ const Requests = ({ title, title1, title2, items, items2 }) => {
                       Дата: {item.request_date}
                     </div>
                     <div className={styles.buttonContainer}>
-                      <Button type="submit" className={styles.button}>
+                      <Button
+                        type="submit"
+                        className={styles.button}
+                        onClick={handleClickAccept(item.id)}
+                      >
                         Принять
                       </Button>
-                      <Button type="submit" className={styles.button}>
+                      <Button
+                        type="submit"
+                        className={styles.button}
+                        onClick={handleClickReject(item.id)}
+                      >
                         Отказаться
                       </Button>
                     </div>
