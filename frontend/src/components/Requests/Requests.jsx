@@ -19,15 +19,17 @@ const Requests = ({ title, title1, title2, items, items2 }) => {
                     <div className={styles.boxItem}>
                       Получатель: {item.receiver}
                     </div>
-                    <div className={styles.boxItem}>
-                      Заметка:{" "}
-                      <LinkComponent
-                        to={`/tasks/${item.task.id}`}
-                        className={styles.link}
-                      >
-                        {item.task.name}
-                      </LinkComponent>
-                    </div>
+                    {item.task && (
+                      <div className={styles.boxItem}>
+                        Заметка:{" "}
+                        <LinkComponent
+                          to={`/tasks/${item.task.id}`}
+                          className={styles.link}
+                        >
+                          {item.task.name}
+                        </LinkComponent>
+                      </div>
+                    )}
                     <div className={styles.boxItem}>Статус: {item.status}</div>
                     <div className={styles.boxItem}>
                       Дата: {item.request_date}
@@ -50,15 +52,17 @@ const Requests = ({ title, title1, title2, items, items2 }) => {
                     <div className={styles.boxItem}>
                       Отправитель: {item.sender}
                     </div>
-                    <div className={styles.boxItem}>
-                      Заметка:{" "}
-                      <LinkComponent
-                        to={`/tasks/${item.task.id}`}
-                        className={styles.link}
-                      >
-                        {item.task.name}
-                      </LinkComponent>
-                    </div>
+                    {item.task && (
+                      <div className={styles.boxItem}>
+                        Заметка:{" "}
+                        <LinkComponent
+                          to={`/tasks/${item.task.id}`}
+                          className={styles.link}
+                        >
+                          {item.task.name}
+                        </LinkComponent>
+                      </div>
+                    )}
                     <div className={styles.boxItem}>Статус: {item.status}</div>
                     <div className={styles.boxItem}>
                       Дата: {item.request_date}
