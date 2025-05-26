@@ -86,11 +86,17 @@ class BaseResponseSerializer(serializers.Serializer):
 
 
 class CollaborationRequestReadSerializer(BaseRequestReadSerializer):
-    task = serializers.CharField(source='task.name')
+    task = serializers.SerializerMethodField()
 
     class Meta:
         model = CollaborationRequest
         fields = '__all__'
+
+    def get_task(self, obj):
+        return {
+            'id': obj.task.id,
+            'name': obj.task.name
+        }
 
 
 class CollaborationRequestWriteSerializer(BaseRequestWriteSerializer):

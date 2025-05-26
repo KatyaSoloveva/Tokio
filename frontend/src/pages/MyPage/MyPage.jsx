@@ -9,6 +9,8 @@ import Requests from "../../components/Requests/Requests";
 
 const MyPage = () => {
   const [user, setuser] = useState([]);
+  const [receivedColls, setReceivedColls] = useState([]);
+
   useEffect(() => {
     const fetchFriends = async () => {
       try {
@@ -19,6 +21,16 @@ const MyPage = () => {
     fetchFriends();
   }, []);
 
+  useEffect(() => {
+    const receivedColls = async () => {
+      try {
+        const collsRequests = await api.getReceivedCollaborations();
+        setReceivedColls(collsRequests);
+      } catch (error) {}
+    };
+    receivedColls();
+  }, []);
+  console.log(receivedColls);
   return (
     <Main>
       <Container className={styles.mainMyTasks}>
@@ -50,10 +62,19 @@ const MyPage = () => {
           </div>
         </Container>
       </Container>
-      <hr/>
-      <Requests title="Заявки в друзья" child1="Отправленные" child2="Полученные"></Requests>
-      <hr/>
-      <Requests title="Запросы на сотрудничество" child1="Отправленные" child2="Полученные"></Requests>
+      <hr />
+      <Requests
+        title="Заявки в друзья"
+        title1="Отправленные"
+        title2="Полученные"
+        items={receivedColls}
+      ></Requests>
+      <hr />
+      <Requests
+        title="Запросы на сотрудничество"
+        title1="Отправленные"
+        title2="Полученные"
+      ></Requests>
     </Main>
   );
 };
