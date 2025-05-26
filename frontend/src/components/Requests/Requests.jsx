@@ -14,7 +14,15 @@ const Requests = ({ title, title1, title2, items }) => {
           <div className={styles.boxesContainer}>
             {items?.map((item) => (
               <div key={item.id} className={styles.box}>
-                <div className={styles.boxItem}>Получатель: {item.sender}</div>
+              </div>
+            ))}
+          </div>
+        </Container>
+        <Container>
+          <div className={styles.requestContainer}>{title2}</div>
+          <div className={styles.boxesContainer}>
+            {items?.map((item) => (
+              <div key={item.id} className={styles.box}><div className={styles.boxItem}>Отправитель: {item.sender}</div>
                 <div className={styles.boxItem}>
                   Заметка:{" "}
                   <LinkComponent
@@ -25,16 +33,7 @@ const Requests = ({ title, title1, title2, items }) => {
                   </LinkComponent>
                 </div>
                 <div className={styles.boxItem}>Статус: {item.status}</div>
-                <div className={styles.boxItem}>Дата: {item.request_date}</div>
-              </div>
-            ))}
-          </div>
-        </Container>
-        <Container>
-          <div className={styles.requestContainer}>{title2}</div>
-          <div className={styles.boxesContainer}>
-            {items?.map((item) => (
-              <div key={item.id} className={styles.box}></div>
+                <div className={styles.boxItem}>Дата: {item.request_date}</div></div>
             ))}
           </div>
         </Container>

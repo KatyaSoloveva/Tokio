@@ -67,13 +67,13 @@ const MyPage = () => {
         title="Заявки в друзья"
         title1="Отправленные"
         title2="Полученные"
-        items={receivedColls}
       ></Requests>
       <hr />
       <Requests
         title="Запросы на сотрудничество"
         title1="Отправленные"
         title2="Полученные"
+        items={receivedColls}
       ></Requests>
     </Main>
   );
