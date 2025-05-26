@@ -244,9 +244,27 @@ class Api {
           body: JSON.stringify({ request_id, action }),
         }
       );
-      return TouchList.checkResponse(response);
+      return this.checkResponse(response);
     } catch (error) {
       console.log("Ошибка ответа на запрос о коллаборации", error);
+      throw error;
+    }
+  }
+
+  async respondFriendship({ request_id, action }) {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(
+        `api/friendship/${request_id}/respond/`,
+        {
+          method: "POST",
+          headers: { ...this._headers, authorization: `Token ${token}` },
+          body: JSON.stringify({ request_id, action }),
+        }
+      );
+      return this.checkResponse(response);
+    } catch (error) {
+      console.log("Ошибка ответа на заявку в друзья", error);
       throw error;
     }
   }
