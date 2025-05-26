@@ -212,10 +212,21 @@ class Api {
       });
       return this.checkResponse(response);
     } catch (error) {
-      console.log(
-        "Ошибка получения полученных заявок в друзья",
-        error
-      );
+      console.log("Ошибка получения полученных заявок в друзья", error);
+      throw error;
+    }
+  }
+
+  async getSentFriendship() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("api/friendship/sent/", {
+        method: "GET",
+        headers: { ...this._headers, authorization: `Token ${token}` },
+      });
+      return this.checkResponse(response);
+    } catch (error) {
+      console.log("Ошибка получения отправленных заявок в друзья", error);
       throw error;
     }
   }
