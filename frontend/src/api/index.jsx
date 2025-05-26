@@ -169,7 +169,7 @@ class Api {
       throw error;
     }
   }
-  async getReceivedCpllaborations() {
+  async getReceivedCollaborations() {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch("api/collaborations/received/", {
@@ -180,6 +180,23 @@ class Api {
     } catch (error) {
       console.log(
         "Ошибка получения полученных запросов на коллаборацию",
+        error
+      );
+      throw error;
+    }
+  }
+
+  async getSentCollaborations() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("api/collaborations/sent/", {
+        method: "GET",
+        headers: { ...this._headers, authorization: `Token ${token}` },
+      });
+      return this.checkResponse(response);
+    } catch (error) {
+      console.log(
+        "Ошибка получения отправленных запросов на коллаборацию",
         error
       );
       throw error;
