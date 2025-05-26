@@ -15,7 +15,7 @@ const MyPage = () => {
   const [receivedFriends, setReceivedFriends] = useState([]);
   const [sentFriends, setSentFriends] = useState([]);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -70,28 +70,28 @@ const MyPage = () => {
   const acceptColls = async (id) => {
     try {
       await api.respondCollaborations({ request_id: id, action: "accepted" });
-      // make navigation later
+      navigate(0);
     } catch (error) {}
   };
 
   const rejectColls = async (id) => {
     try {
       await api.respondCollaborations({ request_id: id, action: "rejected" });
-      // make navigation later
+      navigate(0);
     } catch (error) {}
   };
 
   const acceptFriendship = async (id) => {
     try {
       await api.respondFriendship({ request_id: id, action: "accepted" });
-      // make navigation later
+      navigate(0);
     } catch (error) {}
   };
 
   const rejectFriendship = async (id) => {
     try {
       await api.respondFriendship({ request_id: id, action: "rejected" });
-      // make navigation later
+      navigate(0);
     } catch (error) {}
   };
 
@@ -108,13 +108,22 @@ const MyPage = () => {
       <Container className={styles.mainMyTasks}>
         <Container>
           <UserCard
+            style={{ position: "relative" }}
             isUser
             image={user.avatar}
             username={user.username}
             name={user.first_name + " " + user.last_name}
             email={user.email}
             birthday={user.birthday}
-          ></UserCard>
+          >
+            <button
+              type="button"
+              className={styles.button}
+              style={{ left: "auto", top: "auto" }}
+            >
+              Редактировать
+            </button>
+          </UserCard>
         </Container>
         <Container>
           <Input

@@ -2,7 +2,7 @@ import Container from "../Container/Container";
 import styles from "./UserCard.module.css";
 import anonim from "/avatar_anonim.png";
 
-const UserCard = ({ image, username, name, birthday, email, isUser }) => {
+const UserCard = ({ image, username, name, birthday, email, isUser, children }) => {
   return (
     <Container className={styles.usercardContainer}>
       <img src={image || anonim} className={styles.image} />
@@ -33,6 +33,7 @@ const UserCard = ({ image, username, name, birthday, email, isUser }) => {
           </div>
         )}
       </Container>
+      {children}
     </Container>
   );
 };
