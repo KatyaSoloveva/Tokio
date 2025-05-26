@@ -5,6 +5,7 @@ import Main from "../../components/Main/Main";
 import styles from "./MyPage.module.css";
 import api from "../../api";
 import UserCard from "../../components/UserCard/UserCard";
+import Requests from "../../components/Requests/Requests";
 
 const MyPage = () => {
   const [user, setuser] = useState([]);
@@ -49,13 +50,10 @@ const MyPage = () => {
           </div>
         </Container>
       </Container>
-      <Container>
-        <h1>requests</h1>
-        <Container className={styles.mainMyTasks}>
-          <Container>sent</Container>
-          <Container>received</Container>
-        </Container>
-      </Container>
+      <hr/>
+      <Requests title="Заявки в друзья"></Requests>
+      <hr/>
+      <Requests title="Запросы на сотрудничество"></Requests>
     </Main>
   );
 };
