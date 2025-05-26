@@ -10,6 +10,7 @@ import Requests from "../../components/Requests/Requests";
 const MyPage = () => {
   const [user, setuser] = useState([]);
   const [receivedColls, setReceivedColls] = useState([]);
+  const [sentColls, setSentColls] = useState([]);
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -30,7 +31,17 @@ const MyPage = () => {
     };
     receivedColls();
   }, []);
-  console.log(receivedColls);
+
+  useEffect(() => {
+    const sentColls = async () => {
+      try {
+        const collsRequests = await api.getSentCollaborations();
+        setSentColls(collsRequests);
+      } catch (error) {}
+    };
+    sentColls();
+  }, []);
+console.log(sentColls)
   return (
     <Main>
       <Container className={styles.mainMyTasks}>
@@ -74,6 +85,7 @@ const MyPage = () => {
         title1="Отправленные"
         title2="Полученные"
         items={receivedColls}
+        items2={sentColls}
       ></Requests>
     </Main>
   );
