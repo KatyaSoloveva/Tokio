@@ -1,3 +1,5 @@
+import { jsx } from "react/jsx-runtime";
+
 class Api {
   constructor(url, headers) {
     this._url = url;
@@ -227,6 +229,24 @@ class Api {
       return this.checkResponse(response);
     } catch (error) {
       console.log("Ошибка получения отправленных заявок в друзья", error);
+      throw error;
+    }
+  }
+
+  async respondCollaborations({ request_id, action }) {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(
+        `api/collaborations/${request_id}/respond/`,
+        {
+          method: "POST",
+          headers: { ...this._headers, authorization: `Token ${token}` },
+          body: JSON.stringify({ request_id, action }),
+        }
+      );
+      return TouchList.checkResponse(response);
+    } catch (error) {
+      console.log("Ошибка ответа на запрос о коллаборации", error);
       throw error;
     }
   }
