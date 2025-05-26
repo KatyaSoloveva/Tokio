@@ -92,7 +92,6 @@ const MyPage = () => {
     } catch (error) {}
   };
 
-
   return (
     <Main>
       <Container className={styles.mainMyTasks}>
@@ -114,12 +113,15 @@ const MyPage = () => {
           />
           <div className={styles.friendUsercards}>
             {user?.friends?.map((friend) => (
-              <UserCard
-                key={friend.id}
-                username={friend.username}
-                name={friend.first_name + " " + friend.last_name}
-                birthday={friend.birthday}
-              ></UserCard>
+              <>
+                <UserCard
+                  key={friend.id}
+                  username={friend.username}
+                  name={friend.first_name + " " + friend.last_name}
+                  birthday={friend.birthday}
+                ></UserCard>
+                <button type="submit" onClick={handleClick} className={styles.button}>Удалить</button>
+              </>
             ))}
           </div>
         </Container>
@@ -131,8 +133,8 @@ const MyPage = () => {
         title2="Полученные"
         items={receivedFriends}
         items2={sentFriends}
-        onClickAccepted = {acceptFriendship}
-        onClickRejected = {rejectFriendship}
+        onClickAccepted={acceptFriendship}
+        onClickRejected={rejectFriendship}
       ></Requests>
       <hr />
       <Requests
@@ -142,7 +144,7 @@ const MyPage = () => {
         items={receivedColls}
         items2={sentColls}
         onClickAccepted={acceptColls}
-        onClickRejected = {rejectColls}
+        onClickRejected={rejectColls}
       ></Requests>
     </Main>
   );
