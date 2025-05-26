@@ -21,6 +21,8 @@
 
 .button {
   position: absolute;
+  left: 0px;
+  top: 0px;
   background-color: rgb(83, 12, 92);
   border: 1px solid #835e7e;
   border-radius: 15px;

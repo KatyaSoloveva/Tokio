@@ -90,14 +90,14 @@ const Requests = ({
                     {item.status === "pending" && (
                       <div className={styles.buttonContainer}>
                         <Button
-                          type="submit"
+                          type="button"
                           className={styles.button}
                           onClick={handleClickAccept(item.id)}
                         >
                           Принять
                         </Button>
                         <Button
-                          type="submit"
+                          type="button"
                           className={styles.button}
                           onClick={handleClickReject(item.id)}
                         >

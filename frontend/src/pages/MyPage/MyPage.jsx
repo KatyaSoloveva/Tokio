@@ -6,6 +6,7 @@ import styles from "./MyPage.module.css";
 import api from "../../api";
 import UserCard from "../../components/UserCard/UserCard";
 import Requests from "../../components/Requests/Requests";
+import { useNavigate } from "react-router-dom";
 
 const MyPage = () => {
   const [user, setuser] = useState([]);
@@ -13,6 +14,8 @@ const MyPage = () => {
   const [sentColls, setSentColls] = useState([]);
   const [receivedFriends, setReceivedFriends] = useState([]);
   const [sentFriends, setSentFriends] = useState([]);
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -92,6 +95,14 @@ const MyPage = () => {
     } catch (error) {}
   };
 
+  const handleClick = (id) => async (event) => {
+    event.preventDefault();
+    try {
+      await api.deleteFriend({ friend_id: id });
+      navigate(0);
+    } catch (error) {}
+  };
+
   return (
     <Main>
       <Container className={styles.mainMyTasks}>
@@ -113,15 +124,21 @@ const MyPage = () => {
           />
           <div className={styles.friendUsercards}>
             {user?.friends?.map((friend) => (
-              <>
+              <div key={friend.id} style={{ position: "relative" }}>
                 <UserCard
                   key={friend.id}
                   username={friend.username}
                   name={friend.first_name + " " + friend.last_name}
                   birthday={friend.birthday}
                 ></UserCard>
-                <button type="submit" onClick={handleClick} className={styles.button}>Удалить</button>
-              </>
+                <button
+                  type="button"
+                  onClick={handleClick(friend.id)}
+                  className={styles.button}
+                >
+                  Удалить
+                </button>
+              </div>
             ))}
           </div>
         </Container>
