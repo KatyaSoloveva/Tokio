@@ -4,3 +4,8 @@
   grid-auto-rows: 1fr;
   grid-gap: 10px;
 }
+
+.requestContainer{
+    font-size: 1.5rem;
+    color: rgb(105, 27, 75)
+}

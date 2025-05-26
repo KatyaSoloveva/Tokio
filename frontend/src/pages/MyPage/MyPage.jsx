@@ -51,9 +51,9 @@ const MyPage = () => {
         </Container>
       </Container>
       <hr/>
-      <Requests title="Заявки в друзья"></Requests>
+      <Requests title="Заявки в друзья" child1="Отправленные" child2="Полученные"></Requests>
       <hr/>
-      <Requests title="Запросы на сотрудничество"></Requests>
+      <Requests title="Запросы на сотрудничество" child1="Отправленные" child2="Полученные"></Requests>
     </Main>
   );
 };
