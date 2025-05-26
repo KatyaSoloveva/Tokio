@@ -70,7 +70,7 @@ class Api {
     }
   }
 
-  async createTask({ name, text, categories=[] }) {
+  async createTask({ name, text, categories = [] }) {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch("/api/tasks/", {
@@ -166,6 +166,22 @@ class Api {
       return this.checkResponse(response);
     } catch (error) {
       console.log("Ошибка получения категорий", error);
+      throw error;
+    }
+  }
+  async getReceivedCpllaborations() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("api/collaborations/received/", {
+        method: "GET",
+        headers: { ...this._headers, authorization: `Token ${token}` },
+      });
+      return this.checkResponse(response);
+    } catch (error) {
+      console.log(
+        "Ошибка получения полученных запросов на коллаборацию",
+        error
+      );
       throw error;
     }
   }
