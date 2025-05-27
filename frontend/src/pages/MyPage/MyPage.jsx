@@ -20,7 +20,7 @@ const MyPage = () => {
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const user = await api.getFriends();
+        const user = await api.getMyPage();
         setuser(user);
       } catch (error) {}
     };
@@ -103,6 +103,11 @@ const MyPage = () => {
     } catch (error) {}
   };
 
+  const onClick = (event) => {
+    event.preventDefault()
+    navigate("/edit_profile")
+  }
+
   return (
     <Main>
       <Container className={styles.mainMyTasks}>
@@ -120,6 +125,7 @@ const MyPage = () => {
               type="button"
               className={styles.button}
               style={{ left: "auto", top: "auto" }}
+              onClick={onClick}
             >
               Редактировать
             </button>

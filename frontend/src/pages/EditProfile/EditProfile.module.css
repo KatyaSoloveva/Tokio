@@ -1,0 +1,9 @@
+.item {
+  color: rgb(105, 27, 75);
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+.text {
+    text-align: left;
+}

@@ -8,6 +8,7 @@ import "./App.css";
 import { AuthProvider } from "./contexts/AuthContext";
 import MyTasks from "./pages/MyTasks/MyTasks";
 import MyPage from "./pages/MyPage/MyPage";
+import EditProfile from "./pages/EditProfile/EditProfile";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="tasks" element={<MyTasks />}></Route>
           <Route path="tasks/:id" element={<MyTasks />} />
           <Route path="mypage" element={<MyPage />} />
+          <Route path="edit_profile" element={<EditProfile />} />
         </Routes>
       </>
     </AuthProvider>
