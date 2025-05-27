@@ -282,6 +282,27 @@ class Api {
       throw error;
     }
   }
+
+  async updateMyProfile({ username, first_name, last_name, birthday, email }) {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("/api/users/me/", {
+        method: "PATCH",
+        headers: { ...this._headers, authorization: `Token ${token}` },
+        body: JSON.stringify({
+          username,
+          first_name,
+          last_name,
+          birthday,
+          email,
+        }),
+      });
+      return this.checkResponse(response);
+    } catch (error) {
+      console.log("Ошибка при редактировании профиля:", error);
+      throw error;
+    }
+  }
 }
 
 export default new Api("http://localhost:8000", {
