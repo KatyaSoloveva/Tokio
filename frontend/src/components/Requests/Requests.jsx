@@ -25,7 +25,6 @@ const Requests = ({
     onClickRejected(id);
   };
 
-  items?.map((item) => console.log(item.request_date));
   return (
     <Container>
       <FormTitle title={title}></FormTitle>

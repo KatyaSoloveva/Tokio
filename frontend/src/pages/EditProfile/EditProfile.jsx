@@ -7,11 +7,28 @@ import Container from "../../components/Container/Container";
 import { useEffect, useState } from "react";
 import api from "../../api";
 import styles from "./EditProfile.module.css";
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
+  const navigate = useNavigate();
   const [user, setuser] = useState([]);
-  const onSubmit = (event) => {
+  const [formData, setFormData] = useState({
+    username: "",
+    first_name: "",
+    last_name: "",
+    birthday: "",
+    email: "",
+  });
+
+  const onSubmit = async (event) => {
     event.preventDefault();
+    const filteredFormData = Object.fromEntries(
+      Object.entries(formData).filter(([key, value]) => value !== "")
+    );
+    try {
+      await api.updateMyProfile(filteredFormData);
+      navigate("/mypage");
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -24,13 +41,13 @@ const EditProfile = () => {
     fetchMyPage();
   }, []);
 
-  const [formData, setFormData] = useState({
-    username: user.username,
-    first_name: user.first_name,
-    last_name: user.last_name,
-    birthday: user.birthday,
-    email: user.email
-  });
+  const onChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   return (
     <Main withBG>
@@ -43,23 +60,49 @@ const EditProfile = () => {
               label={user.username}
               name="username"
               type="text"
+              value={formData.username}
+              onChange={onChange}
             />
           </div>
           <div className={styles.item}>
             <div className={styles.text}>Имя </div>
-            <Input label={user.first_name} name="first_name" type="text" />
+            <Input
+              label={user.first_name}
+              name="first_name"
+              type="text"
+              value={formData.first_name}
+              onChange={onChange}
+            />
           </div>
           <div className={styles.item}>
             <div className={styles.text}>Фамилия </div>
-            <Input label={user.last_name} name="last_name" type="text" />
+            <Input
+              label={user.last_name}
+              name="last_name"
+              type="text"
+              value={formData.last_name}
+              onChange={onChange}
+            />
           </div>
           <div className={styles.item}>
             <div className={styles.text}>День рождения </div>
-            <Input label={user.birthday} name="birthday" type="text" />
+            <Input
+              label={user.birthday}
+              name="birthday"
+              type="text"
+              value={formData.birthday}
+              onChange={onChange}
+            />
           </div>
           <div className={styles.item}>
             <div className={styles.text}>Email </div>
-            <Input label={user.email} name="email" type="text" />
+            <Input
+              label={user.email}
+              name="email"
+              type="text"
+              value={formData.email}
+              onChange={onChange}
+            />
           </div>
           <Button type="submit">Редактировать профиль</Button>
         </Form>

@@ -11,7 +11,6 @@ const Friends = () => {
     const fetchFriends = async () => {
       try {
         const friends = await api.getFriends();
-        console.log(friends.friends);
         setFriends(friends.friends)
       } catch (error) {}
     };
