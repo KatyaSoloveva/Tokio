@@ -1,8 +1,18 @@
 import Container from "../Container/Container";
 import styles from "./UserCard.module.css";
 import anonim from "/avatar_anonim.png";
+import { format, parseISO } from "date-fns";
+import { ru } from "date-fns/locale";
 
-const UserCard = ({ image, username, name, birthday, email, isUser, children }) => {
+const UserCard = ({
+  image,
+  username,
+  name,
+  birthday,
+  email,
+  isUser,
+  children,
+}) => {
   return (
     <Container className={styles.usercardContainer}>
       <img src={image || anonim} className={styles.image} />
@@ -25,7 +35,9 @@ const UserCard = ({ image, username, name, birthday, email, isUser, children }) 
           {null ? name : "Анонимный Аноним"}
         </div>
         <div className={styles.info} style={{ gridColumn: 2, gridRow: 2 }}>
-          {birthday}
+          {birthday
+            ? format(parseISO(birthday), "dd.MM.yyyy", { locale: ru })
+            : "Дата рождения не указана"}
         </div>
         {isUser && (
           <div className={styles.info} style={{ gridColumn: 3, gridRow: 2 }}>

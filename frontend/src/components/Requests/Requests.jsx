@@ -3,6 +3,8 @@ import Container from "../Container/Container";
 import FormTitle from "../FormTitle/FormTitle";
 import LinkComponent from "../Link/Link";
 import styles from "./Requests.module.css";
+import { format, parseISO } from "date-fns";
+import { ru } from "date-fns/locale";
 
 const Requests = ({
   title,
@@ -51,7 +53,12 @@ const Requests = ({
                     )}
                     <div className={styles.boxItem}>Статус: {item.status}</div>
                     <div className={styles.boxItem}>
-                      Дата: {item.request_date}
+                      Дата:{" "}
+                      {format(
+                        parseISO(item.request_date),
+                        "dd.MM.yyyy, HH:mm",
+                        { locale: ru }
+                      )}
                     </div>
                     <div className={styles.buttonContainer}></div>
                   </div>
@@ -85,7 +92,12 @@ const Requests = ({
                     )}
                     <div className={styles.boxItem}>Статус: {item.status}</div>
                     <div className={styles.boxItem}>
-                      Дата: {item.request_date}
+                      Дата:{" "}
+                      {format(
+                        parseISO(item.request_date),
+                        "dd.MM.yyyy, HH:mm",
+                        { locale: ru }
+                      )}
                     </div>
                     {item.status === "pending" && (
                       <div className={styles.buttonContainer}>
