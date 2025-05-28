@@ -30,3 +30,11 @@
   font-size: 1rem;
   cursor: pointer;
 }
+
+.imgLeft {
+  transform: rotate(270deg);
+}
+
+.imgRight {
+  transform: rotate(90deg);
+}

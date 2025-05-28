@@ -7,6 +7,7 @@ import api from "../../api";
 import UserCard from "../../components/UserCard/UserCard";
 import Requests from "../../components/Requests/Requests";
 import { useNavigate } from "react-router-dom";
+import Arrow from "../../components/Arrow/Arrow";
 
 const MyPage = () => {
   const [user, setuser] = useState([]);
@@ -32,7 +33,7 @@ const MyPage = () => {
     const fetchFriends = async () => {
       try {
         const friends = await api.getFriends({ page: 1 });
-        setFriends(friends.results);
+        setFriends(friends);
       } catch (error) {}
     };
     fetchFriends();
@@ -149,7 +150,7 @@ const MyPage = () => {
             className={styles.friendsInput}
           />
           <div className={styles.friendUsercards}>
-            {friends?.map((friend) => (
+            {friends?.results?.map((friend) => (
               <div key={friend.id} style={{ position: "relative" }}>
                 <UserCard
                   key={friend.id}
@@ -167,6 +168,8 @@ const MyPage = () => {
               </div>
             ))}
           </div>
+          <Arrow alt="лево" className={styles.imgLeft}></Arrow>
+          <Arrow alt="право" className={styles.imgRight}></Arrow>
         </Container>
       </Container>
       <hr />
