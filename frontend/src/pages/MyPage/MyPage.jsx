@@ -16,8 +16,19 @@ const MyPage = () => {
   const [sentColls, setSentColls] = useState([]);
   const [receivedFriends, setReceivedFriends] = useState([]);
   const [sentFriends, setSentFriends] = useState([]);
+  const [page, setPage] = useState(1);
 
   const navigate = useNavigate();
+
+  const onClickRight = (event) => {
+    event.preventDefault();
+    setPage(page + 1);
+  };
+
+  const onClickLeft = (event) => {
+    event.preventDefault();
+    setPage(page - 1);
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -30,14 +41,14 @@ const MyPage = () => {
   }, []);
 
   useEffect(() => {
-    const fetchFriends = async () => {
+    const fetchFriends = async (page) => {
       try {
-        const friends = await api.getFriends({ page: 1 });
+        const friends = await api.getFriends({ page: page });
         setFriends(friends);
       } catch (error) {}
     };
-    fetchFriends();
-  }, []);
+    fetchFriends(page);
+  }, [page]);
 
   useEffect(() => {
     const receivedColls = async () => {
@@ -168,8 +179,20 @@ const MyPage = () => {
               </div>
             ))}
           </div>
-          <Arrow alt="лево" className={styles.imgLeft}></Arrow>
-          <Arrow alt="право" className={styles.imgRight}></Arrow>
+          {friends?.previous && (
+            <Arrow
+              alt="лево"
+              className={styles.imgLeft}
+              onClick={onClickLeft}
+            />
+          )}
+          {friends?.next && (
+            <Arrow
+              alt="право"
+              className={styles.imgRight}
+              onClick={onClickRight}
+            />
+          )}
         </Container>
       </Container>
       <hr />
