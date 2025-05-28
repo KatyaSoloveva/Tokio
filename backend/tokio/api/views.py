@@ -12,6 +12,7 @@ from .serializers import (BaseResponseSerializer, CategorySerializer,
                           CollaborationRequestWriteSerializer,
                           FriendshipRequestReadSerializer,
                           FriendshipRequestWriteSerializer,
+                          FriendSerializer,
                           TaskWriteSerializer, TaskReadSerializer)
 from tasks.models import Category, CollaborationRequest, Task
 from users.models import FriendShipRequest
@@ -22,6 +23,12 @@ User = get_user_model()
 
 
 class UserViewSet(UserViewSet):
+
+    @action(detail=False, methods=('get',), url_path='me/friends')
+    def friends(self, request):
+        user = request.user
+        serializer = FriendSerializer(user.friends, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=('delete',),
             url_path=r'me/delete_friend/(?P<user_id>\d+)')
