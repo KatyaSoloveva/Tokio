@@ -161,16 +161,13 @@ class Api {
   async getFriends({ page = 1 }) {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch(
-        `/api/users/me/friends/?page=${page}`,
-        {
-          method: "GET",
-          headers: { ...this._headers, authorization: `Token ${token}` },
-        }
-      );
+      const response = await fetch(`/api/users/me/friends/?page=${page}`, {
+        method: "GET",
+        headers: { ...this._headers, authorization: `Token ${token}` },
+      });
       return this.checkResponse(response);
     } catch (error) {
-      console.log('Не удалось получить список друзей пользователя', error);
+      console.log("Не удалось получить список друзей пользователя", error);
       throw error;
     }
   }
@@ -205,13 +202,16 @@ class Api {
       throw error;
     }
   }
-  async getReceivedCollaborations() {
+  async getReceivedCollaborations(page = 1) {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("api/collaborations/received/", {
-        method: "GET",
-        headers: { ...this._headers, authorization: `Token ${token}` },
-      });
+      const response = await fetch(
+        `api/collaborations/received/?page=${page}`,
+        {
+          method: "GET",
+          headers: { ...this._headers, authorization: `Token ${token}` },
+        }
+      );
       return this.checkResponse(response);
     } catch (error) {
       console.log(
@@ -222,10 +222,10 @@ class Api {
     }
   }
 
-  async getSentCollaborations() {
+  async getSentCollaborations(page = 1) {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("api/collaborations/sent/", {
+      const response = await fetch(`api/collaborations/sent/?page=${page}`, {
         method: "GET",
         headers: { ...this._headers, authorization: `Token ${token}` },
       });
@@ -239,10 +239,10 @@ class Api {
     }
   }
 
-  async getReceivedFriendship() {
+  async getReceivedFriendship(page = 1) {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("api/friendship/received/", {
+      const response = await fetch(`api/friendship/received/?page=${page}`, {
         method: "GET",
         headers: { ...this._headers, authorization: `Token ${token}` },
       });
@@ -253,10 +253,10 @@ class Api {
     }
   }
 
-  async getSentFriendship() {
+  async getSentFriendship(page = 1) {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("api/friendship/sent/", {
+      const response = await fetch(`api/friendship/sent/?page=${page}`, {
         method: "GET",
         headers: { ...this._headers, authorization: `Token ${token}` },
       });

@@ -34,7 +34,7 @@ const Requests = ({
           <div className={styles.boxesContainer}>
             {items2 ? (
               <>
-                {items2.map((item) => (
+                {items2.results?.map((item) => (
                   <div key={item.id} className={styles.box}>
                     <div className={styles.boxItem}>
                       Получатель: {item.receiver}
@@ -73,7 +73,7 @@ const Requests = ({
           <div className={styles.boxesContainer}>
             {items ? (
               <>
-                {items.map((item) => (
+                {items.results?.map((item) => (
                   <div key={item.id} className={styles.box}>
                     <div className={styles.boxItem}>
                       Отправитель: {item.sender}
