@@ -18,17 +18,21 @@ from tasks.models import Category, CollaborationRequest, Task
 from users.models import FriendShipRequest
 from .permissions import (IsAuthorOrCollaborator, IsAuthorOnly,
                           IsSenderOrReadOnly, IsReceiverOnly,)
+from .pagination import UserPagination
 
 User = get_user_model()
 
 
 class UserViewSet(UserViewSet):
+    pagination_class = UserPagination
 
     @action(detail=False, methods=('get',), url_path='me/friends')
     def friends(self, request):
         user = request.user
-        serializer = FriendSerializer(user.friends, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        friends = user.friends.all().order_by('username')
+        page = self.paginate_queryset(friends)
+        serializer = FriendSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
     @action(detail=False, methods=('delete',),
             url_path=r'me/delete_friend/(?P<user_id>\d+)')
