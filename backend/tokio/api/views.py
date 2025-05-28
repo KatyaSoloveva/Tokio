@@ -18,7 +18,7 @@ from tasks.models import Category, CollaborationRequest, Task
 from users.models import FriendShipRequest
 from .permissions import (IsAuthorOrCollaborator, IsAuthorOnly,
                           IsSenderOrReadOnly, IsReceiverOnly,)
-from .pagination import TaskPagination, UserPagination
+from .pagination import RequestPagination, TaskPagination, UserPagination
 
 User = get_user_model()
 
@@ -97,6 +97,7 @@ class BaseRequestViewSet(mixins.CreateModelMixin,
     serializer_write_class = None
     request_model = None
     permission_classes = (IsSenderOrReadOnly,)
+    pagination_class = RequestPagination
 
     def get_queryset(self):
         user = self.request.user
@@ -118,8 +119,9 @@ class BaseRequestViewSet(mixins.CreateModelMixin,
         requests = self.get_optimized_queryset(
             self.request_model.objects.filter(**filter_condition)
         )
+        self.paginate_queryset(requests)
         serializer = self.get_serializer(requests, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return self.get_paginated_response(serializer.data)
 
     @action(detail=False, methods=('get',))
     def sent(self, request):

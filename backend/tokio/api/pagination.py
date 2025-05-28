@@ -1,6 +1,6 @@
 from rest_framework.pagination import PageNumberPagination
 
-from core.constants import TaskLimit, UserLimit
+from core.constants import RequestLimit, TaskLimit, UserLimit
 
 
 class UserPagination(PageNumberPagination):
@@ -9,3 +9,7 @@ class UserPagination(PageNumberPagination):
 
 class TaskPagination(PageNumberPagination):
     page_size = TaskLimit
+
+
+class RequestPagination(PageNumberPagination):
+    page_size = RequestLimit
