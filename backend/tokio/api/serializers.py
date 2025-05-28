@@ -1,24 +1,30 @@
 from rest_framework import serializers
 from djoser.serializers import UserSerializer as DjoserUserSerializer
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
 
 from tasks.models import Category, CollaborationRequest, Task
 from users.models import FriendShipRequest
 from core.base_models import BaseRequestModel
 
-
-class FriendSerializer(DjoserUserSerializer):
-    class Meta(DjoserUserSerializer.Meta):
-        fields = DjoserUserSerializer.Meta.fields + (
-            'first_name', 'last_name', 'birthday', 'avatar'
-        )
+User = get_user_model()
 
 
-class UserSerializer(FriendSerializer):
+class FriendSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name',
+                  'birthday', 'avatar')
+
+
+class UserSerializer(DjoserUserSerializer):
     friends = FriendSerializer(many=True, read_only=True)
 
-    class Meta(FriendSerializer.Meta):
-        fields = FriendSerializer.Meta.fields + ('friends',)
+    class Meta(DjoserUserSerializer.Meta):
+        fields = DjoserUserSerializer.Meta.fields + (
+            'first_name', 'last_name', 'birthday', 'avatar', 'friends'
+        )
 
 
 class CategorySerializer(serializers.ModelSerializer):

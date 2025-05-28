@@ -18,7 +18,6 @@ from users.models import FriendShipRequest
 from .permissions import (IsAuthorOrCollaborator, IsAuthorOnly,
                           IsSenderOrReadOnly, IsReceiverOnly,)
 
-
 User = get_user_model()
 
 
