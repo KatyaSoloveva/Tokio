@@ -18,7 +18,7 @@ from tasks.models import Category, CollaborationRequest, Task
 from users.models import FriendShipRequest
 from .permissions import (IsAuthorOrCollaborator, IsAuthorOnly,
                           IsSenderOrReadOnly, IsReceiverOnly,)
-from .pagination import UserPagination
+from .pagination import TaskPagination, UserPagination
 
 User = get_user_model()
 
@@ -50,6 +50,7 @@ class UserViewSet(UserViewSet):
 
 class TaskViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthorOrCollaborator,)
+    pagination_class = TaskPagination
 
     def get_queryset(self):
         user = self.request.user
