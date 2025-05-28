@@ -158,11 +158,11 @@ class Api {
     }
   }
 
-  async getFriends({ page = 1, limit = 2 }) {
+  async getFriends({ page = 1 }) {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `/api/users/me/delete_friend/?page=${page}&limit=${limit}`,
+        `/api/users/me/friends/?page=${page}`,
         {
           method: "GET",
           headers: { ...this._headers, authorization: `Token ${token}` },

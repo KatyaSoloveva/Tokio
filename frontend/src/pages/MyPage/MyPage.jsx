@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 const MyPage = () => {
   const [user, setuser] = useState([]);
+  const [friends, setFriends] = useState([]);
   const [receivedColls, setReceivedColls] = useState([]);
   const [sentColls, setSentColls] = useState([]);
   const [receivedFriends, setReceivedFriends] = useState([]);
@@ -25,6 +26,16 @@ const MyPage = () => {
       } catch (error) {}
     };
     fetchUser();
+  }, []);
+
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const friends = await api.getFriends({ page: 1 });
+        setFriends(friends.results);
+      } catch (error) {}
+    };
+    fetchFriends();
   }, []);
 
   useEffect(() => {
@@ -104,9 +115,9 @@ const MyPage = () => {
   };
 
   const onClick = (event) => {
-    event.preventDefault()
-    navigate("/edit_profile")
-  }
+    event.preventDefault();
+    navigate("/edit_profile");
+  };
 
   return (
     <Main>
@@ -138,7 +149,7 @@ const MyPage = () => {
             className={styles.friendsInput}
           />
           <div className={styles.friendUsercards}>
-            {user?.friends?.map((friend) => (
+            {friends?.map((friend) => (
               <div key={friend.id} style={{ position: "relative" }}>
                 <UserCard
                   key={friend.id}
