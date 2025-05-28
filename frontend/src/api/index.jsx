@@ -158,6 +158,23 @@ class Api {
     }
   }
 
+  async getFriends({ page = 1, limit = 2 }) {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(
+        `/api/users/me/delete_friend/?page=${page}&limit=${limit}`,
+        {
+          method: "GET",
+          headers: { ...this._headers, authorization: `Token ${token}` },
+        }
+      );
+      return this.checkResponse(response);
+    } catch (error) {
+      console.log('Не удалось получить список друзей пользователя', error);
+      throw error;
+    }
+  }
+
   async deleteFriend({ friend_id }) {
     const token = localStorage.getItem("token");
     try {

@@ -18,13 +18,13 @@ const MyPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchFriends = async () => {
+    const fetchUser = async () => {
       try {
         const user = await api.getMyPage();
         setuser(user);
       } catch (error) {}
     };
-    fetchFriends();
+    fetchUser();
   }, []);
 
   useEffect(() => {
