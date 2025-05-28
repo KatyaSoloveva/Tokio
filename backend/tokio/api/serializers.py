@@ -19,11 +19,10 @@ class FriendSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(DjoserUserSerializer):
-    friends = FriendSerializer(many=True, read_only=True)
 
     class Meta(DjoserUserSerializer.Meta):
         fields = DjoserUserSerializer.Meta.fields + (
-            'first_name', 'last_name', 'birthday', 'avatar', 'friends'
+            'first_name', 'last_name', 'birthday', 'avatar',
         )
 
 
