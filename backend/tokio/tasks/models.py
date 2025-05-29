@@ -152,6 +152,11 @@ class CollaborationRequest(BaseRequestModel):
             raise ValidationError(
                 'Нельзя пригласить коллаборатора не в свою заметку!'
             )
+        if self.receiver not in self.sender.friends.all():
+            raise ValidationError(
+                'Нельзя пригласить в заметку пользователя, не являющегося '
+                'вашим другом!'
+            )
 
     def perform_acception(self):
         self.task.collaborators.add(self.receiver)
