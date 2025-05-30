@@ -27,11 +27,13 @@ User = get_user_model()
 
 class UserViewSet(UserViewSet):
     pagination_class = UserPagination
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('^username', )
 
     @action(detail=False, methods=('get',), url_path='me/friends')
     def friends(self, request):
         user = request.user
-        friends = user.friends.all().order_by('username')
+        friends = self.filter_queryset(user.friends.all().order_by('username'))
         page = self.paginate_queryset(friends)
         serializer = FriendSerializer(page, many=True)
         return self.get_paginated_response(serializer.data)
