@@ -2,6 +2,7 @@ from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import filters
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -52,6 +53,8 @@ class UserViewSet(UserViewSet):
 class TaskViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthorOrCollaborator,)
     pagination_class = TaskPagination
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('^name',)
 
     def get_queryset(self):
         user = self.request.user
