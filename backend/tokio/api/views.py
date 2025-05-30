@@ -88,6 +88,8 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('^name',)
 
     def get_queryset(self):
         return (Category.objects.filter(
