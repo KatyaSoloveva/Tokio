@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import (BaseResponseSerializer, CategorySerializer,
                           CollaborationRequestReadSerializer,
@@ -98,6 +99,8 @@ class BaseRequestViewSet(mixins.CreateModelMixin,
     request_model = None
     permission_classes = (IsSenderOrReadOnly,)
     pagination_class = RequestPagination
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('status',)
 
     def get_queryset(self):
         user = self.request.user
@@ -116,9 +119,9 @@ class BaseRequestViewSet(mixins.CreateModelMixin,
         )
 
     def get_requests_type(self, filter_condition):
-        requests = self.get_optimized_queryset(
+        requests = self.filter_queryset(self.get_optimized_queryset(
             self.request_model.objects.filter(**filter_condition)
-        )
+        ))
         self.paginate_queryset(requests)
         serializer = self.get_serializer(requests, many=True)
         return self.get_paginated_response(serializer.data)
