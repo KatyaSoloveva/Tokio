@@ -5,6 +5,8 @@ from datetime import date
 
 from core.base_models import BaseRequestModel
 from core.decorators import request_constraint
+from core.constants import (BIRTH_MAX_BORDER, BIRTH_MIN_BORDER,
+                            EMAIL_TASK_LENGTH, LENGTH, USER_FIELDS_LENGTH)
 
 year = date.today().year
 
@@ -13,13 +15,15 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ('username',)
 
-    username = models.CharField(max_length=125,
+    username = models.CharField(max_length=USER_FIELDS_LENGTH,
                                 unique=True, verbose_name='Логин')
-    first_name = models.CharField(max_length=255, blank=True, null=True,
+    first_name = models.CharField(max_length=USER_FIELDS_LENGTH, blank=True,
+                                  null=True,
                                   verbose_name='Имя')
-    last_name = models.CharField(max_length=255, blank=True, null=True,
+    last_name = models.CharField(max_length=USER_FIELDS_LENGTH, blank=True,
+                                 null=True,
                                  verbose_name='Фамилия')
-    email = models.EmailField(max_length=125, unique=True,
+    email = models.EmailField(max_length=EMAIL_TASK_LENGTH, unique=True,
                               verbose_name='Email')
     avatar = models.ImageField(upload_to='users/avatars', blank=True,
                                null=True, verbose_name='Аватар')
@@ -34,16 +38,17 @@ class User(AbstractUser):
         ordering = ('username',)
 
     def __str__(self):
-        return self.username[:20]
+        return self.username[:LENGTH]
 
     def clean(self):
         if self.birthday:
             if self.birthday.year - year > 0:
                 raise ValidationError('Этот год еще не настал!')
-            elif (year - self.birthday.year < 5
-                  or year - self.birthday.year > 100):
+            elif (year - self.birthday.year < BIRTH_MIN_BORDER
+                  or year - self.birthday.year > BIRTH_MAX_BORDER):
                 raise ValidationError(
-                    'Вам не может быть более 100 и менее 5 лет!'
+                    f'Вам не может быть более {BIRTH_MAX_BORDER}'
+                    'и менее {BIRTH_MIN_BORDER} лет!'
                 )
 
 

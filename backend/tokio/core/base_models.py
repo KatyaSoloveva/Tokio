@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
+from core.constants import STATUS_LENGTH
+
 
 class BaseRequestModel(models.Model):
     class Status(models.TextChoices):
@@ -8,7 +10,7 @@ class BaseRequestModel(models.Model):
         ACCEPTED = 'accepted', 'Принято'
         REJECTED = 'rejected', 'Отклонено'
 
-    status = models.CharField(max_length=20, choices=Status.choices,
+    status = models.CharField(max_length=STATUS_LENGTH, choices=Status.choices,
                               verbose_name='Статус запроса',
                               default=Status.PENDING)
     request_date = models.DateTimeField(

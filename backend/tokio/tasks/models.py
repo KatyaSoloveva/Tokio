@@ -10,6 +10,9 @@ from unidecode import unidecode
 from core.validators import validate_category_name
 from core.base_models import BaseRequestModel
 from core.decorators import request_constraint
+from core.constants import (BASE_SLUG, BASE_SLUG_WITH_COUNTER,
+                            CATEGORY_LENGTH, EMAIL_TASK_LENGTH, LENGTH,
+                            SLUG_LENGTH, STATUS_LENGTH)
 
 User = get_user_model()
 
@@ -19,10 +22,11 @@ class Category(models.Model):
                                verbose_name='Создатель категории',
                                related_name='categories', null=True,
                                blank=True)
-    name = models.CharField(max_length=255, verbose_name='Категория',
+    name = models.CharField(max_length=CATEGORY_LENGTH,
+                            verbose_name='Категория',
                             validators=(validate_category_name,))
     slug = models.SlugField(verbose_name='Slug',
-                            max_length=50, blank=True,
+                            max_length=SLUG_LENGTH, blank=True,
                             help_text='Поле заполняется автоматически, но при '
                             'желании может быть заполнено самостоятельно')
     is_system = models.BooleanField(default=False)
@@ -42,19 +46,19 @@ class Category(models.Model):
         )
 
     def __str__(self):
-        return self.name[:30]
+        return self.name[:LENGTH]
 
     def get_unique_slug(self, base_slug):
         slug = base_slug
         counter = 0
         while Category.objects.filter(author=self.author, slug=slug).exists():
             counter += 1
-            slug = f'{base_slug[:45]}-{counter}'
+            slug = f'{base_slug[:BASE_SLUG_WITH_COUNTER]}-{counter}'
         return slug
 
     def save(self, *args, **kwargs):
         if not self.id:
-            base_slug = slugify(unidecode(self.name))[:50]
+            base_slug = slugify(unidecode(self.name))[:BASE_SLUG]
             self.slug = self.get_unique_slug(base_slug)
         super().save(*args, **kwargs)
 
@@ -71,8 +75,8 @@ class Task(models.Model):
     collaborators = models.ManyToManyField(User, blank=True,
                                            verbose_name='Коллабораторы',
                                            related_name='tasks_collaborators')
-    name = models.CharField(max_length=255, verbose_name='Заметка',
-                            blank=True, default=None)
+    name = models.CharField(max_length=EMAIL_TASK_LENGTH,
+                            verbose_name='Заметка', blank=True, default=None)
     text = models.TextField(null=True, blank=True,
                             verbose_name='Текст заметки')
     pub_date = models.DateTimeField(auto_now_add=True,
@@ -84,7 +88,7 @@ class Task(models.Model):
                               verbose_name='Заставка заметки')
     categories = models.ManyToManyField(Category, verbose_name='Категории',
                                         blank=True)
-    status = models.CharField(max_length=20, choices=Status.choices,
+    status = models.CharField(max_length=STATUS_LENGTH, choices=Status.choices,
                               verbose_name='Статус заметки',
                               default=Status.NOT_STARTED)
 
@@ -101,7 +105,7 @@ class Task(models.Model):
         )
 
     def __str__(self):
-        return self.name[:30]
+        return self.name[:LENGTH]
 
     def save(self, *args, **kwargs):
         self.text = self.clean_html(self.text)
