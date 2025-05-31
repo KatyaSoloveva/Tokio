@@ -2,7 +2,6 @@ from rest_framework import serializers
 from djoser.serializers import UserSerializer as DjoserUserSerializer
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
-
 from tasks.models import Category, CollaborationRequest, Task
 from users.models import FriendShipRequest
 from core.base_models import BaseRequestModel
@@ -76,6 +75,12 @@ class TaskReadSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ShortTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ('id', 'name')
+
+
 class BaseRequestReadSerializer(serializers.ModelSerializer):
     """Базовый сериализатор для отображения информации о запросах."""
 
@@ -120,17 +125,11 @@ class ResponseSerializer(serializers.Serializer):
 class CollaborationRequestReadSerializer(BaseRequestReadSerializer):
     """Сериализатор для отображения информации о запросе на коллаборацию."""
 
-    task = serializers.SerializerMethodField()
+    task = ShortTaskSerializer()
 
     class Meta:
         model = CollaborationRequest
         fields = '__all__'
-
-    def get_task(self, obj):
-        return {
-            'id': obj.task.id,
-            'name': obj.task.name
-        }
 
 
 class CollaborationRequestWriteSerializer(BaseRequestWriteSerializer):

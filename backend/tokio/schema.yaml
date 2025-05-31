@@ -1182,8 +1182,7 @@ components:
         sender:
           type: string
         task:
-          type: string
-          readOnly: true
+          $ref: '#/components/schemas/ShortTask'
         status:
           allOf:
           - $ref: '#/components/schemas/StatusF25Enum'
@@ -1209,6 +1208,8 @@ components:
         sender:
           type: string
           minLength: 1
+        task:
+          $ref: '#/components/schemas/ShortTaskRequest'
         status:
           allOf:
           - $ref: '#/components/schemas/StatusF25Enum'
@@ -1216,6 +1217,7 @@ components:
       required:
       - receiver
       - sender
+      - task
     CollaborationRequestWrite:
       type: object
       description: Сериализатор для создания запроса на коллаборацию.
@@ -1544,6 +1546,25 @@ components:
       required:
       - current_password
       - new_email
+    ShortTask:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Заметка
+          maxLength: 254
+      required:
+      - id
+    ShortTaskRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Заметка
+          maxLength: 254
     StatusB50Enum:
       enum:
       - in_progress
