@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'django_filters',
     'api.apps.ApiConfig',
     'tasks.apps.TasksConfig',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -137,7 +138,8 @@ REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 DJOSER = {
@@ -146,4 +148,14 @@ DJOSER = {
         'user': 'api.serializers.UserSerializer',
         'current_user': 'api.serializers.UserSerializer'
     }
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'API For Tokio',
+    'VERSION': '1.0.0',
+    'SCHEMA_PATH_PREFIX': '/api/',
+    'SCHEMA_COMPONENT_NAME_OVERRIDES': {
+        'TokenDestroySerializer': 'TokenDestroyResponse',
+    },
+    'COMPONENT_SPLIT_REQUEST': True,
 }

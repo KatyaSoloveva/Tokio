@@ -133,7 +133,7 @@ class CollaborationRequestWriteSerializer(BaseRequestWriteSerializer):
 
     class Meta:
         model = CollaborationRequest
-        fields = '__all__'
+        exclude = ('status',)
 
     def validate(self, attrs):
         super().validate(attrs)
@@ -160,7 +160,7 @@ class FriendshipRequestWriteSerializer(BaseRequestWriteSerializer):
 
     class Meta:
         model = FriendShipRequest
-        fields = '__all__'
+        exclude = ('status',)
 
     def validate(self, attrs):
         super().validate(attrs)

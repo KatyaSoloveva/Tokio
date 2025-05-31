@@ -65,7 +65,12 @@ class TaskViewSet(viewsets.ModelViewSet):
     search_fields = ('^name',)
 
     def get_queryset(self):
-        ссссс
+        """
+        Получение queryset.
+
+        Содержит заметки, в которых текущий пользователь либо автор,
+        либо коллаборатор.
+        """
         user = self.request.user
         return Task.objects.filter(
             Q(author=user) | Q(collaborators=user)
