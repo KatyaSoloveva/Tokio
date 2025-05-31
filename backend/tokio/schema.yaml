@@ -1,0 +1,1862 @@
+openapi: 3.0.3
+info:
+  title: API For Tokio
+  version: 1.0.0
+paths:
+  /api/auth/token/login/:
+    post:
+      operationId: auth_token_login_create
+      description: Use this endpoint to obtain user authentication token.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenCreateRequest'
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenCreate'
+          description: ''
+  /api/auth/token/logout/:
+    post:
+      operationId: auth_token_logout_create
+      description: Use this endpoint to logout user (remove user authentication token).
+      tags:
+      - auth
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/categories/:
+    get:
+      operationId: categories_list
+      description: ViewSet для модели Category.
+      parameters:
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - categories
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+          description: ''
+    post:
+      operationId: categories_create
+      description: ViewSet для модели Category.
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/categories/{id}/:
+    get:
+      operationId: categories_retrieve
+      description: ViewSet для модели Category.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - categories
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    put:
+      operationId: categories_update
+      description: ViewSet для модели Category.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    patch:
+      operationId: categories_partial_update
+      description: ViewSet для модели Category.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCategoryRequest'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    delete:
+      operationId: categories_destroy
+      description: ViewSet для модели Category.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - categories
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/collaborations/:
+    post:
+      operationId: collaborations_create
+      description: ViewSet для модели CollaborationRequest.
+      tags:
+      - collaborations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollaborationRequestWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CollaborationRequestWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CollaborationRequestWriteRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollaborationRequestWrite'
+          description: ''
+  /api/collaborations/{id}/:
+    get:
+      operationId: collaborations_retrieve
+      description: ViewSet для модели CollaborationRequest.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - collaborations
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollaborationRequestRead'
+          description: ''
+    delete:
+      operationId: collaborations_destroy
+      description: ViewSet для модели CollaborationRequest.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - collaborations
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/collaborations/{id}/respond/:
+    post:
+      operationId: collaborations_respond_create
+      description: Action для ответа на запрос.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - collaborations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollaborationRequestReadRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CollaborationRequestReadRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CollaborationRequestReadRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollaborationRequestRead'
+          description: ''
+  /api/collaborations/received/:
+    get:
+      operationId: collaborations_received_retrieve
+      description: Action для получния полученных запросов.
+      tags:
+      - collaborations
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollaborationRequestRead'
+          description: ''
+  /api/collaborations/sent/:
+    get:
+      operationId: collaborations_sent_retrieve
+      description: Action для получния отправленных запросов.
+      tags:
+      - collaborations
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollaborationRequestRead'
+          description: ''
+  /api/friendship/:
+    post:
+      operationId: friendship_create
+      description: ViewSet для модели FriendShipRequest.
+      tags:
+      - friendship
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FriendshipRequestWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FriendshipRequestWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FriendshipRequestWriteRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FriendshipRequestWrite'
+          description: ''
+  /api/friendship/{id}/:
+    get:
+      operationId: friendship_retrieve
+      description: ViewSet для модели FriendShipRequest.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - friendship
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FriendshipRequestRead'
+          description: ''
+    delete:
+      operationId: friendship_destroy
+      description: ViewSet для модели FriendShipRequest.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - friendship
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/friendship/{id}/respond/:
+    post:
+      operationId: friendship_respond_create
+      description: Action для ответа на запрос.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - friendship
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FriendshipRequestReadRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FriendshipRequestReadRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FriendshipRequestReadRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FriendshipRequestRead'
+          description: ''
+  /api/friendship/received/:
+    get:
+      operationId: friendship_received_retrieve
+      description: Action для получния полученных запросов.
+      tags:
+      - friendship
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FriendshipRequestRead'
+          description: ''
+  /api/friendship/sent/:
+    get:
+      operationId: friendship_sent_retrieve
+      description: Action для получния отправленных запросов.
+      tags:
+      - friendship
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FriendshipRequestRead'
+          description: ''
+  /api/tasks/:
+    get:
+      operationId: tasks_list
+      description: ViewSet для модели Task.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - tasks
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTaskReadList'
+          description: ''
+    post:
+      operationId: tasks_create
+      description: ViewSet для модели Task.
+      tags:
+      - tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TaskWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaskWriteRequest'
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskWrite'
+          description: ''
+  /api/tasks/{id}/:
+    get:
+      operationId: tasks_retrieve
+      description: ViewSet для модели Task.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - tasks
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskRead'
+          description: ''
+    put:
+      operationId: tasks_update
+      description: ViewSet для модели Task.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TaskWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaskWriteRequest'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskWrite'
+          description: ''
+    patch:
+      operationId: tasks_partial_update
+      description: ViewSet для модели Task.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTaskWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTaskWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTaskWriteRequest'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskWrite'
+          description: ''
+    delete:
+      operationId: tasks_destroy
+      description: ViewSet для модели Task.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - tasks
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/tasks/{id}/delete_collaborator/{user_id}/:
+    delete:
+      operationId: tasks_delete_collaborator_destroy
+      description: Action для удаления пользователя из коллабораторов заметки.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - tasks
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/:
+    get:
+      operationId: users_list
+      description: ViewSet для модели User.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - users
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: users_create
+      description: ViewSet для модели User.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+  /api/users/{id}/:
+    get:
+      operationId: users_retrieve
+      description: ViewSet для модели User.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Пользователь.
+        required: true
+      tags:
+      - users
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_update
+      description: ViewSet для модели User.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Пользователь.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      description: ViewSet для модели User.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Пользователь.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: users_destroy
+      description: ViewSet для модели User.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Пользователь.
+        required: true
+      tags:
+      - users
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/activation/:
+    post:
+      operationId: users_activation_create
+      description: ViewSet для модели User.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ActivationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ActivationRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activation'
+          description: ''
+  /api/users/me/:
+    get:
+      operationId: users_me_retrieve
+      description: ViewSet для модели User.
+      tags:
+      - users
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_me_update
+      description: ViewSet для модели User.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_me_partial_update
+      description: ViewSet для модели User.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserRequest'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: users_me_destroy
+      description: ViewSet для модели User.
+      tags:
+      - users
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/me/delete_friend/{user_id}/:
+    delete:
+      operationId: users_me_delete_friend_destroy
+      description: Action для удаления пользователя из друзей.
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - users
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/me/friends/:
+    get:
+      operationId: users_me_friends_retrieve
+      description: Action для получния пагинированного списка друзей.
+      tags:
+      - users
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/resend_activation/:
+    post:
+      operationId: users_resend_activation_create
+      description: ViewSet для модели User.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailResetRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailResetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailResetRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
+  /api/users/reset_email/:
+    post:
+      operationId: users_reset_email_create
+      description: ViewSet для модели User.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailResetRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailResetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailResetRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
+  /api/users/reset_email_confirm/:
+    post:
+      operationId: users_reset_email_confirm_create
+      description: ViewSet для модели User.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirmRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirmRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UsernameResetConfirmRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsernameResetConfirm'
+          description: ''
+  /api/users/reset_password/:
+    post:
+      operationId: users_reset_password_create
+      description: ViewSet для модели User.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendEmailResetRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendEmailResetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendEmailResetRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendEmailReset'
+          description: ''
+  /api/users/reset_password_confirm/:
+    post:
+      operationId: users_reset_password_confirm_create
+      description: ViewSet для модели User.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordResetConfirm'
+          description: ''
+  /api/users/set_email/:
+    post:
+      operationId: users_set_email_create
+      description: ViewSet для модели User.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetUsernameRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetUsernameRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetUsernameRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetUsername'
+          description: ''
+  /api/users/set_password/:
+    post:
+      operationId: users_set_password_create
+      description: ViewSet для модели User.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetPasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetPasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetPasswordRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetPassword'
+          description: ''
+components:
+  schemas:
+    Activation:
+      type: object
+      properties:
+        uid:
+          type: string
+        token:
+          type: string
+      required:
+      - token
+      - uid
+    ActivationRequest:
+      type: object
+      properties:
+        uid:
+          type: string
+          minLength: 1
+        token:
+          type: string
+          minLength: 1
+      required:
+      - token
+      - uid
+    Category:
+      type: object
+      description: Сериализатор для модели Category.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Категория
+          maxLength: 100
+        slug:
+          type: string
+          description: Поле заполняется автоматически, но при желании может быть заполнено
+            самостоятельно
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        is_system:
+          type: boolean
+      required:
+      - id
+      - name
+      - slug
+    CategoryRequest:
+      type: object
+      description: Сериализатор для модели Category.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Категория
+          maxLength: 100
+        slug:
+          type: string
+          description: Поле заполняется автоматически, но при желании может быть заполнено
+            самостоятельно
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        is_system:
+          type: boolean
+      required:
+      - name
+      - slug
+    CollaborationRequestRead:
+      type: object
+      description: Сериализатор для отображения информации о запросе на коллаборацию.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        receiver:
+          type: string
+        sender:
+          type: string
+        task:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusF25Enum'
+          title: Статус запроса
+        request_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата создания запроса
+      required:
+      - id
+      - receiver
+      - request_date
+      - sender
+      - task
+    CollaborationRequestReadRequest:
+      type: object
+      description: Сериализатор для отображения информации о запросе на коллаборацию.
+      properties:
+        receiver:
+          type: string
+          minLength: 1
+        sender:
+          type: string
+          minLength: 1
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusF25Enum'
+          title: Статус запроса
+      required:
+      - receiver
+      - sender
+    CollaborationRequestWrite:
+      type: object
+      description: Сериализатор для создания запроса на коллаборацию.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        request_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата создания запроса
+        task:
+          type: integer
+          title: Задача
+        receiver:
+          type: integer
+          title: Приглашенный
+      required:
+      - id
+      - receiver
+      - request_date
+      - task
+    CollaborationRequestWriteRequest:
+      type: object
+      description: Сериализатор для создания запроса на коллаборацию.
+      properties:
+        task:
+          type: integer
+          title: Задача
+        receiver:
+          type: integer
+          title: Приглашенный
+      required:
+      - receiver
+      - task
+    FriendshipRequestRead:
+      type: object
+      description: Сериализатор для отображения информации о запросе на дружбу.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        receiver:
+          type: string
+        sender:
+          type: string
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusF25Enum'
+          title: Статус запроса
+        request_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата создания запроса
+      required:
+      - id
+      - receiver
+      - request_date
+      - sender
+    FriendshipRequestReadRequest:
+      type: object
+      description: Сериализатор для отображения информации о запросе на дружбу.
+      properties:
+        receiver:
+          type: string
+          minLength: 1
+        sender:
+          type: string
+          minLength: 1
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusF25Enum'
+          title: Статус запроса
+      required:
+      - receiver
+      - sender
+    FriendshipRequestWrite:
+      type: object
+      description: Сериализатор для создания запроса на дружбу.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        request_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата создания запроса
+        receiver:
+          type: integer
+          title: Получатель запроса
+      required:
+      - id
+      - receiver
+      - request_date
+    FriendshipRequestWriteRequest:
+      type: object
+      description: Сериализатор для создания запроса на дружбу.
+      properties:
+        receiver:
+          type: integer
+          title: Получатель запроса
+      required:
+      - receiver
+    PaginatedTaskReadList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskRead'
+    PaginatedUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PasswordResetConfirm:
+      type: object
+      properties:
+        uid:
+          type: string
+        token:
+          type: string
+        new_password:
+          type: string
+      required:
+      - new_password
+      - token
+      - uid
+    PasswordResetConfirmRequest:
+      type: object
+      properties:
+        uid:
+          type: string
+          minLength: 1
+        token:
+          type: string
+          minLength: 1
+        new_password:
+          type: string
+          minLength: 1
+      required:
+      - new_password
+      - token
+      - uid
+    PatchedCategoryRequest:
+      type: object
+      description: Сериализатор для модели Category.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Категория
+          maxLength: 100
+        slug:
+          type: string
+          description: Поле заполняется автоматически, но при желании может быть заполнено
+            самостоятельно
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        is_system:
+          type: boolean
+    PatchedTaskWriteRequest:
+      type: object
+      description: |-
+        Сериализатор для модели Task.
+
+        Отвечает за создание и обновление задачи.
+      properties:
+        name:
+          type: string
+          title: Заметка
+          maxLength: 254
+        text:
+          type: string
+          nullable: true
+          title: Текст заметки
+        image:
+          type: string
+          format: binary
+          nullable: true
+          title: Заставка заметки
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusB50Enum'
+          title: Статус заметки
+        categories:
+          type: array
+          items:
+            type: integer
+            title: Категории
+          title: Категории
+    PatchedUserRequest:
+      type: object
+      description: Сериализатор для модели User.
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Логин
+          maxLength: 150
+        first_name:
+          type: string
+          nullable: true
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          nullable: true
+          title: Фамилия
+          maxLength: 150
+        birthday:
+          type: string
+          format: date
+          nullable: true
+          title: День рождения
+        avatar:
+          type: string
+          format: binary
+          nullable: true
+          title: Аватар
+    SendEmailReset:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
+    SendEmailResetRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+      required:
+      - email
+    SetPassword:
+      type: object
+      properties:
+        new_password:
+          type: string
+        current_password:
+          type: string
+      required:
+      - current_password
+      - new_password
+    SetPasswordRequest:
+      type: object
+      properties:
+        new_password:
+          type: string
+          minLength: 1
+        current_password:
+          type: string
+          minLength: 1
+      required:
+      - current_password
+      - new_password
+    SetUsername:
+      type: object
+      properties:
+        current_password:
+          type: string
+        new_email:
+          type: string
+          format: email
+          title: Email
+          maxLength: 254
+      required:
+      - current_password
+      - new_email
+    SetUsernameRequest:
+      type: object
+      properties:
+        current_password:
+          type: string
+          minLength: 1
+        new_email:
+          type: string
+          format: email
+          minLength: 1
+          title: Email
+          maxLength: 254
+      required:
+      - current_password
+      - new_email
+    StatusB50Enum:
+      enum:
+      - in_progress
+      - done
+      - not_started
+      type: string
+      description: |-
+        * `in_progress` - В процессе
+        * `done` - Сделано
+        * `not_started` - Не начато
+    StatusF25Enum:
+      enum:
+      - pending
+      - accepted
+      - rejected
+      type: string
+      description: |-
+        * `pending` - Ожидает подтверждения
+        * `accepted` - Принято
+        * `rejected` - Отклонено
+    TaskRead:
+      type: object
+      description: |-
+        Сериализатор для модели Task.
+
+        Отвечает за отображение информации о задаче.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+          readOnly: true
+        collaborators:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          readOnly: true
+        name:
+          type: string
+          title: Заметка
+          maxLength: 254
+        text:
+          type: string
+          nullable: true
+          title: Текст заметки
+        pub_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата создания заметки
+        update_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата обновления заметки
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Заставка заметки
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusB50Enum'
+          title: Статус заметки
+      required:
+      - author
+      - categories
+      - collaborators
+      - id
+      - pub_date
+      - update_date
+    TaskWrite:
+      type: object
+      description: |-
+        Сериализатор для модели Task.
+
+        Отвечает за создание и обновление задачи.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        collaborators:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          readOnly: true
+        name:
+          type: string
+          title: Заметка
+          maxLength: 254
+        text:
+          type: string
+          nullable: true
+          title: Текст заметки
+        pub_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата создания заметки
+        update_date:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Дата обновления заметки
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Заставка заметки
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusB50Enum'
+          title: Статус заметки
+        categories:
+          type: array
+          items:
+            type: integer
+            title: Категории
+          title: Категории
+      required:
+      - collaborators
+      - id
+      - pub_date
+      - update_date
+    TaskWriteRequest:
+      type: object
+      description: |-
+        Сериализатор для модели Task.
+
+        Отвечает за создание и обновление задачи.
+      properties:
+        name:
+          type: string
+          title: Заметка
+          maxLength: 254
+        text:
+          type: string
+          nullable: true
+          title: Текст заметки
+        image:
+          type: string
+          format: binary
+          nullable: true
+          title: Заставка заметки
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusB50Enum'
+          title: Статус заметки
+        categories:
+          type: array
+          items:
+            type: integer
+            title: Категории
+          title: Категории
+    TokenCreate:
+      type: object
+      properties:
+        password:
+          type: string
+        email:
+          type: string
+    TokenCreateRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          minLength: 1
+    User:
+      type: object
+      description: Сериализатор для модели User.
+      properties:
+        username:
+          type: string
+          title: Логин
+          maxLength: 150
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+        first_name:
+          type: string
+          nullable: true
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          nullable: true
+          title: Фамилия
+          maxLength: 150
+        birthday:
+          type: string
+          format: date
+          nullable: true
+          title: День рождения
+        avatar:
+          type: string
+          format: uri
+          nullable: true
+          title: Аватар
+      required:
+      - email
+      - id
+      - username
+    UserCreate:
+      type: object
+      properties:
+        username:
+          type: string
+          title: Логин
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        id:
+          type: integer
+          readOnly: true
+      required:
+      - email
+      - id
+      - username
+    UserCreateRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Логин
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - email
+      - password
+      - username
+    UserRequest:
+      type: object
+      description: Сериализатор для модели User.
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Логин
+          maxLength: 150
+        first_name:
+          type: string
+          nullable: true
+          title: Имя
+          maxLength: 150
+        last_name:
+          type: string
+          nullable: true
+          title: Фамилия
+          maxLength: 150
+        birthday:
+          type: string
+          format: date
+          nullable: true
+          title: День рождения
+        avatar:
+          type: string
+          format: binary
+          nullable: true
+          title: Аватар
+      required:
+      - username
+    UsernameResetConfirm:
+      type: object
+      properties:
+        new_email:
+          type: string
+          format: email
+          title: Email
+          maxLength: 254
+      required:
+      - new_email
+    UsernameResetConfirmRequest:
+      type: object
+      properties:
+        new_email:
+          type: string
+          format: email
+          minLength: 1
+          title: Email
+          maxLength: 254
+      required:
+      - new_email
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
