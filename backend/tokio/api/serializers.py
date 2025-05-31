@@ -138,7 +138,7 @@ class CollaborationRequestWriteSerializer(BaseRequestWriteSerializer):
 
     def validate(self, attrs):
         super().validate(attrs)
-        if attrs['sender'] != attrs['task'].sender:
+        if attrs['sender'] != attrs['task'].author:
             raise ValidationError(
                 'Нельзя пригласить коллаборатора не в свою заметку!'
             )
