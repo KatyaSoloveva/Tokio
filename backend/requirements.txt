@@ -5,3 +5,5 @@ djoser==2.3.1
 bleach==6.2.0
 bleach[css]
 django-filter==25.1
+drf-spectacular==0.28.0
+Unidecode==1.4.0
