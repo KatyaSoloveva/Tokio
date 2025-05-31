@@ -1147,14 +1147,16 @@ components:
           maxLength: 100
         slug:
           type: string
+          readOnly: true
           description: Поле заполняется автоматически, но при желании может быть заполнено
             самостоятельно
-          maxLength: 50
           pattern: ^[-a-zA-Z0-9_]+$
         is_system:
           type: boolean
+          readOnly: true
       required:
       - id
+      - is_system
       - name
       - slug
     CategoryRequest:
@@ -1166,17 +1168,8 @@ components:
           minLength: 1
           title: Категория
           maxLength: 100
-        slug:
-          type: string
-          description: Поле заполняется автоматически, но при желании может быть заполнено
-            самостоятельно
-          maxLength: 50
-          pattern: ^[-a-zA-Z0-9_]+$
-        is_system:
-          type: boolean
       required:
       - name
-      - slug
     CollaborationRequestRead:
       type: object
       description: Сериализатор для отображения информации о запросе на коллаборацию.
@@ -1230,6 +1223,11 @@ components:
         id:
           type: integer
           readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusF25Enum'
+          readOnly: true
+          title: Статус запроса
         request_date:
           type: string
           format: date-time
@@ -1245,6 +1243,7 @@ components:
       - id
       - receiver
       - request_date
+      - status
       - task
     CollaborationRequestWriteRequest:
       type: object
@@ -1308,6 +1307,11 @@ components:
         id:
           type: integer
           readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusF25Enum'
+          readOnly: true
+          title: Статус запроса
         request_date:
           type: string
           format: date-time
@@ -1320,6 +1324,7 @@ components:
       - id
       - receiver
       - request_date
+      - status
     FriendshipRequestWriteRequest:
       type: object
       description: Сериализатор для создания запроса на дружбу.
@@ -1413,14 +1418,6 @@ components:
           minLength: 1
           title: Категория
           maxLength: 100
-        slug:
-          type: string
-          description: Поле заполняется автоматически, но при желании может быть заполнено
-            самостоятельно
-          maxLength: 50
-          pattern: ^[-a-zA-Z0-9_]+$
-        is_system:
-          type: boolean
     PatchedTaskWriteRequest:
       type: object
       description: |-

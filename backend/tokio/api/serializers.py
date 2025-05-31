@@ -96,6 +96,10 @@ class BaseRequestWriteSerializer(serializers.ModelSerializer):
             )
         return attrs
 
+    class Meta:
+        fields = '__all__'
+        read_only_fields = ('status',)
+
 
 class ResponseSerializer(serializers.Serializer):
     """Сериализатор для ответа на запрос."""
@@ -132,9 +136,8 @@ class CollaborationRequestReadSerializer(BaseRequestReadSerializer):
 class CollaborationRequestWriteSerializer(BaseRequestWriteSerializer):
     """Сериализатор для создания запроса на коллаборацию."""
 
-    class Meta:
+    class Meta(BaseRequestWriteSerializer.Meta):
         model = CollaborationRequest
-        exclude = ('status',)
 
     def validate(self, attrs):
         super().validate(attrs)
@@ -159,9 +162,8 @@ class FriendshipRequestReadSerializer(BaseRequestReadSerializer):
 class FriendshipRequestWriteSerializer(BaseRequestWriteSerializer):
     """Сериализатор для создания запроса на дружбу."""
 
-    class Meta:
+    class Meta(BaseRequestWriteSerializer.Meta):
         model = FriendShipRequest
-        exclude = ('status',)
 
     def validate(self, attrs):
         super().validate(attrs)
