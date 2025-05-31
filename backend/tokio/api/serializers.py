@@ -11,6 +11,7 @@ User = get_user_model()
 
 
 class FriendSerializer(serializers.ModelSerializer):
+    """Сериализатор для представления информации о друзьях пользователя."""
 
     class Meta:
         model = User
@@ -19,6 +20,7 @@ class FriendSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(DjoserUserSerializer):
+    """Сериализатор для модели User."""
 
     class Meta(DjoserUserSerializer.Meta):
         fields = DjoserUserSerializer.Meta.fields + (
@@ -27,6 +29,8 @@ class UserSerializer(DjoserUserSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    """Сериализатор для модели Category."""
+
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
@@ -35,6 +39,12 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class TaskWriteSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для модели Task.
+
+    Отвечает за создание и обновление задачи.
+    """
+
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
     collaborators = UserSerializer(many=True, read_only=True)
 
@@ -50,6 +60,12 @@ class TaskWriteSerializer(serializers.ModelSerializer):
 
 
 class TaskReadSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для модели Task.
+
+    Отвечает за отображение информации о задаче.
+    """
+
     author = UserSerializer(read_only=True)
     categories = CategorySerializer(many=True, read_only=True)
     collaborators = UserSerializer(many=True, read_only=True)
@@ -60,11 +76,15 @@ class TaskReadSerializer(serializers.ModelSerializer):
 
 
 class BaseRequestReadSerializer(serializers.ModelSerializer):
+    """Базовый сериализатор для отображения информации о запросах."""
+
     receiver = serializers.CharField(source='receiver.username')
     sender = serializers.CharField(source='sender.username')
 
 
 class BaseRequestWriteSerializer(serializers.ModelSerializer):
+    """Базовый сериализатор для создания запроса."""
+
     sender = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     def validate(self, attrs):
@@ -76,7 +96,9 @@ class BaseRequestWriteSerializer(serializers.ModelSerializer):
         return attrs
 
 
-class BaseResponseSerializer(serializers.Serializer):
+class ResponseSerializer(serializers.Serializer):
+    """Сериализатор для ответа на запрос."""
+
     action = serializers.ChoiceField(choices=(
         BaseRequestModel.Status.ACCEPTED,
         BaseRequestModel.Status.REJECTED
@@ -91,6 +113,8 @@ class BaseResponseSerializer(serializers.Serializer):
 
 
 class CollaborationRequestReadSerializer(BaseRequestReadSerializer):
+    """Сериализатор для отображения информации о запросе на коллаборацию."""
+
     task = serializers.SerializerMethodField()
 
     class Meta:
@@ -105,6 +129,7 @@ class CollaborationRequestReadSerializer(BaseRequestReadSerializer):
 
 
 class CollaborationRequestWriteSerializer(BaseRequestWriteSerializer):
+    """Сериализатор для создания запроса на коллаборацию."""
 
     class Meta:
         model = CollaborationRequest
@@ -123,6 +148,7 @@ class CollaborationRequestWriteSerializer(BaseRequestWriteSerializer):
 
 
 class FriendshipRequestReadSerializer(BaseRequestReadSerializer):
+    """Сериализатор для отображения информации о запросе на дружбу."""
 
     class Meta:
         model = FriendShipRequest
@@ -130,6 +156,7 @@ class FriendshipRequestReadSerializer(BaseRequestReadSerializer):
 
 
 class FriendshipRequestWriteSerializer(BaseRequestWriteSerializer):
+    """Сериализатор для создания запроса на дружбу."""
 
     class Meta:
         model = FriendShipRequest

@@ -5,6 +5,12 @@ from core.constants import STATUS_LENGTH
 
 
 class BaseRequestModel(models.Model):
+    """
+    Абстрактная модель.
+
+    Основа для FriendShipRequestViewSet и CollaborationRequestViewSet.
+    """
+
     class Status(models.TextChoices):
         PENDING = 'pending', 'Ожидает подтверждения'
         ACCEPTED = 'accepted', 'Принято'

@@ -7,6 +7,8 @@ from tasks.models import Category
 
 
 class Command(BaseCommand):
+    """Management-команда для загрузки категорий в БД."""
+
     def handle(self, *args, **options):
         file_path = settings.BASE_DIR/'data/categories.csv'
         print(file_path)

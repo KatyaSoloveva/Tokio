@@ -2,6 +2,7 @@ from django.db import models
 
 
 def request_constraint(*fields):
+    """Декоратор для добавления ограничения к модели."""
     def decorator(meta_class):
         meta_class.constraints = (
             models.UniqueConstraint(
