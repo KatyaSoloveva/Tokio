@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  backend:
+    image: kkatssol/tokio_backend:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/tokio/db.sqlite3:/app/db.sqlite3
+      - ./backend/tokio/media:/app/media
+    networks:
+      - tokio-network
+  frontend:
+    image: kkatssol/tokio_frontend:latest
+    ports:
+      - "5173:5173"
+    networks:
+      - tokio-network
+    depends_on:
+      - backend
+    
+networks:
+  tokio-network:
+    driver: bridge
