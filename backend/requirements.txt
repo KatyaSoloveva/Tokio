@@ -7,3 +7,4 @@ bleach[css]
 django-filter==25.1
 drf-spectacular==0.28.0
 Unidecode==1.4.0
+gunicorn==23.0.0
